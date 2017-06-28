@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/GregaMohorko/GM.Utility/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/GregaMohorko/GM.Utility</projectUrl>
+	<iconUrl>http://mohorko.info/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright (c) 2017 Grega Mohorko</copyright>
+    <tags>utility</tags>
+  </metadata>
+</package>
