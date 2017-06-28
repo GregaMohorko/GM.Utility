@@ -90,10 +90,16 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Gets the assembly information of the specified type.
+		/// <para>
+		/// AssemblyType.Current is not allowed.
+		/// </para>
 		/// </summary>
 		/// <param name="assemblyType">The type of the assembly to look for.</param>
 		public static AssemblyInformation GetAssemblyInformation(AssemblyType assemblyType)
 		{
+			if(assemblyType == AssemblyType.Current) {
+				throw new InvalidEnumArgumentException("AssemblyType.Current is not allowed when getting the assembly information. Use GetAssembly() to get the assembly first, then call GetAssemblyInformation().");
+			}
 			var assembly = GetAssembly(assemblyType);
 			return GetAssemblyInformation(assembly);
 		}
