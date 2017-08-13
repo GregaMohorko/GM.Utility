@@ -11,6 +11,7 @@
 	<iconUrl>http://mohorko.info/favicon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
+	<releaseNotes>Fixed a bug when getting the assembly information of the application.</releaseNotes>
     <copyright>Copyright (c) 2017 Grega Mohorko</copyright>
     <tags>utility</tags>
   </metadata>
