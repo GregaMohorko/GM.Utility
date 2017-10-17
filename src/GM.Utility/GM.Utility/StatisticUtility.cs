@@ -9,6 +9,22 @@ namespace GM.Utility
 	public static class StatisticUtility
 	{
 		/// <summary>
+		/// Calculates the standard deviation of the provided values.
+		/// <para>
+		/// https://www.khanacademy.org/math/probability/data-distributions-a1/summarizing-spread-distributions/a/calculating-standard-deviation-step-by-step
+		/// </para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		public static double CalculateStandardDeviation(IEnumerable<double> values)
+		{
+			int count = values.Count();
+			double mean = values.Sum() / count;
+			double standardDeviation = values.Sum(v => Math.Pow(Math.Abs(v - mean), 2));
+			standardDeviation = Math.Sqrt(standardDeviation / count);
+			return standardDeviation;
+		}
+
+		/// <summary>
 		/// Finds the median, which is a value separating the higher half of the values from the lower half.
 		/// </summary>
 		/// <param name="values">The values.</param>
