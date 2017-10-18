@@ -9,6 +9,96 @@ namespace GM.Utility
 	public static class StatisticUtility
 	{
 		/// <summary>
+		/// Calculates the linear regression line and returns the a and b parameters of the line. The equation for the line itself is: y = x*a + b.
+		/// <para>
+		/// https://en.wikipedia.org/wiki/Simple_linear_regression
+		/// </para>
+		/// </summary>
+		/// <param name="independantValues">Values of the independant (X-axis) variable.</param>
+		/// <param name="dependantValues">Values of the dependant (Y-axis) variable.</param>
+		public static Tuple<double,double> CalculateSimpleLinearRegressionLine(IEnumerable<double> x,IEnumerable<double> y)
+		{
+			int n;
+			{
+				int xCount = x.Count();
+				int yCount = y.Count();
+
+				if(xCount != yCount) {
+					throw new ArgumentException("The count of both value collections must be the same.");
+				}
+				n = xCount;
+			}
+			
+			double xMean = x.Sum() / n;
+			double yMean = y.Sum() / n;
+
+			double a;
+			{
+				double aTop = 0;
+				double aBottom = 0;
+				for(int i = n - 1; i >= 0; --i) {
+					double xi = x.ElementAt(i);
+					double yi = y.ElementAt(i);
+
+					double tmp = xi - xMean;
+
+					aTop += tmp * (yi - yMean);
+					aBottom += Math.Pow(tmp, 2);
+				}
+				a = aTop / aBottom;
+			}
+
+			double b = yMean - a * xMean;
+
+			return Tuple.Create(a, b);
+		}
+
+		/// <summary>
+		/// Calculates the sample correlation coefficient (also called "R squared") between x and y values. Sample correlation coefficient is the proportion of the variance in the dependent variable (x) that is predictable from the independent variable (y).
+		/// <para>
+		/// https://en.wikipedia.org/wiki/Correlation_and_dependence#Pearson.27s_product-moment_coefficient
+		/// </para>
+		/// </summary>
+		/// <param name="independantValues">Values of the independant (X-axis) variable.</param>
+		/// <param name="dependantValues">Values of the dependant (Y-axis) variable.</param>
+		public static double CalculateR2(IEnumerable<double> x, IEnumerable<double> y)
+		{
+			int n;
+			{
+				int xCount = x.Count();
+				int yCount = y.Count();
+
+				if(xCount != yCount) {
+					throw new ArgumentException("The count of both value collections must be the same.");
+				}
+				n = xCount;
+			}
+			
+			double xMean = 0;
+			double yMean = 0;
+			double xyMean = 0;
+			double x2Mean = 0;
+			double y2Mean = 0;
+			for(int i = n - 1; i >= 0; --i) {
+				double xi = x.ElementAt(i);
+				double yi = y.ElementAt(i);
+
+				xMean += xi;
+				yMean += yi;
+				xyMean += xi * yi;
+				x2Mean += xi * xi;
+				y2Mean += yi * yi;
+			}
+			xMean /= n;
+			yMean /= n;
+			xyMean /= n;
+			x2Mean /= n;
+			y2Mean /= n;
+
+			return Math.Pow((xyMean - xMean * yMean), 2) / ((x2Mean - xMean * xMean) * (y2Mean - yMean * yMean));
+		}
+
+		/// <summary>
 		/// Calculates the standard deviation of the provided values.
 		/// <para>
 		/// https://www.khanacademy.org/math/probability/data-distributions-a1/summarizing-spread-distributions/a/calculating-standard-deviation-step-by-step
