@@ -11,6 +11,7 @@
 - [DateTime](src/GM.Utility/GM.Utility/DateTimeUtility.cs)
 - [Decimal](src/GM.Utility/GM.Utility/DecimalUtility.cs)
 - [Dictionary](src/GM.Utility/GM.Utility/DictionaryUtility.cs)
+- [Double](src/GM.Utility/GM.Utility/DoubleUtility.cs)
 - [Environment](src/GM.Utility/GM.Utility/EnvironmentUtility.cs)
 - [IO](src/GM.Utility/GM.Utility/IOUtility.cs)
 - [Int](src/GM.Utility/GM.Utility/IntUtility.cs)
