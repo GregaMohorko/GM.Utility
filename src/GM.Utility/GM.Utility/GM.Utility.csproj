@@ -50,6 +50,7 @@
     <Compile Include="DateTimeUtility.cs" />
     <Compile Include="DecimalExtensions.cs" />
     <Compile Include="DecimalUtility.cs" />
+    <Compile Include="DoubleUtility.cs" />
     <Compile Include="DictionaryUtility.cs" />
     <Compile Include="EnvironmentUtility.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
