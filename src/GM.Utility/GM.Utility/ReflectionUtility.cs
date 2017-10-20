@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -134,12 +135,40 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Gets the local (operating-system wise) path of the assembly that defines the specified type.
+		/// Gets the local (operating-system wise) directory path of the assembly that defines the specified type.
 		/// </summary>
-		/// <param name="type">The type that is defined in the assembly of which to get the local path.</param>
-		public static string GetAssemblyLocalPath(Type type)
+		/// <param name="type">The type that is defined in the assembly of which to get the local directory path.</param>
+		public static string GetAssemblyDirectoryLocalPath(Type type)
 		{
-			string codebase = type.Assembly.CodeBase;
+			return GetAssemblyDirectoryLocalPath(type.Assembly);
+		}
+
+		/// <summary>
+		/// Gets the local (operating-system wise) directory path of the specified assembly.
+		/// </summary>
+		/// <param name="assembly">The assembly.</param>
+		public static string GetAssemblyDirectoryLocalPath(Assembly assembly)
+		{
+			string filePath = GetAssemblyFileLocalPath(assembly);
+			return Path.GetDirectoryName(filePath);
+		}
+
+		/// <summary>
+		/// Gets the local (operating-system wise) file (.dll) path of the assembly that defines the specified type.
+		/// </summary>
+		/// <param name="type">The type that is defined in the assembly of which to get the local file path.</param>
+		public static string GetAssemblyFileLocalPath(Type type)
+		{
+			return GetAssemblyFileLocalPath(type.Assembly);
+		}
+
+		/// <summary>
+		/// Gets the local (operating-system wise) file (.dll) path of the specified assembly.
+		/// </summary>
+		/// <param name="assembly">The assembly.</param>
+		public static string GetAssemblyFileLocalPath(Assembly assembly)
+		{
+			string codebase = assembly.CodeBase;
 			var uri = new Uri(codebase, UriKind.Absolute);
 			return uri.LocalPath;
 		}
