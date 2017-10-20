@@ -134,6 +134,17 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Gets the local (operating-system wise) path of the assembly that defines the specified type.
+		/// </summary>
+		/// <param name="type">The type that is defined in the assembly of which to get the local path.</param>
+		public static string GetAssemblyLocalPath(Type type)
+		{
+			string codebase = type.Assembly.CodeBase;
+			var uri = new Uri(codebase, UriKind.Absolute);
+			return uri.LocalPath;
+		}
+
+		/// <summary>
 		/// Sets the specified property to the provided value in the provided object.
 		/// </summary>
 		/// <param name="obj">The object with the property.</param>
