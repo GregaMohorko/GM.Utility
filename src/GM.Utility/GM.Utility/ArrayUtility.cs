@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace GM.Utility
 {
-	public static class ArrayExtensions
+	/// <summary>
+	/// Utilities for arrays.
+	/// </summary>
+	public static class ArrayUtility
 	{
 		/// <summary>
 		/// Adds the provided item to the end of the array.
@@ -24,7 +27,7 @@ namespace GM.Utility
 		/// <summary>
 		/// Performs the specified action for each element in the array. Supports multiple dimensions, the second parameter of the action are current indices for the dimensions.
 		/// <para>
-		/// To use the indices, you can use the <see cref="Array.GetValue(int[])"/> or <see cref="Array.SetValue(object, int[])"/>.
+		/// To use the indices, you can use the <see cref="Array.GetValue(int[])"/> and <see cref="Array.SetValue(object, int[])"/>.
 		/// </para>
 		/// </summary>
 		/// <param name="array">The array that contains the elements.</param>
@@ -39,8 +42,33 @@ namespace GM.Utility
 
 			do {
 				action(array, walker.Position);
+			} while(walker.Step());
+		}
+
+		/// <summary>
+		/// Swaps two indexes in the array.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements in the array.</typeparam>
+		/// <param name="array">The array in which to swap two elements.</param>
+		/// <param name="index1">The index of the first element.</param>
+		/// <param name="index2">The index of the second element.</param>
+		public static void Swap<T>(this T[] array, int index1, int index2)
+		{
+			Util.Swap(ref array[index1], ref array[index2]);
+		}
+
+		/// <summary>
+		/// Swaps two rows in the array.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements in the array.</typeparam>
+		/// <param name="array">The array in which to swap two rows.</param>
+		/// <param name="row1">First row.</param>
+		/// <param name="row2">Second row.</param>
+		public static void SwapRow<T>(this T[,] array, int row1, int row2)
+		{
+			for(int i = array.GetLength(1) - 1; i >= 0; --i) {
+				Util.Swap(ref array[row1, i], ref array[row2, i]);
 			}
-			while(walker.Step());
 		}
 
 		private class ArrayTraverse
@@ -53,8 +81,9 @@ namespace GM.Utility
 				Position = new int[array.Rank];
 
 				maxLengths = new int[array.Rank];
-				for(int i = 0; i < array.Rank; i++)
+				for(int i = 0; i < array.Rank; i++) {
 					maxLengths[i] = array.GetLength(i) - 1;
+				}
 			}
 
 			public bool Step()
@@ -62,8 +91,9 @@ namespace GM.Utility
 				for(int i = 0; i < Position.Length; i++)
 					if(Position[i] < maxLengths[i]) {
 						Position[i]++;
-						for(int j = 0; j < i; j++)
+						for(int j = 0; j < i; j++) {
 							Position[j] = 0;
+						}
 
 						return true;
 					}

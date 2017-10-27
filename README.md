@@ -7,29 +7,24 @@
 ## List of classes
 
 **Utilities**:
+- [Array](src/GM.Utility/GM.Utility/ArrayUtility.cs)
 - [Bool](src/GM.Utility/GM.Utility/BoolUtility.cs)
 - [DateTime](src/GM.Utility/GM.Utility/DateTimeUtility.cs)
 - [Decimal](src/GM.Utility/GM.Utility/DecimalUtility.cs)
 - [Dictionary](src/GM.Utility/GM.Utility/DictionaryUtility.cs)
 - [Double](src/GM.Utility/GM.Utility/DoubleUtility.cs)
 - [Environment](src/GM.Utility/GM.Utility/EnvironmentUtility.cs)
-- [IO](src/GM.Utility/GM.Utility/IOUtility.cs)
+- [IEnumerable](src/GM.Utility/GM.Utility/IEnumerableUtility.cs)
 - [Int](src/GM.Utility/GM.Utility/IntUtility.cs)
+- [IO](src/GM.Utility/GM.Utility/IOUtility.cs)
 - [Long](src/GM.Utility/GM.Utility/LongUtility.cs)
+- [Object](src/GM.Utility/GM.Utility/ObjectUtility.cs)
 - [Processes](src/GM.Utility/GM.Utility/ProcessesUtility.cs)
 - [Reflection](src/GM.Utility/GM.Utility/ReflectionUtility.cs)
+- [SecureString](src/GM.Utility/GM.Utility/SecureStringUtility.cs)
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
+- [String](src/GM.Utility/GM.Utility/StringUtility.cs)
 - [XML](src/GM.Utility/GM.Utility/XMLUtility.cs)
-
-**Extensions**:
-- [Array](src/GM.Utility/GM.Utility/ArrayExtensions.cs)
-- [DateTime](src/GM.Utility/GM.Utility/DateTimeExtensions.cs)
-- [Decimal](src/GM.Utility/GM.Utility/DecimalExtensions.cs)
-- [IEnumerable](src/GM.Utility/GM.Utility/IEnumerableExtensions.cs)
-- [Object](src/GM.Utility/GM.Utility/ObjectExtensions.cs)
-- [SecureString](src/GM.Utility/GM.Utility/SecureStringExtensions.cs)
-- [String](src/GM.Utility/GM.Utility/StringExtensions.cs)
-- [Type](src/GM.Utility/GM.Utility/TypeExtensions.cs)
 
 **Other**:
 - [Util](src/GM.Utility/GM.Utility/Util.cs)

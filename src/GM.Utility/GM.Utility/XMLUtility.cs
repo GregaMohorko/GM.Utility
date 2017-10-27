@@ -8,6 +8,9 @@ using System.Xml.Linq;
 
 namespace GM.Utility
 {
+	/// <summary>
+	/// Utilities for XML.
+	/// </summary>
 	public static class XMLUtility
 	{
 		/// <summary>

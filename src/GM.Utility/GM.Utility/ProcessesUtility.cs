@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace GM.Utility
 {
+	/// <summary>
+	/// Utilities for processes.
+	/// </summary>
 	public static class ProcessesUtility
 	{
 		/// <summary>

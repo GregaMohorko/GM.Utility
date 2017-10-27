@@ -8,8 +8,15 @@ using System.Threading.Tasks;
 
 namespace GM.Utility
 {
-	public static class SecureStringExtensions
+	/// <summary>
+	/// Utilities for SecureString.
+	/// </summary>
+	public static class SecureStringUtility
 	{
+		/// <summary>
+		/// Converts input characters into a read-only secure string.
+		/// </summary>
+		/// <param name="input">The characters to convert.</param>
 		[SecurityCritical]
 		public static SecureString ToSecureString(this IEnumerable<char> input)
 		{
@@ -24,6 +31,10 @@ namespace GM.Utility
 			return secure;
 		}
 
+		/// <summary>
+		/// Converts a secure string to string.
+		/// </summary>
+		/// <param name="input">The secure string to convert.</param>
 		[SecurityCritical]
 		public static string ToInsecureString(this SecureString input)
 		{

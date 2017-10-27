@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GM.Utility
 {
+	/// <summary>
+	/// Utilities for Dictionary.
+	/// </summary>
 	public static class DictionaryUtility
 	{
 		/// <summary>
@@ -27,10 +30,11 @@ namespace GM.Utility
 			foreach(IGrouping<TKey, TObject> group in groups) {
 				List<TObject> groupObjects = group.ToList();
 
-				if(groupObjects.Count > 1)
+				if(groupObjects.Count > 1) {
 					lists.Add(group.Key, groupObjects);
-				else
+				} else {
 					singles.Add(group.Key, groupObjects[0]);
+				}
 			}
 		}
 	}

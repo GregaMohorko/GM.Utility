@@ -7,9 +7,17 @@ using System.Threading.Tasks;
 
 namespace GM.Utility
 {
-	public static class ObjectExtensions
+	/// <summary>
+	/// Utilities for object.
+	/// </summary>
+	public static class ObjectUtility
 	{
-		private static readonly MethodInfo MemberwiseCloneMethod = typeof(object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly MethodInfo MemberwiseCloneMethod;
+
+		static ObjectUtility()
+		{
+			MemberwiseCloneMethod = typeof(object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
+		}
 
 		/// <summary>
 		/// Creates a deep copy (new instance with new instances of properties).
@@ -18,6 +26,7 @@ namespace GM.Utility
 		/// https://raw.githubusercontent.com/Burtsev-Alexey/net-object-deep-copy/master/ObjectExtensions.cs
 		/// </para>
 		/// </summary>
+		/// <param name="original">The original object to copy.</param>
 		public static object DeepCopy(this object original)
 		{
 			return DeepCopyInternal(original, new Dictionary<object, object>(new ReferenceEqualityComparer()));
@@ -25,19 +34,23 @@ namespace GM.Utility
 
 		private static object DeepCopyInternal(object original, IDictionary<object, object> visited)
 		{
-			if(original == null)
+			if(original == null) {
 				return null;
+			}
 
 			Type typeToReflect = original.GetType();
 
-			if(typeToReflect.IsPrimitive())
+			if(typeToReflect.IsPrimitive()) {
 				return original;
+			}
 
-			if(visited.ContainsKey(original))
+			if(visited.ContainsKey(original)) {
 				return visited[original];
+			}
 
-			if(typeof(Delegate).IsAssignableFrom(typeToReflect))
+			if(typeof(Delegate).IsAssignableFrom(typeToReflect)) {
 				return null;
+			}
 
 			object cloneObject = MemberwiseCloneMethod.Invoke(original, null);
 
@@ -61,11 +74,13 @@ namespace GM.Utility
 		private static void DeepCopyFields(object original, IDictionary<object, object> visited, object cloneObject, Type typeToReflect, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy, Func<FieldInfo, bool> filter = null)
 		{
 			foreach(FieldInfo fieldInfo in typeToReflect.GetFields(bindingFlags)) {
-				if(filter != null && !filter(fieldInfo))
+				if(filter != null && !filter(fieldInfo)) {
 					continue;
+				}
 
-				if(fieldInfo.FieldType.IsPrimitive())
+				if(fieldInfo.FieldType.IsPrimitive()) {
 					continue;
+				}
 
 				object originalFieldValue = fieldInfo.GetValue(original);
 				object clonedFieldValue = DeepCopyInternal(originalFieldValue, visited);
@@ -91,8 +106,9 @@ namespace GM.Utility
 
 			public override int GetHashCode(object obj)
 			{
-				if(obj == null)
+				if(obj == null) {
 					return 0;
+				}
 
 				return obj.GetHashCode();
 			}

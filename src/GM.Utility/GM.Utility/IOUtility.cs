@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace GM.Utility
 {
+	/// <summary>
+	/// Utilities for input and output of any kind.
+	/// </summary>
 	public static class IOUtility
 	{
 		/// <summary>
@@ -253,6 +256,33 @@ namespace GM.Utility
 			string newName = file.Name.Substring(0, file.Name.Length - suffix.Length);
 			string absolutePath = Path.Combine(Path.GetDirectoryName(file.FullName), newName);
 			file.MoveTo(absolutePath);
+		}
+
+		/// <summary>
+		/// Searches for a file that matches the specified search pattern from the specified directory up.
+		/// <para>
+		/// If the file is not in the start directory, it will search in the parent directory. And then again in the parent directory. Until either the file is found or the start of the drive is reached and an exception is thrown.
+		/// </para>
+		/// </summary>
+		/// <param name="startDirectory">The relative or absolute path to the directory in which to start searching. This string is not case-sensitive.</param>
+		/// <param name="searchPattern">The search string to match against the names of files. This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but doesn't support regular expressions.</param>
+		/// <param name="throwExceptionIfMultipleFound">Determines whether or not to throw an exception if multiple files are found for the specified search pattern.</param>
+		public static string SearchUp(string startDirectory,string searchPattern,bool throwExceptionIfMultipleFound=false)
+		{
+			string currentDirectory = startDirectory;
+			while(true) {
+				string[] files = Directory.GetFiles(currentDirectory, searchPattern, SearchOption.TopDirectoryOnly);
+
+				if(files.Length > 0) {
+					if(throwExceptionIfMultipleFound && files.Length > 1) {
+						throw new Exception($"Multiple files were found for the search pattern '{searchPattern}'.");
+					}
+					return files[0];
+				}
+
+				// moves to the parent
+				currentDirectory = Directory.GetParent(currentDirectory).FullName;
+			}
 		}
 
 		/// <summary>

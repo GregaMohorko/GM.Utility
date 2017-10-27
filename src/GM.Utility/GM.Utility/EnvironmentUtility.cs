@@ -6,17 +6,22 @@ using System.Threading.Tasks;
 
 namespace GM.Utility
 {
+	/// <summary>
+	/// Utilities for Environment. Includes operating system.
+	/// </summary>
 	public static class EnvironmentUtility
 	{
 		/// <summary>
 		/// Gets the bitness of the current Windows operating system. Either 32 or 64.
 		/// <para>
-		/// This method is deprecated, please use GetOperatingSystemBitness instead.
+		/// This method is deprecated, please use <see cref="GetOperatingSystemBitness"/> instead.
 		/// </para>
 		/// </summary>
-		[Obsolete("Method GetWindowsBit is deprecated, please use GetOperatingSystemBitness instead.",false)]
+		[Obsolete("Method GetWindowsBit is deprecated, please use GetOperatingSystemBitness instead.",true)]
 		public static int GetWindowsBit()
 		{
+			// FIXME obsolete
+			// 2017-10-27
 			return GetOperatingSystemBitness();
 		}
 		

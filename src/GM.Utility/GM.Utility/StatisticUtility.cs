@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GM.Utility
 {
+	/// <summary>
+	/// Statistic utilities.
+	/// </summary>
 	public static class StatisticUtility
 	{
 		/// <summary>
@@ -14,8 +17,8 @@ namespace GM.Utility
 		/// https://en.wikipedia.org/wiki/Simple_linear_regression
 		/// </para>
 		/// </summary>
-		/// <param name="independantValues">Values of the independant (X-axis) variable.</param>
-		/// <param name="dependantValues">Values of the dependant (Y-axis) variable.</param>
+		/// <param name="x">Values of the independant (X-axis) variable.</param>
+		/// <param name="y">Values of the dependant (Y-axis) variable.</param>
 		public static Tuple<double,double> CalculateSimpleLinearRegressionLine(IEnumerable<double> x,IEnumerable<double> y)
 		{
 			int n;
@@ -59,8 +62,8 @@ namespace GM.Utility
 		/// https://en.wikipedia.org/wiki/Correlation_and_dependence#Pearson.27s_product-moment_coefficient
 		/// </para>
 		/// </summary>
-		/// <param name="independantValues">Values of the independant (X-axis) variable.</param>
-		/// <param name="dependantValues">Values of the dependant (Y-axis) variable.</param>
+		/// <param name="x">Values of the independant (X-axis) variable.</param>
+		/// <param name="y">Values of the dependant (Y-axis) variable.</param>
 		public static double CalculateR2(IEnumerable<double> x, IEnumerable<double> y)
 		{
 			int n;
