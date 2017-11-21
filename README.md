@@ -9,6 +9,7 @@
 **Utilities**:
 - [Array](src/GM.Utility/GM.Utility/ArrayUtility.cs)
 - [Bool](src/GM.Utility/GM.Utility/BoolUtility.cs)
+- [Cryptography](src/GM.Utility/GM.Utility/CryptographyUtility.cs)
 - [DateTime](src/GM.Utility/GM.Utility/DateTimeUtility.cs)
 - [Decimal](src/GM.Utility/GM.Utility/DecimalUtility.cs)
 - [Dictionary](src/GM.Utility/GM.Utility/DictionaryUtility.cs)
@@ -27,6 +28,7 @@
 - [XML](src/GM.Utility/GM.Utility/XMLUtility.cs)
 
 **Other**:
+- [KeyCodes](src/GM.Utility/GM.Utility/KeyCodes.cs)
 - [Util](src/GM.Utility/GM.Utility/Util.cs)
 
 ## Requirements
