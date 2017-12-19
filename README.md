@@ -1,12 +1,12 @@
 # GM.Utility
-.NET library with various static classes that provide universally useful functions and extensions.
+.NET library with various static classes and tools that provide universally useful functions, extensions and utilities.
 
 [![Release](https://img.shields.io/github/release/GregaMohorko/GM.Utility.svg?style=flat-square)](https://github.com/GregaMohorko/GM.Utility/releases/latest)
 [![NuGet](https://img.shields.io/nuget/v/GM.Utility.svg?style=flat-square)](https://www.nuget.org/packages/GM.Utility)
 
 ## List of classes
 
-**Utilities**:
+**Utilities (static classes)**:
 - [Array](src/GM.Utility/GM.Utility/ArrayUtility.cs)
 - [Bool](src/GM.Utility/GM.Utility/BoolUtility.cs)
 - [Cryptography](src/GM.Utility/GM.Utility/CryptographyUtility.cs)
@@ -26,6 +26,9 @@
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
 - [String](src/GM.Utility/GM.Utility/StringUtility.cs)
 - [XML](src/GM.Utility/GM.Utility/XMLUtility.cs)
+
+**Software design patterns**:
+- [Singleton](src/GM.Utility/GM.Utility/Singleton.cs)
 
 **Other**:
 - [KeyCodes](src/GM.Utility/GM.Utility/KeyCodes.cs)

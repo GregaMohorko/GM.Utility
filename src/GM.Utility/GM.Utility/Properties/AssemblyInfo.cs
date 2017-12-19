@@ -34,7 +34,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("GM.Utility")]
-[assembly: AssemblyDescription("Library with various static classes that provide universally useful functions and extensions.")]
+[assembly: AssemblyDescription("Library with various static classes and tools that provide universally useful functions, extensions and utilities.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Grega Mohorko")]
 [assembly: AssemblyProduct("GM.Utility")]
@@ -60,5 +60,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.1.0")]
-[assembly: AssemblyFileVersion("1.1.1.0")]
+[assembly: AssemblyVersion("1.1.2.0")]
+[assembly: AssemblyFileVersion("1.1.2.0")]

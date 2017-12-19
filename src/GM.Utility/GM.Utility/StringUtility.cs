@@ -41,6 +41,41 @@ namespace GM.Utility
 	public static class StringUtility
 	{
 		/// <summary>
+		/// Returns a new string in which all occurences of the specified value are removed.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="value">The string to seek and remove.</param>
+		public static string RemoveAllOf(this string text, string value)
+		{
+			// TEST performance
+			//return text.Replace(value, string.Empty);
+
+			int index = text.LastIndexOf(value);
+			while(index >= 0) {
+				text = text.Remove(index, value.Length);
+				--index;
+				index = text.LastIndexOf(value, index);
+			}
+			return text;
+		}
+
+		/// <summary>
+		/// Returns a new string in which the first occurence of the specified value is removed.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="value">The string to seek and remove its first occurence.</param>
+		public static string RemoveFirstOf(this string text, string value)
+		{
+			int index = text.IndexOf(value);
+			if(index < 0) {
+				// the value is not present in the text
+				return text;
+			}
+
+			return text.Remove(index, value.Length);
+		}
+
+		/// <summary>
 		/// Removes the whitespace in this text.
 		/// </summary>
 		/// <param name="text">The text.</param>

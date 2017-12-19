@@ -55,8 +55,9 @@ namespace GM.Utility
 			}
 
 			string checksum = BitConverter.ToString(checksumBytes);
+
 			// remove the hyphen
-			return checksum.Replace("-", string.Empty);
+			return checksum.RemoveAllOf("-");
 		}
 	}
 }

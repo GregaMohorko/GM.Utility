@@ -28,6 +28,7 @@ Author: Grega Mohorko
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,8 +49,7 @@ namespace GM.Utility
 		[Obsolete("Method GetWindowsBit is deprecated, please use GetOperatingSystemBitness instead.",true)]
 		public static int GetWindowsBit()
 		{
-			// FIXME obsolete
-			// 2017-10-27
+			// FIXME obsolete 2017-10-27
 			return GetOperatingSystemBitness();
 		}
 		
@@ -83,6 +83,15 @@ namespace GM.Utility
 		public static string GetProcessArchitecture()
 		{
 			return Environment.Is64BitProcess ? "x64" : "x86";
+		}
+
+		/// <summary>
+		/// Gets the root directory information of the system drive. The system drive is considered the one on which the windows directory is located.
+		/// </summary>
+		public static string GetSystemDrive()
+		{
+			string windowsPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+			return Path.GetPathRoot(windowsPath);
 		}
 	}
 }

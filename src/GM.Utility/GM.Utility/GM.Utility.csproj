@@ -38,7 +38,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>GM.StrongNameKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -70,13 +70,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionUtility.cs" />
     <Compile Include="SecureStringUtility.cs" />
+    <Compile Include="Singleton.cs" />
     <Compile Include="StatisticUtility.cs" />
     <Compile Include="StringUtility.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="XMLUtility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GM.StrongNameKey.pfx" />
+    <None Include="GM.StrongNameKey.snk" />
     <None Include="GM.Utility.licenseheader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

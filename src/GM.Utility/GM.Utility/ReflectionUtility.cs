@@ -43,6 +43,7 @@ namespace GM.Utility
 	/// </summary>
 	public static class ReflectionUtility
 	{
+		#region ASSEMBLY
 		/// <summary>
 		/// Specifies the type of the assembly.
 		/// </summary>
@@ -237,32 +238,7 @@ namespace GM.Utility
 			var uri = new Uri(codebase, UriKind.Absolute);
 			return uri.LocalPath;
 		}
-
-		/// <summary>
-		/// Sets the specified property to the provided value in the object.
-		/// </summary>
-		/// <param name="obj">The object with the property.</param>
-		/// <param name="propertyName">The name of the property to set.</param>
-		/// <param name="value">The value to set the property to.</param>
-		public static void SetProperty(this object obj, string propertyName, object value)
-		{
-			PropertyInfo property = GetPropertyInfo(obj, propertyName);
-			property.SetValue(obj, value);
-		}
-
-		/// <summary>
-		/// Sets the specified property to a value that will be extracted from the provided string value using the <see cref="TypeDescriptor.GetConverter(Type)"/> and <see cref="TypeConverter.ConvertFromString(string)"/>.
-		/// </summary>
-		/// <param name="obj">The object with the property.</param>
-		/// <param name="propertyName">The name of the property to set.</param>
-		/// <param name="valueAsString">The string representation of the value to set to the property.</param>
-		public static void SetPropertyFromString(this object obj, string propertyName, string valueAsString)
-		{
-			PropertyInfo property = GetPropertyInfo(obj, propertyName);
-			TypeConverter converter = TypeDescriptor.GetConverter(property.PropertyType);
-			object value = converter.ConvertFromString(valueAsString);
-			property.SetValue(obj, value);
-		}
+		#endregion // Assembly
 
 		/// <summary>
 		/// Gets the value of the specified property in the object.
@@ -278,16 +254,14 @@ namespace GM.Utility
 		/// <summary>
 		/// Gets the type of the specified property in the type.
 		/// <para>
-		/// If the type is nullable, this function gets its generic definition.
+		/// If the type is nullable, this function gets its generic definition. To get the real type, use <see cref="GetPropertyTypeReal(Type, string)"/>.
 		/// </para>
 		/// </summary>
 		/// <param name="type">The type that has the specified property.</param>
 		/// <param name="propertyName">The name of the property.</param>
 		public static Type GetPropertyType(this Type type, string propertyName)
 		{
-			PropertyInfo property = GetPropertyInfo(type, propertyName);
-
-			Type propertyType = property.PropertyType;
+			Type propertyType = GetPropertyTypeReal(type, propertyName);
 
 			// get the generic type of nullable, not THE nullable
 			if(propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>)) {
@@ -295,6 +269,17 @@ namespace GM.Utility
 			}
 
 			return propertyType;
+		}
+
+		/// <summary>
+		/// Gets the type of the specified property in the type.
+		/// </summary>
+		/// <param name="type">The type that has the specified property.</param>
+		/// <param name="propertyName">The name of the property.</param>
+		public static Type GetPropertyTypeReal(this Type type, string propertyName)
+		{
+			PropertyInfo property = GetPropertyInfo(type, propertyName);
+			return property.PropertyType;
 		}
 
 		/// <summary>
@@ -348,6 +333,32 @@ namespace GM.Utility
 			FieldInfo[] fields = type.GetFields(bindingFlags);
 
 			return fields.Where(fi => fi.IsLiteral && !fi.IsInitOnly);
+		}
+
+		/// <summary>
+		/// Sets the specified property to the provided value in the object.
+		/// </summary>
+		/// <param name="obj">The object with the property.</param>
+		/// <param name="propertyName">The name of the property to set.</param>
+		/// <param name="value">The value to set the property to.</param>
+		public static void SetProperty(this object obj, string propertyName, object value)
+		{
+			PropertyInfo property = GetPropertyInfo(obj, propertyName);
+			property.SetValue(obj, value);
+		}
+
+		/// <summary>
+		/// Sets the specified property to a value that will be extracted from the provided string value using the <see cref="TypeDescriptor.GetConverter(Type)"/> and <see cref="TypeConverter.ConvertFromString(string)"/>.
+		/// </summary>
+		/// <param name="obj">The object with the property.</param>
+		/// <param name="propertyName">The name of the property to set.</param>
+		/// <param name="valueAsString">The string representation of the value to set to the property.</param>
+		public static void SetPropertyFromString(this object obj, string propertyName, string valueAsString)
+		{
+			PropertyInfo property = GetPropertyInfo(obj, propertyName);
+			TypeConverter converter = TypeDescriptor.GetConverter(property.PropertyType);
+			object value = converter.ConvertFromString(valueAsString);
+			property.SetValue(obj, value);
 		}
 
 		/// <summary>
@@ -430,15 +441,43 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Determines whether this type is a primitive.
+		/// <para><see cref="string"/> is considered a primitive.</para>
 		/// </summary>
 		/// <param name="type">The type.</param>
 		public static bool IsPrimitive(this Type type)
 		{
 			if(type == typeof(string)) {
+				// string is considered as a primitive
 				return true;
 			}
 
 			return type.IsValueType && type.IsPrimitive;
+		}
+
+		/// <summary>
+		/// Gets the default value of this type.
+		/// </summary>
+		/// <param name="type">The type for which to get the default value.</param>
+		public static object GetDefault(this Type type)
+		{
+			// https://stackoverflow.com/questions/325426/programmatic-equivalent-of-defaulttype
+
+			if(!type.IsValueType) {
+				// is a reference type
+				return null;
+			}
+
+			Func<object> f = GetDefaultGeneric<object>;
+			return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type).Invoke(null, null);
+		}
+
+		/// <summary>
+		/// Gets the default value of the specified type.
+		/// </summary>
+		/// <typeparam name="T">The type for which to get the default value.</typeparam>
+		public static T GetDefaultGeneric<T>()
+		{
+			return default(T);
 		}
 	}
 }
