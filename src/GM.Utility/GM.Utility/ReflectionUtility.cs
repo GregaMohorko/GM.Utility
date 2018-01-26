@@ -174,7 +174,7 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Gets the assembly information of the specified type.
+		/// Gets the assembly information of the specified assembly.
 		/// </summary>
 		/// <param name="assembly">The assembly from which to extract the information from.</param>
 		public static AssemblyInformation GetAssemblyInformation(this Assembly assembly)
