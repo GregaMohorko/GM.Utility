@@ -25,7 +25,11 @@
 - [SecureString](src/GM.Utility/GM.Utility/SecureStringUtility.cs)
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
 - [String](src/GM.Utility/GM.Utility/StringUtility.cs)
+- [Type](src/GM.Utility/GM.Utility/TypeUtility.cs)
 - [XML](src/GM.Utility/GM.Utility/XMLUtility.cs)
+
+**Collections**:
+- [ReloadableCollection](src/GM.Utility/GM.Utility/Collections/ReloadableCollection.cs)
 
 **Software design patterns**:
 - [Singleton](src/GM.Utility/GM.Utility/Singleton.cs)

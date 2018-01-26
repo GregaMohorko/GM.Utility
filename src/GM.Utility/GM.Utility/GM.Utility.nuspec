@@ -13,6 +13,6 @@
     <description>$description$</description>
 	<summary>$description$</summary>
     <copyright>$copyright$</copyright>
-    <tags>utility extensions</tags>
+    <tags>utility extensions software design pattern</tags>
   </metadata>
 </package>

@@ -50,10 +50,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayUtility.cs" />
     <Compile Include="BoolUtility.cs" />
+    <Compile Include="Collections\ReloadableCollection.cs" />
     <Compile Include="CryptographyUtility.cs" />
     <Compile Include="DateTimeUtility.cs" />
     <Compile Include="DecimalUtility.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Singleton.cs" />
     <Compile Include="StatisticUtility.cs" />
     <Compile Include="StringUtility.cs" />
+    <Compile Include="TypeUtility.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="XMLUtility.cs" />
   </ItemGroup>
