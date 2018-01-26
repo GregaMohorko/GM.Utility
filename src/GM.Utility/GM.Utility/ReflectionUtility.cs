@@ -30,9 +30,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -239,6 +241,51 @@ namespace GM.Utility
 			return uri.LocalPath;
 		}
 		#endregion // Assembly
+
+		/// <summary>
+		/// Calls the static constructor of this type.
+		/// </summary>
+		/// <param name="type">The type of which to call the static constructor.</param>
+		public static void CallStaticConstructor(this Type type)
+		{
+			// https://stackoverflow.com/questions/11520829/explicitly-call-static-constructor/29511342#29511342
+			// https://stackoverflow.com/questions/2654010/how-can-i-run-a-static-constructor/2654684#2654684
+			RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+		}
+
+		/// <summary>
+		/// Gets the method that called the current method where this method is used.
+		/// <para>
+		/// Note that because of compiler optimization, you should add <see cref="MethodImplAttribute"/> to the method where this method is used and use the <see cref="MethodImplOptions.NoInlining"/> value.
+		/// </para>
+		/// </summary>
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static MethodBase GetCallingMethod()
+		{
+			return new StackFrame(2, false)?.GetMethod();
+		}
+
+		/// <summary>
+		/// Gets the type that called the current method where this method is used.
+		/// <para>
+		/// Note that because of compiler optimization, you should add <see cref="MethodImplAttribute"/> to the method where this method is used and use the <see cref="MethodImplOptions.NoInlining"/> value.
+		/// </para>
+		/// </summary>
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static Type GetCallingType()
+		{
+			return new StackFrame(2, false)?.GetMethod()?.DeclaringType;
+		}
+
+		/// <summary>
+		/// Gets the types defined in this assembly and in the specified namespace.
+		/// </summary>
+		/// <param name="assembly">The assembly from which to get the types.</param>
+		/// <param name="namespace">The namespace in which the types are defined.</param>
+		public static IEnumerable<Type> GetTypesInNamespace(this Assembly assembly, string @namespace)
+		{
+			return assembly.GetTypes().Where(t => t.Namespace == @namespace);
+		}
 
 		/// <summary>
 		/// Gets the value of the specified property in the object.
