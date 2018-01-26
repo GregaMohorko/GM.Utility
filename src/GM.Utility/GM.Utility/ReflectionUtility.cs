@@ -254,7 +254,7 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Gets the method that called the current method where this method is used.
+		/// Gets the method that called the current method where this method is used. This does not work when used in async methods.
 		/// <para>
 		/// Note that because of compiler optimization, you should add <see cref="MethodImplAttribute"/> to the method where this method is used and use the <see cref="MethodImplOptions.NoInlining"/> value.
 		/// </para>
