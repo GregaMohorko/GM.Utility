@@ -179,12 +179,12 @@ namespace GM.Utility
 		/// <param name="assembly">The assembly from which to extract the information from.</param>
 		public static AssemblyInformation GetAssemblyInformation(this Assembly assembly)
 		{
-			string title = assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
-			string description = assembly.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
-			string company = assembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
-			string product = assembly.GetCustomAttribute<AssemblyProductAttribute>().Product;
-			string copyright = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright;
-			string trademark = assembly.GetCustomAttribute<AssemblyTrademarkAttribute>().Trademark;
+			string title = assembly.GetCustomAttribute<AssemblyTitleAttribute>()?.Title;
+			string description = assembly.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description;
+			string company = assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company;
+			string product = assembly.GetCustomAttribute<AssemblyProductAttribute>()?.Product;
+			string copyright = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>()?.Copyright;
+			string trademark = assembly.GetCustomAttribute<AssemblyTrademarkAttribute>()?.Trademark;
 
 			string versionS;
 			AssemblyVersionAttribute assemblyVersion = assembly.GetCustomAttribute<AssemblyVersionAttribute>();
@@ -192,12 +192,12 @@ namespace GM.Utility
 				versionS = assemblyVersion.Version;
 			} else {
 				AssemblyFileVersionAttribute fileVersion = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
-				if(fileVersion == null) {
-					throw new Exception("Assembly version could not be found.");
-				}
-				versionS = fileVersion.Version;
+				versionS = fileVersion?.Version;
 			}
-			Version version = Version.Parse(versionS);
+			Version version = null;
+			if(versionS != null) {
+				Version.Parse(versionS);
+			}
 
 			return new AssemblyInformation(title, description, company, product, copyright, trademark, version);
 		}
