@@ -31,7 +31,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,20 +39,18 @@ namespace GM.Utility
 	/// <summary>
 	/// Utilities for processes.
 	/// </summary>
+	[Obsolete("This class is obsolete. Get GM.Windows.Utility package with NuGet and use class ProcessUtility there.", true)]
 	public static class ProcessesUtility
 	{
+		// FIXME obsolete 2018-01-31
+
 		/// <summary>
 		/// Gets the executable path of the specified process. Can be slow (~2 seconds) if the current process is 32bit and the specified process is 64bit.
 		/// </summary>
 		/// <param name="process">The process.</param>
 		public static string GetProcessPath(Process process)
 		{
-			try {
-				return process.MainModule.FileName;
-			} catch(Win32Exception) {
-				// the slower version
-				return GetProcessPath(process.Id);
-			}
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -62,13 +59,7 @@ namespace GM.Utility
 		/// <param name="processId">The unique identifier of the process.</param>
 		public static string GetProcessPath(int processId)
 		{
-			string query = $"SELECT ExecutablePath FROM Win32_Process WHERE ProcessId = {processId}";
-
-			using(var mos = new ManagementObjectSearcher(query)) {
-				using(ManagementObjectCollection moc = mos.Get()) {
-					return (from mo in moc.Cast<ManagementObject>() select mo["ExecutablePath"]).First().ToString();
-				}
-			}
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -77,8 +68,7 @@ namespace GM.Utility
 		/// <param name="processName">The friendly name of the process.</param>
 		public static bool IsRunning(string processName)
 		{
-			Process[] processes = Process.GetProcessesByName(processName);
-			return processes.Length > 0;
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -87,14 +77,7 @@ namespace GM.Utility
 		/// <param name="processes">The processes to kill and dispose.</param>
 		public static void KillAllProcesses(IEnumerable<Process> processes)
 		{
-			foreach(var process in processes) {
-				try {
-					if(!process.HasExited) {
-						process.Kill();
-					}
-					process.Dispose();
-				} catch { }
-			}
+			throw new NotImplementedException();
 		}
 	}
 }

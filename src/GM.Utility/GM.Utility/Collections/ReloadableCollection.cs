@@ -33,7 +33,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace GM.Utility.Collections
 {
@@ -60,11 +59,6 @@ namespace GM.Utility.Collections
 		}
 		private volatile int _interval;
 
-		/// <summary>
-		/// If set, the <see cref="Collection{T}.Add(T)"/> and <see cref="ObservableCollection{T}.RemoveItem(int)"/> operations will be invoked on this dispatcher.
-		/// </summary>
-		public readonly Dispatcher Dispatcher;
-
 		private readonly Func<List<T>> loadItems;
 		private Task task;
 		private volatile CancellationTokenSource cts;
@@ -76,15 +70,13 @@ namespace GM.Utility.Collections
 		/// </summary>
 		/// <param name="interval">The interval (in milliseconds) with which this collection will be reloading.</param>
 		/// <param name="loadItems">A method that (re)loads the elements of this collection.</param>
-		/// <param name="dispatcher">If set, the <see cref="Collection{T}.Add(T)"/> and <see cref="ObservableCollection{T}.RemoveItem(int)"/> operations will be invoked on this dispatcher.</param>
 		/// <param name="startImmediately">If true, reloading will start immediately when this instance is initialized.</param>
-		public ReloadableCollection(int interval, Func<List<T>> loadItems, Dispatcher dispatcher=null, bool startImmediately = false) : base()
+		public ReloadableCollection(int interval, Func<List<T>> loadItems, bool startImmediately = false) : base()
 		{
 			currentStartID = 0;
 			currentStopID = 0;
 			Interval = interval;
 			this.loadItems = loadItems;
-			Dispatcher = dispatcher;
 
 			if(startImmediately) {
 				Start();
@@ -95,9 +87,8 @@ namespace GM.Utility.Collections
 		/// Initializes a new instance of <see cref="ReloadableCollection{T}"/> with the <see cref="DEFAULT_INTERVAL"/> interval.
 		/// </summary>
 		/// <param name="loadItems">A method that (re)loads the elements of this collection.</param>
-		/// <param name="dispatcher">If set, the <see cref="Collection{T}.Add(T)"/> and <see cref="ObservableCollection{T}.RemoveItem(int)"/> operations will be invoked on this dispatcher.</param>
 		/// <param name="startImmediately">If true, reloading will start immediately when this instance is initialized.</param>
-		public ReloadableCollection(Func<List<T>> loadItems,Dispatcher dispatcher=null, bool startImmediately = false) : this(DEFAULT_INTERVAL, loadItems,dispatcher, startImmediately) { }
+		public ReloadableCollection(Func<List<T>> loadItems, bool startImmediately = false) : this(DEFAULT_INTERVAL, loadItems, startImmediately) { }
 
 		/// <summary>
 		/// Starts reloading this collection.
@@ -185,11 +176,7 @@ namespace GM.Utility.Collections
 
 			if(originalList.Count == 0) {
 				foreach(T item in reloadedItems) {
-					if(Dispatcher != null) {
-						Dispatcher.Invoke(() => Add(item));
-					} else {
-						Add(item);
-					}
+					Add(item);
 				}
 				return;
 			}
@@ -216,20 +203,12 @@ namespace GM.Utility.Collections
 
 					int index = IndexOf(itemToRemove);
 
-					if(Dispatcher != null) {
-						Dispatcher.Invoke(() => RemoveItem(index));
-					} else {
-						RemoveItem(index);
-					}
+					RemoveItem(index);
 				}
 			}
 
 			foreach(T itemToInsert in itemsToInsert) {
-				if(Dispatcher != null) {
-					Dispatcher.Invoke(() => Add(itemToInsert));
-				} else {
-					Add(itemToInsert);
-				}
+				Add(itemToInsert);
 			}
 		}
 

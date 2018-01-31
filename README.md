@@ -20,7 +20,6 @@
 - [IO](src/GM.Utility/GM.Utility/IOUtility.cs)
 - [Long](src/GM.Utility/GM.Utility/LongUtility.cs)
 - [Object](src/GM.Utility/GM.Utility/ObjectUtility.cs)
-- [Processes](src/GM.Utility/GM.Utility/ProcessesUtility.cs)
 - [Reflection](src/GM.Utility/GM.Utility/ReflectionUtility.cs)
 - [SecureString](src/GM.Utility/GM.Utility/SecureStringUtility.cs)
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
@@ -39,11 +38,11 @@
 - [Util](src/GM.Utility/GM.Utility/Util.cs)
 
 ## Requirements
-.NET Framework 4.6.1
+.NET Standard 2.0
 
 ## Author and License
 Grega Mohorko ([www.mohorko.info](https://www.mohorko.info))
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2018 Grega Mohorko
 
 [MIT License](./LICENSE)
