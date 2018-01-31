@@ -4,6 +4,10 @@
 [![Release](https://img.shields.io/github/release/GregaMohorko/GM.Utility.svg?style=flat-square)](https://github.com/GregaMohorko/GM.Utility/releases/latest)
 [![NuGet](https://img.shields.io/nuget/v/GM.Utility.svg?style=flat-square)](https://www.nuget.org/packages/GM.Utility)
 
+## Similar projects
+- [GM.WPF](https://github.com/GregaMohorko/GM.WPF)
+- [GM.Windows.Utility](https://github.com/GregaMohorko/GM.Windows.Utility)
+
 ## List of classes
 
 **Utilities (static classes)**:
