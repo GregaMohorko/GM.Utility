@@ -196,7 +196,7 @@ namespace GM.Utility
 			}
 			Version version = null;
 			if(versionS != null) {
-				Version.Parse(versionS);
+				version=Version.Parse(versionS);
 			}
 
 			return new AssemblyInformation(title, description, company, product, copyright, trademark, version);
