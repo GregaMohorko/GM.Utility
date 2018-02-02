@@ -5,8 +5,9 @@
 [![NuGet](https://img.shields.io/nuget/v/GM.Utility.svg?style=flat-square)](https://www.nuget.org/packages/GM.Utility)
 
 ## Similar projects
-- [GM.WPF](https://github.com/GregaMohorko/GM.WPF)
+- [GM.Tools](https://github.com/GregaMohorko/GM.Tools)
 - [GM.Windows.Utility](https://github.com/GregaMohorko/GM.Windows.Utility)
+- [GM.WPF](https://github.com/GregaMohorko/GM.WPF)
 
 ## List of classes
 
