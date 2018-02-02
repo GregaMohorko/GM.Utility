@@ -34,6 +34,9 @@
 **Collections**:
 - [ReloadableCollection](src/GM.Utility/GM.Utility/Collections/ReloadableCollection.cs)
 
+**Net**:
+- [GMWebClient](src/GM.Utility/GM.Utility/Net/GMWebClient.cs)
+
 **Software design patterns**:
 - [Singleton](src/GM.Utility/GM.Utility/Singleton.cs)
 
