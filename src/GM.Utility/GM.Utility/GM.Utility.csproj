@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
-    <Version>1.2.0.2</Version>
+    <Version>1.2.1.0</Version>
 	<Title>GM.Utility</Title>
     <Authors>Grega Mohorko</Authors>
     <Company>Grega Mohorko</Company>
@@ -16,9 +16,13 @@
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
     <Copyright>Copyright © Grega Mohorko 2018</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Fixed a bug in ReflectionUtility.GetAssemblyInformation().</PackageReleaseNotes>
-    <AssemblyVersion>1.2.0.2</AssemblyVersion>
-    <FileVersion>1.2.0.2</FileVersion>
+    <PackageReleaseNotes>Added GMWebClient.
+
+Added OrderByMultipleKeys to IEnumerableUtility.
+
+Fixed a bug in StringUtility.RemoveAll().</PackageReleaseNotes>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
+    <FileVersion>1.2.1.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

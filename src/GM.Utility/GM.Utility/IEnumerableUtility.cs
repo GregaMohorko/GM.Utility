@@ -110,5 +110,46 @@ namespace GM.Utility
 			// check if the resultant counts are all zeros
 			return ok && counts.Values.All(count => count == 0);
 		}
+
+		/// <summary>
+		/// Orders this collection using the keys that will be extracted using the provided key selectors.
+		/// <para>Key selectors are <see cref="Tuple{T1, T2}"/> where the first item is a function that selects the key and the second item determines whether to order ascendingly (if true) or descendingly (if false).</para>
+		/// </summary>
+		/// <typeparam name="T">The type of elements.</typeparam>
+		/// <param name="collection">The collection to order.</param>
+		/// <param name="keySelectors">The key selectors that will be used to extract the keys on which to order from the elements.</param>
+		public static IOrderedEnumerable<T> OrderByMultipleKeys<T>(this IEnumerable<T> collection, IEnumerable<Tuple<Func<T, object>, bool>> keySelectors)
+		{
+			int sortKeySelectorsCount = keySelectors.Count();
+
+			if(sortKeySelectorsCount == 0) {
+				throw new NotImplementedException("Empty SortKeySelector list provided.");
+			}
+
+			IOrderedEnumerable<T> orderedList;
+
+			Tuple<Func<T, object>, bool> tuple = keySelectors.ElementAt(0);
+
+			Func<T, object> sortKeySelector = tuple.Item1;
+
+			if(tuple.Item2) {
+				orderedList = collection.OrderBy(sortKeySelector);
+			} else {
+				orderedList = collection.OrderByDescending(sortKeySelector);
+			}
+
+			for(int i = 1; i < sortKeySelectorsCount; ++i) {
+				tuple = keySelectors.ElementAt(i);
+				sortKeySelector = tuple.Item1;
+
+				if(tuple.Item2) {
+					orderedList = orderedList.ThenBy(sortKeySelector);
+				} else {
+					orderedList = orderedList.ThenByDescending(sortKeySelector);
+				}
+			}
+
+			return orderedList;
+		}
 	}
 }

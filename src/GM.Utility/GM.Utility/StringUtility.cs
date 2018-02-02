@@ -50,11 +50,10 @@ namespace GM.Utility
 			// TEST performance
 			//return text.Replace(value, string.Empty);
 
-			int index = text.LastIndexOf(value);
+			int index = text.LastIndexOf(value,text.Length);
 			while(index >= 0) {
 				text = text.Remove(index, value.Length);
 				--index;
-				index = text.LastIndexOf(value, index);
 			}
 			return text;
 		}
