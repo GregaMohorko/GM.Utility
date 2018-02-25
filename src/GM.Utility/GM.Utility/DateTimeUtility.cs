@@ -63,6 +63,33 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Gets the full name of the week day of this date based on the current UI culture.
+		/// </summary>
+		/// <param name="date">The date of which to get the week day name.</param>
+		public static string GetWeekDayName(this DateTime date)
+		{
+			return GlobalizationUtility.GetWeekDayName(date);
+		}
+
+		/// <summary>
+		/// Gets the full name of the month of this date based on the current UI culture.
+		/// </summary>
+		/// <param name="date">The date of which to get the month name.</param>
+		public static string GetMonthName(this DateTime date)
+		{
+			return GlobalizationUtility.GetMonthName(date);
+		}
+
+		/// <summary>
+		/// Gets the abbreviated name of the month of this date based on the current UI culture.
+		/// </summary>
+		/// <param name="date">The date of which to get the month name.</param>
+		public static string GetMonthNameAbbreviated(DateTime date)
+		{
+			return GlobalizationUtility.GetMonthNameAbbreviated(date);
+		}
+
+		/// <summary>
 		/// Determines whether this date is in the current month.
 		/// <para>
 		/// Ignores the year. 2000-01-01 and 2001-01-01 will return true.

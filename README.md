@@ -20,6 +20,7 @@
 - [Dictionary](src/GM.Utility/GM.Utility/DictionaryUtility.cs)
 - [Double](src/GM.Utility/GM.Utility/DoubleUtility.cs)
 - [Environment](src/GM.Utility/GM.Utility/EnvironmentUtility.cs)
+- [Globalization](src/GM.Utility/GM.Utility/GlobalizationUtility.cs)
 - [IEnumerable](src/GM.Utility/GM.Utility/IEnumerableUtility.cs)
 - [Int](src/GM.Utility/GM.Utility/IntUtility.cs)
 - [IO](src/GM.Utility/GM.Utility/IOUtility.cs)

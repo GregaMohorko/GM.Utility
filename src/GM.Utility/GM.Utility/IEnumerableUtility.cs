@@ -151,5 +151,16 @@ namespace GM.Utility
 
 			return orderedList;
 		}
+
+		/// <summary>
+		/// Creates a <see cref="Dictionary{TKey, TValue}"/> from a grouping collection.
+		/// </summary>
+		/// <typeparam name="TKey">The type of the key.</typeparam>
+		/// <typeparam name="TElement">The type of the elements.</typeparam>
+		/// <param name="groupingCollection">An <see cref="IEnumerable{T}"/> of <see cref="IGrouping{TKey, TElement}"/> to create a <see cref="Dictionary{TKey, TValue}"/> from.</param>
+		public static Dictionary<TKey, List<TElement>> ToDictionaryFromGrouping<TKey, TElement>(this IEnumerable<IGrouping<TKey, TElement>> groupingCollection)
+		{
+			return groupingCollection.ToDictionary(g => g.Key, g => g.ToList());
+		}
 	}
 }
