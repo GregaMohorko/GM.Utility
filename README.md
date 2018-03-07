@@ -7,6 +7,7 @@
 ## Similar projects
 - [GM.Tools](https://github.com/GregaMohorko/GM.Tools)
 - [GM.Windows.Utility](https://github.com/GregaMohorko/GM.Windows.Utility)
+- [GM.Windows.Tools](https://github.com/GregaMohorko/GM.Windows.Tools)
 - [GM.WPF](https://github.com/GregaMohorko/GM.WPF)
 
 ## List of classes
