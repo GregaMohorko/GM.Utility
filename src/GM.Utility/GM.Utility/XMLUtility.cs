@@ -28,11 +28,14 @@ Author: Grega Mohorko
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 
 namespace GM.Utility
 {
@@ -41,6 +44,30 @@ namespace GM.Utility
 	/// </summary>
 	public static class XMLUtility
 	{
+		/// <summary>
+		/// Returns a collection of the child comment nodes of this element or document, in document order.
+		/// </summary>
+		/// <param name="xml">The xml from which to get the comment nodes.</param>
+		public static IEnumerable<XComment> Comments(this XContainer xml)
+		{
+			return xml
+				.Nodes()
+				.Where(n => n.NodeType == XmlNodeType.Comment)
+				.Cast<XComment>();
+		}
+
+		/// <summary>
+		/// Returns a collection of the descendant comment nodes for this document or element, in document order.
+		/// </summary>
+		/// <param name="xml">The xml from which to get the descendant comment nodes.</param>
+		public static IEnumerable<XComment> DescendantComments(this XContainer xml)
+		{
+			return xml
+				.DescendantNodes()
+				.Where(n => n.NodeType == XmlNodeType.Comment)
+				.Cast<XComment>();
+		}
+
 		/// <summary>
 		/// Loads an XElement from the web. Supports HTTP/S and S/FTP.
 		/// </summary>
@@ -57,6 +84,85 @@ namespace GM.Utility
 				string xmlContent = webClient.DownloadString(address);
 				return XElement.Parse(xmlContent);
 			}
+		}
+
+		/// <summary>
+		/// Removes all descendant comment nodes for this document or element.
+		/// </summary>
+		/// <param name="xml">The XML from which to remove all comment nodes.</param>
+		public static void RemoveAllComments(this XContainer xml)
+		{
+			xml.DescendantComments().Remove();
+		}
+
+		/// <summary>
+		/// Removes all information about namespaces in this and all descendant elements.
+		/// </summary>
+		/// <param name="xml">The XML from which to remove the namespace information.</param>
+		public static void RemoveNamespaces(this XElement xml)
+		{
+			xml.DescendantsAndSelf().Attributes().Where(a => a.IsNamespaceDeclaration).Remove();
+			foreach(XElement element in xml.DescendantsAndSelf()) {
+				element.Name = element.Name.LocalName;
+			}
+		}
+
+		/// <summary>
+		/// Validates the provided XML text according to XML Schema definition language (XSD) schemas and returns a list of any validation events (warnings or errors) that occured.
+		/// <para>XML Schemas are associated with namespace URIs either by using the schemaLocation attribute or the provided Schemas property.</para>
+		/// </summary>
+		/// <param name="xml">The XML text to validate.</param>
+		/// <param name="validationFlags">Set your schema validation settigns. Default is: <see cref="XmlSchemaValidationFlags.ProcessInlineSchema"/>, <see cref="XmlSchemaValidationFlags.ProcessSchemaLocation"/>, <see cref="XmlSchemaValidationFlags.ProcessIdentityConstraints"/> and <see cref="XmlSchemaValidationFlags.ReportValidationWarnings"/>.</param>
+		public static List<ValidationEventArgs> ValidateSchema(string xml, XmlSchemaValidationFlags? validationFlags = null)
+		{
+			return ValidateSchema(xml, null, validationFlags);
+		}
+
+		/// <summary>
+		/// Validates the provided XML text according to XML Schema definition language (XSD) schemas and returns a list of any validation events (warnings or errors) that occured.
+		/// <para>XML Schemas are associated with namespace URIs either by using the schemaLocation attribute or the provided Schemas property.</para>
+		/// </summary>
+		/// <param name="xml">The XML text to validate.</param>
+		/// <param name="additionalSchemas">A set of additional custom XML schemas to use.</param>
+		/// <param name="validationFlags">Set your schema validation settigns. Default is: <see cref="XmlSchemaValidationFlags.ProcessInlineSchema"/>, <see cref="XmlSchemaValidationFlags.ProcessSchemaLocation"/>, <see cref="XmlSchemaValidationFlags.ProcessIdentityConstraints"/> and <see cref="XmlSchemaValidationFlags.ReportValidationWarnings"/>.</param>
+		public static List<ValidationEventArgs> ValidateSchema(string xml, XmlSchemaSet additionalSchemas, XmlSchemaValidationFlags? validationFlags = null)
+		{
+			var result = new List<ValidationEventArgs>();
+
+			// Set the validation settings.
+			var settings = new XmlReaderSettings
+			{
+				ValidationType = ValidationType.Schema
+			};
+
+			// set validation flags
+			if(validationFlags != null) {
+				settings.ValidationFlags = validationFlags.Value;
+			} else {
+				settings.ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema;
+				settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
+				settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+				settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessIdentityConstraints;
+			}
+
+			if(additionalSchemas != null) {
+				settings.Schemas = additionalSchemas;
+			}
+
+			settings.ValidationEventHandler += (object sender, ValidationEventArgs args) =>
+			{
+				result.Add(args);
+			};
+
+			using(MemoryStream stream = xml.ToStream()) {
+				// Create the XmlReader object.
+				using(XmlReader reader = XmlReader.Create(stream, settings)) {
+					// Parse the file.
+					while(reader.Read()) ;
+				}
+			}
+
+			return result;
 		}
 	}
 }

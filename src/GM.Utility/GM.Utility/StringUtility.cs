@@ -28,6 +28,7 @@ Author: Grega Mohorko
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -40,6 +41,32 @@ namespace GM.Utility
 	/// </summary>
 	public static class StringUtility
 	{
+		/// <summary>
+		/// Converts the specified string to a stream that can be read from.
+		/// </summary>
+		/// <param name="value">A string value that the stream will read from.</param>
+		public static MemoryStream ConvertToStream(string value)
+		{
+			MemoryStream stream = new MemoryStream();
+			StreamWriter writer = new StreamWriter(stream);
+			writer.Write(value);
+			writer.Flush();
+			stream.Position = 0;
+			return stream;
+		}
+
+		/// <summary>
+		/// Indents this text by the specified space count.
+		/// </summary>
+		/// <param name="text">The text to indent.</param>
+		/// <param name="spaceCount">The number of spaces to indent.</param>
+		public static string Indent(this string text, int spaceCount)
+		{
+			string indentation = new string(' ', spaceCount);
+			string newLineReplacement = Environment.NewLine + indentation;
+			return indentation + text.Replace(Environment.NewLine, newLineReplacement);
+		}
+
 		/// <summary>
 		/// Returns a new string in which all occurences of the specified value are removed.
 		/// </summary>
@@ -81,6 +108,15 @@ namespace GM.Utility
 		public static string RemoveWhitespace(this string text)
 		{
 			return Regex.Replace(text, @"\s+", "");
+		}
+
+		/// <summary>
+		/// Converts this string to a stream that can be read from.
+		/// </summary>
+		/// <param name="value">A string value that the stream will read from.</param>
+		public static MemoryStream ToStream(this string value)
+		{
+			return ConvertToStream(value);
 		}
 
 		/// <summary>
