@@ -17,6 +17,7 @@
 - [Bool](src/GM.Utility/GM.Utility/BoolUtility.cs)
 - [Cryptography](src/GM.Utility/GM.Utility/CryptographyUtility.cs)
 - [DateTime](src/GM.Utility/GM.Utility/DateTimeUtility.cs)
+- [DayOfWeek](src/GM.Utility/GM.Utility/DayOfWeekUtility.cs)
 - [Decimal](src/GM.Utility/GM.Utility/DecimalUtility.cs)
 - [Dictionary](src/GM.Utility/GM.Utility/DictionaryUtility.cs)
 - [Double](src/GM.Utility/GM.Utility/DoubleUtility.cs)
