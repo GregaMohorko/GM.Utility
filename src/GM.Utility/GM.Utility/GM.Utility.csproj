@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
-    <Version>1.2.2.0</Version>
+    <Version>1.2.3.0</Version>
 	<Title>GM.Utility</Title>
     <Authors>Grega Mohorko</Authors>
     <Company>Grega Mohorko</Company>
@@ -16,10 +16,12 @@
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
     <Copyright>Copyright © Grega Mohorko 2018</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added GlobalizationUtility for date names.
-Added method to IEnumerableUtility: ToDictionaryFromGrouping.</PackageReleaseNotes>
-    <AssemblyVersion>1.2.2.0</AssemblyVersion>
-    <FileVersion>1.2.2.0</FileVersion>
+    <PackageReleaseNotes>Added DayOfWeekUtility.
+Added methods to StringUtility: ConvertToStream, Indent.
+Added methods to XMLUtility: Comments, Namespaces, Schema.
+Improved a method in StringUtility: RemoveAllOf.</PackageReleaseNotes>
+    <AssemblyVersion>1.2.3.0</AssemblyVersion>
+    <FileVersion>1.2.3.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -74,15 +74,7 @@ namespace GM.Utility
 		/// <param name="value">The string to seek and remove.</param>
 		public static string RemoveAllOf(this string text, string value)
 		{
-			// TEST performance
-			//return text.Replace(value, string.Empty);
-
-			int index = text.LastIndexOf(value,text.Length);
-			while(index >= 0) {
-				text = text.Remove(index, value.Length);
-				--index;
-			}
-			return text;
+			return text.Replace(value, string.Empty);
 		}
 
 		/// <summary>
