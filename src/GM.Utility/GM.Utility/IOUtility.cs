@@ -222,6 +222,7 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Copies all files whose name starts with the specified prefix in the specified directory, including subdirectories.
+		/// <para>If the destination directory doesn't exist, it is created.</para>
 		/// </summary>
 		/// <param name="sourceDirectory">The path of the source directory.</param>
 		/// <param name="destinationDirectory">The path of the directory where to copy files.</param>
@@ -234,6 +235,7 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Copies all files whose name starts with the specified prefix in the specified directory, using the specified search option.
+		/// <para>If the destination directory doesn't exist, it is created.</para>
 		/// </summary>
 		/// <param name="sourceDirectory">The path of the source directory.</param>
 		/// <param name="destinationDirectory">The path of the directory where to copy files.</param>
@@ -247,7 +249,8 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Copies all files whose name starts with the specified prefix in the specified directory, using the specified search option.
+		/// Copies all files whose name starts with the specified prefix in the specified directory, including subdirectories.
+		/// <para>If the destination directory doesn't exist, it is created.</para>
 		/// </summary>
 		/// <param name="sourceDirectory">The source directory.</param>
 		/// <param name="destinationDirectory">The path of the directory where to copy files.</param>
@@ -260,6 +263,7 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Copies all files whose name starts with the specified prefix in the specified directory, using the specified search option.
+		/// <para>If the destination directory doesn't exist, it is created.</para>
 		/// </summary>
 		/// <param name="sourceDirectory">The source directory.</param>
 		/// <param name="destinationDirectory">The path of the directory where to copy files.</param>
@@ -268,7 +272,11 @@ namespace GM.Utility
 		/// <param name="overwrite">true to allow an existing file to be overwritten; otherwise, false.</param>
 		public static void CopyAllFilesWithPrefix(DirectoryInfo sourceDirectory, string destinationDirectory, string prefix, SearchOption searchOption, bool overwrite = true)
 		{
-			FileInfo[] topFiles = sourceDirectory.GetFiles("*", SearchOption.TopDirectoryOnly);
+			if(!Directory.Exists(destinationDirectory)) {
+				Directory.CreateDirectory(destinationDirectory);
+			}
+
+			FileInfo[] topFiles = sourceDirectory.GetFiles($"{prefix}*", SearchOption.TopDirectoryOnly);
 			foreach(FileInfo topFile in topFiles) {
 				string fileNewPath = Path.Combine(destinationDirectory, topFile.Name);
 				topFile.CopyTo(fileNewPath, overwrite);
@@ -278,9 +286,6 @@ namespace GM.Utility
 				DirectoryInfo[] subdirectories = sourceDirectory.GetDirectories("*", SearchOption.TopDirectoryOnly);
 				foreach(DirectoryInfo subdirectory in subdirectories) {
 					string subdirectoryNewPath = Path.Combine(destinationDirectory, subdirectory.Name);
-					if(!Directory.Exists(subdirectoryNewPath)) {
-						Directory.CreateDirectory(subdirectoryNewPath);
-					}
 					CopyAllFilesWithPrefix(subdirectory, subdirectoryNewPath, prefix, SearchOption.AllDirectories, overwrite);
 				}
 			}
