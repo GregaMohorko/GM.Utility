@@ -28,6 +28,7 @@
 - [IO](src/GM.Utility/GM.Utility/IOUtility.cs)
 - [Long](src/GM.Utility/GM.Utility/LongUtility.cs)
 - [Object](src/GM.Utility/GM.Utility/ObjectUtility.cs)
+- [Path](src/GM.Utility/GM.Utility/PathUtility.cs)
 - [Reflection](src/GM.Utility/GM.Utility/ReflectionUtility.cs)
 - [SecureString](src/GM.Utility/GM.Utility/SecureStringUtility.cs)
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
