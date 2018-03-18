@@ -49,13 +49,45 @@ namespace GM.Utility
 		}
 		
 		/// <summary>
-		/// Gets the decimal part of this decimal number.
+		/// Gets only the decimal part of this decimal.
+		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// </summary>
+		/// <param name="value">The decimal value.</param>
+		public static decimal GetDecimals(this decimal value)
+		{
+			return value - decimal.Truncate(value);
+		}
+
+		/// <summary>
+		/// Gets the specified number of decimals from the decimal part of this decimal number as an integer.
+		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// </summary>
+		/// <param name="value">The decimal value.</param>
+		/// <param name="decimalCount">Number of decimals to get.</param>
+		public static int GetDecimalPart(this decimal value, int decimalCount)
+		{
+			decimal decimals = GetDecimals(value);
+			return (int)(decimals * (int)(Math.Pow(10, decimalCount)));
+		}
+
+		/// <summary>
+		/// Gets the whole decimal part of this decimal number as an integer.
+		/// <para>If the value is negative, the returned value will also be negative.</para>
 		/// </summary>
 		/// <param name="value">The decimal value.</param>
 		public static int GetDecimalPart(this decimal value)
 		{
-			decimal decimalPart = value - decimal.Truncate(value);
-			return (int)(decimalPart * 100);
+			decimal decimals = GetDecimals(value);
+			int decimalPart = 0;
+			int add;
+			while(decimals != 0) {
+				decimals *= 10;
+				decimalPart *= 10;
+				add = (int)decimals;
+				decimalPart += add;
+				decimals -= add;
+			}
+			return decimalPart;
 		}
 
 		/// <summary>

@@ -49,6 +49,41 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Gets only the decimal part of this double.
+		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// </summary>
+		/// <param name="value">The double value.</param>
+		public static double GetDecimals(this double value)
+		{
+			decimal decimalValue = Convert.ToDecimal(value);
+			decimal decimals = decimalValue.GetDecimals();
+			return decimal.ToDouble(decimals);
+		}
+
+		/// <summary>
+		/// Gets the specified number of decimals from the decimal part of this double as an integer.
+		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// </summary>
+		/// <param name="value">The double value.</param>
+		/// <param name="decimalCount">Number of decimals to get.</param>
+		public static int GetDecimalPart(this double value, int decimalCount)
+		{
+			decimal decimalValue = Convert.ToDecimal(value);
+			return decimalValue.GetDecimalPart(decimalCount);
+		}
+
+		/// <summary>
+		/// Gets the whole decimal part of this double as an integer.
+		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// </summary>
+		/// <param name="value">The double value.</param>
+		public static int GetDecimalPart(this double value)
+		{
+			decimal decimalValue = Convert.ToDecimal(value);
+			return decimalValue.GetDecimalPart();
+		}
+
+		/// <summary>
 		/// Determines whether the provided text represents a valid double.
 		/// </summary>
 		/// <param name="text">The text.</param>
