@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
-    <Version>1.2.4.0</Version>
+    <Version>1.2.5.0</Version>
 	<Title>GM.Utility</Title>
     <Authors>Grega Mohorko</Authors>
     <Company>Grega Mohorko</Company>
@@ -16,10 +16,10 @@
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
     <Copyright>Copyright © Grega Mohorko 2018</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added: PathUtility.GetRelativePath.
-Fixed: IOUtility.CopyAllFilesWithPrefix.</PackageReleaseNotes>
-    <AssemblyVersion>1.2.4.0</AssemblyVersion>
-    <FileVersion>1.2.4.0</FileVersion>
+    <PackageReleaseNotes>Added support for asynchronous reloading in ReloadableCollection.
+Added methods to DecimalUtility and DoubleUtility: GetDecimals, GetDecimalPart.</PackageReleaseNotes>
+    <AssemblyVersion>1.2.5.0</AssemblyVersion>
+    <FileVersion>1.2.5.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -37,7 +37,7 @@ using System.Threading.Tasks;
 namespace GM.Utility.Collections
 {
 	/// <summary>
-	/// An ObservableCollection that reloads with an interval.
+	/// An <see cref="ObservableCollection{T}"/> that reloads with an interval.
 	/// <para>
 	/// Important: Needs to be stopped and/or disposed.
 	/// </para>
@@ -52,43 +52,55 @@ namespace GM.Utility.Collections
 		/// <summary>
 		/// The interval (in milliseconds) with which this collection is reloading.
 		/// </summary>
-		public int Interval
-		{
-			get => _interval;
-			set => _interval = value;
-		}
-		private volatile int _interval;
+		public int Interval { get; set; }
 
-		private readonly Func<List<T>> loadItems;
-		private Task task;
-		private volatile CancellationTokenSource cts;
-		private volatile int currentStartID;
-		private volatile int currentStopID;
+		private readonly Func<List<T>> loadItemsSync;
+		private readonly Func<Task<List<T>>> loadItemsAsync;
+		private CancellationTokenSource cts;
+		private int currentStartID;
+		private int currentStopID;
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="ReloadableCollection{T}"/>.
-		/// </summary>
-		/// <param name="interval">The interval (in milliseconds) with which this collection will be reloading.</param>
-		/// <param name="loadItems">A method that (re)loads the elements of this collection.</param>
-		/// <param name="startImmediately">If true, reloading will start immediately when this instance is initialized.</param>
-		public ReloadableCollection(int interval, Func<List<T>> loadItems, bool startImmediately = false) : base()
-		{
-			currentStartID = 0;
-			currentStopID = 0;
-			Interval = interval;
-			this.loadItems = loadItems;
-
-			if(startImmediately) {
-				Start();
-			}
-		}
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="ReloadableCollection{T}"/> with the <see cref="DEFAULT_INTERVAL"/> interval.
+		/// Initializes a new instance of <see cref="ReloadableCollection{T}"/> with synchronous reloading and the <see cref="DEFAULT_INTERVAL"/> interval.
 		/// </summary>
 		/// <param name="loadItems">A method that (re)loads the elements of this collection.</param>
 		/// <param name="startImmediately">If true, reloading will start immediately when this instance is initialized.</param>
 		public ReloadableCollection(Func<List<T>> loadItems, bool startImmediately = false) : this(DEFAULT_INTERVAL, loadItems, startImmediately) { }
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="ReloadableCollection{T}"/> with synchronous reloading.
+		/// </summary>
+		/// <param name="interval">The interval (in milliseconds) with which this collection will be reloading.</param>
+		/// <param name="loadItems">A method that (re)loads the elements of this collection.</param>
+		/// <param name="startImmediately">If true, reloading will start immediately when this instance is initialized.</param>
+		public ReloadableCollection(int interval, Func<List<T>> loadItems, bool startImmediately = false) : this(interval,loadItems, null,startImmediately) { }
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="ReloadableCollection{T}"/> with asynchronous reloading and the <see cref="DEFAULT_INTERVAL"/> interval.
+		/// </summary>
+		/// <param name="loadItems">A method that (re)loads the elements of this collection.</param>
+		/// <param name="startImmediately">If true, reloading will start immediately when this instance is initialized.</param>
+		public ReloadableCollection(Func<Task<List<T>>> loadItems,bool startImmediately = false) : this(DEFAULT_INTERVAL, loadItems, startImmediately) { }
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="ReloadableCollection{T}"/> with asynchronous reloading.
+		/// </summary>
+		/// <param name="interval">The interval (in milliseconds) with which this collection will be reloading.</param>
+		/// <param name="loadItems">A method that (re)loads the elements of this collection.</param>
+		/// <param name="startImmediately">If true, reloading will start immediately when this instance is initialized.</param>
+		public ReloadableCollection(int interval, Func<Task<List<T>>> loadItems, bool startImmediately = false) : this(interval, null, loadItems, startImmediately) { }
+
+		private ReloadableCollection(int interval, Func<List<T>> loadItemsSync, Func<Task<List<T>>> loadItemsAsync, bool startImmediately)
+		{
+			currentStartID = 0;
+			currentStopID = 0;
+			Interval = interval;
+			this.loadItemsSync = loadItemsSync;
+			this.loadItemsAsync = loadItemsAsync;
+			if(startImmediately) {
+				Start();
+			}
+		}
 
 		/// <summary>
 		/// Starts reloading this collection.
@@ -102,8 +114,9 @@ namespace GM.Utility.Collections
 
 				++currentStartID;
 
-				// check if task is null OR if it is already completed (if its not, it will restart the thread again when the current ends)
-				if(task == null || task.IsCompleted) {
+				// if cts != null it means that it is currently still running and that it will end the next iteration
+				// and it will see that a new start is pending and will start it
+				if(cts == null) {
 					StartInternal();
 				}
 			} else {
@@ -112,47 +125,33 @@ namespace GM.Utility.Collections
 		}
 
 		/// <summary>
-		/// Actually fires up the inner thread and starts running.
+		/// Stops the reloading.
 		/// </summary>
-		private void StartInternal()
-		{
-			cts = new CancellationTokenSource();
-
-			task = new Task(Run, cts.Token, TaskCreationOptions.LongRunning);
-
-			task.Start();
-		}
-
-		/// <summary>
-		/// Stops the background reloading. If the wait parameter is true, it will wait for the background task to stop executing.
-		/// </summary>
-		/// <param name="wait">True, if it should wait for the reloading background task to stop executing.</param>
-		public void Stop(bool wait)
+		public void Stop()
 		{
 			if(currentStartID > currentStopID) {
 				// running, stop it
 
 				++currentStopID;
 				cts?.Cancel();
-				if(wait && !task.IsCompleted) {
-					task.Wait();
-				}
 			} else if(currentStartID == currentStopID) {
-				// if Stop(false) was called, and then Stop(true) BEFORE it has actually stopped, it can come to here
-				if(wait && task != null && !task.IsCompleted) {
-					task.Wait();
-				}
+				// already stopped, do nothing
 			} else {
 				throw new NotImplementedException("WTF"); // it should never come to this
 			}
 		}
 
-		private void Run()
+		private async void StartInternal()
 		{
+			cts = new CancellationTokenSource();
+
 			while(!cts.Token.IsCancellationRequested) {
-				Reload();
-				Thread.Sleep(Interval);
+				await Reload();
+				await Task.Delay(Interval);
 			}
+
+			cts.Dispose();
+			cts = null;
 
 			if(currentStartID > currentStopID) {
 				// new start is pending, fire it up
@@ -160,14 +159,14 @@ namespace GM.Utility.Collections
 			}
 		}
 
-		private void Reload()
+		private async Task Reload()
 		{
-			if(loadItems == null) {
-				Stop(false);
-				return;
+			List<T> reloadedItems;
+			if(loadItemsAsync != null) {
+				reloadedItems = await loadItemsAsync();
+			} else {
+				reloadedItems = loadItemsSync();
 			}
-
-			List<T> reloadedItems = loadItems.Invoke();
 			if(reloadedItems == null || cts.Token.IsCancellationRequested) {
 				return;
 			}
@@ -181,10 +180,10 @@ namespace GM.Utility.Collections
 				return;
 			}
 
+			// checks which reloaded items should be inserted
 			List<T> itemsToInsert = new List<T>();
 			bool[] checkedIndexes = new bool[originalList.Count];
-
-			for(int i = 0; i < reloadedItems.Count; i++) {
+			for(int i = 0; i < reloadedItems.Count; ++i) {
 				T reloadedItem = reloadedItems[i];
 
 				int currentItemIndex = originalList.IndexOf(reloadedItem);
@@ -197,7 +196,7 @@ namespace GM.Utility.Collections
 			}
 
 			// check if any items have not been checked (were probably deleted somewhere outside of this application)
-			for(int i = checkedIndexes.Length - 1; i >= 0; i--) {
+			for(int i = checkedIndexes.Length - 1; i >= 0; --i) {
 				if(!checkedIndexes[i]) {
 					T itemToRemove = originalList[i];
 
@@ -213,14 +212,11 @@ namespace GM.Utility.Collections
 		}
 
 		/// <summary>
-		/// Disposes this instance of <see cref="ReloadableCollection{T}"/>. If the reloading task is currently running, it waits for it to stop.
+		/// Stops and disposes this instance of <see cref="ReloadableCollection{T}"/>.
 		/// </summary>
 		public void Dispose()
 		{
-			Stop(true);
-
-			task?.Dispose();
-			cts?.Dispose();
+			Stop();
 		}
 	}
 }
