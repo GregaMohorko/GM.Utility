@@ -51,6 +51,8 @@
     <Compile Include="DecimalUtilityTest.cs" />
     <Compile Include="DoubleUtilityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IEnumerableUtilityTest.cs" />
+    <Compile Include="EnumUtilityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GM.Utility.Test.licenseheader" />

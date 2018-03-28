@@ -81,37 +81,6 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Determines whether two sequences are equal by comparing the elements by using the default equality comparer for their type. Note that this method does not compare the order of elements and returns true even if the order is not equal.
-		/// </summary>
-		/// <typeparam name="T">The type of the elements of the input sequences.</typeparam>
-		/// <param name="first">The first sequence.</param>
-		/// <param name="second">An IEnumerable to compare to the first sequence.</param>
-		public static bool SequenceEqualUnordered<T>(this IEnumerable<T> first, IEnumerable<T> second)
-		{
-			// Solution from: http://stackoverflow.com/questions/22173762/check-if-two-lists-are-equal
-			// linear time!
-
-			// hash-based dictionary of counts
-			Dictionary<T, int> counts = first
-				.GroupBy(element => element)
-				.ToDictionary(group => group.Key, group => group.Count());
-
-			// -1 for each element of the second sequence
-			bool ok = true;
-			foreach(T element in second) {
-				if(counts.ContainsKey(element)) {
-					counts[element]--;
-				} else {
-					ok = false;
-					break;
-				}
-			}
-
-			// check if the resultant counts are all zeros
-			return ok && counts.Values.All(count => count == 0);
-		}
-
-		/// <summary>
 		/// Orders this collection using the keys that will be extracted using the provided key selectors.
 		/// <para>Key selectors are <see cref="Tuple{T1, T2}"/> where the first item is a function that selects the key and the second item determines whether to order ascendingly (if true) or descendingly (if false).</para>
 		/// </summary>
@@ -150,6 +119,73 @@ namespace GM.Utility
 			}
 
 			return orderedList;
+		}
+
+		/// <summary>
+		/// Rotates this collection (moves the start by the specified number of elements). Can be negative.
+		/// <para>Example: If your collection is { 1, 2, 3, 4 } and you rotate by 1, result will be { 4, 1, 2, 3 }.</para>
+		/// <para>Example 2: If your collection is { 1, 2, 3, 4, 5 } and you rotate by -2, result will be { 3, 4, 5, 1, 2 }.</para>
+		/// </summary>
+		/// <typeparam name="T">The element type..</typeparam>
+		/// <param name="collection">The collection to rotate.</param>
+		/// <param name="numberOfElements">The amount of elements to rotate.</param>
+		public static IEnumerable<T> Rotate<T>(this IEnumerable<T> collection, int numberOfElements)
+		{
+			if(numberOfElements == 0) {
+				return collection;
+			}
+			return RotateImpl(collection, numberOfElements);
+		}
+
+		private static IEnumerable<T> RotateImpl<T>(IEnumerable<T> collection, int numberOfElements)
+		{
+			List<T> list = collection.ToList();
+
+			if(numberOfElements < 0) {
+				numberOfElements = (numberOfElements % list.Count) + list.Count;
+			}
+			if(numberOfElements >= list.Count) {
+				numberOfElements %= list.Count;
+			}
+
+			int start = list.Count - numberOfElements;
+			for(int i = start; i < list.Count; ++i) {
+				yield return list[i];
+			}
+			for(int i = 0; i < start; ++i) {
+				yield return list[i];
+			}
+		}
+
+		/// <summary>
+		/// Determines whether two sequences are equal by comparing the elements by using the default equality comparer for their type. Note that this method does not compare the order of elements and returns true even if the order is not equal.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements of the input sequences.</typeparam>
+		/// <param name="first">The first sequence.</param>
+		/// <param name="second">An IEnumerable to compare to the first sequence.</param>
+		public static bool SequenceEqualUnordered<T>(this IEnumerable<T> first, IEnumerable<T> second)
+		{
+			// Solution from: http://stackoverflow.com/questions/22173762/check-if-two-lists-are-equal
+			// linear time!
+
+			// hash-based dictionary of counts
+			Dictionary<T, int> counts = first
+				.GroupBy(element => element)
+				.ToDictionary(group => group.Key, group => group.Count());
+
+			// -1 for each element of the second sequence
+			bool ok = true;
+			foreach(T element in second) {
+				if(counts.ContainsKey(element)) {
+					counts[element]--;
+				} else {
+					ok = false;
+					break;
+				}
+			}
+
+			// check if the resultant counts are all zeros
+			return ok && counts.Values.All(count => count == 0);
 		}
 
 		/// <summary>
