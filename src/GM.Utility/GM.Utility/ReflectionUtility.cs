@@ -409,6 +409,26 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Sets all fields and properties of the specified type in the provided object to the specified value.
+		/// <para>Internal, protected and private fields are included, static are not.</para>
+		/// </summary>
+		/// <typeparam name="T">The type of the properties.</typeparam>
+		/// <param name="obj">The object.</param>
+		/// <param name="value">The value to set the properties to.</param>
+		public static void SetAllPropertiesOfType<T>(object obj, T value)
+		{
+			Type type = obj.GetType();
+
+			FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+			foreach(FieldInfo field in fields) {
+				if(field.FieldType == typeof(T)) {
+					field.SetValue(obj, value);
+				}
+			}
+		}
+
+		/// <summary>
 		/// Determines whether or not this object has a property with the specified name.
 		/// </summary>
 		/// <param name="obj">The object.</param>
