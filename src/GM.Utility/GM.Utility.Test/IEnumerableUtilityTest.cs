@@ -37,6 +37,31 @@ namespace GM.Utility.Test
 	public class IEnumerableUtilityTest
 	{
 		[TestMethod]
+		public void AllSame()
+		{
+			char valueSelector1(string s) => s[0];
+			char valueSelector3(string s) => s[2];
+			var example = new List<string> { "abc", "aac", "bac" };
+
+			Assert.ThrowsException<ArgumentNullException>(delegate
+			{
+				IEnumerableUtility.AllSame<string, char>(null, valueSelector1);
+			});
+			Assert.ThrowsException<ArgumentNullException>(delegate
+			{
+				IEnumerableUtility.AllSame<string, char>(example, null);
+			});
+
+			// all strings have the same character in the third position
+			Assert.IsTrue(example.AllSame(valueSelector3));
+			// not all strings have the same character in the first position
+			Assert.IsFalse(example.AllSame(valueSelector1));
+
+			// empty collections should return true, the same as LINQ All method
+			Assert.IsTrue(new List<string>().AllSame(valueSelector1));
+		}
+
+		[TestMethod]
 		public void Rotate()
 		{
 			var example = new List<int> { 1, 2, 3, 4 };

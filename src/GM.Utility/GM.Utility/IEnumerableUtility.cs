@@ -43,6 +43,28 @@ namespace GM.Utility
 	public static class IEnumerableUtility
 	{
 		/// <summary>
+		/// Determines whether all elements in this collection produce the same value with the provided value selector. Compares using the <see cref="object.Equals(object)"/> method.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <typeparam name="TValue">The type of the values to compare.</typeparam>
+		/// <param name="enumerable">The collection.</param>
+		/// <param name="valueSelector">A transform function to apply to each element to select the value on which to compare elements.</param>
+		public static bool AllSame<T,TValue>(this IEnumerable<T> enumerable,Func<T, TValue> valueSelector)
+		{
+			if(enumerable == null) {
+				throw new ArgumentNullException(nameof(enumerable));
+			}
+			if(valueSelector == null) {
+				throw new ArgumentNullException(nameof(valueSelector));
+			}
+			if(!enumerable.Any()) {
+				return true;
+			}
+			TValue sample = valueSelector(enumerable.First());
+			return enumerable.All(e => sample.Equals(valueSelector(e)));
+		}
+
+		/// <summary>
 		/// Returns distinct elements from a sequence using the provided value selector for equality comparison.
 		/// </summary>
 		/// <typeparam name="T1">The type of the elements of source.</typeparam>
