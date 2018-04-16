@@ -278,6 +278,18 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Gets all the namespaces in this assembly.
+		/// </summary>
+		/// <param name="assembly">The assembly.</param>
+		public static IEnumerable<string> GetNamespaces(this Assembly assembly)
+		{
+			if(assembly == null) {
+				throw new ArgumentNullException(nameof(assembly));
+			}
+			return assembly.GetTypes().Select(t => t.Namespace);
+		}
+
+		/// <summary>
 		/// Gets the types defined in this assembly and in the specified namespace.
 		/// </summary>
 		/// <param name="assembly">The assembly from which to get the types.</param>

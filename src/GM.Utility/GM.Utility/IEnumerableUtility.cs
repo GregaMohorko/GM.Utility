@@ -65,6 +65,35 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Determines whether all elements in this collection produce the same values with the provided value selectors. Compares using the <see cref="object.Equals(object)"/> method.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <typeparam name="TValue1">The type of the first values to compare.</typeparam>
+		/// <typeparam name="TValue2">The type of the second values to compare.</typeparam>
+		/// <param name="enumerable">The collection.</param>
+		/// <param name="valueSelector1">A transform function to apply to each element to select the first value on which to compare elements.</param>
+		/// <param name="valueSelector2">A transform function to apply to each element to select the second value on which to compare elements.</param>
+		public static bool AllSame<T,TValue1,TValue2>(this IEnumerable<T> enumerable,Func<T,TValue1> valueSelector1, Func<T,TValue2> valueSelector2)
+		{
+			if(enumerable == null) {
+				throw new ArgumentNullException(nameof(enumerable));
+			}
+			if(valueSelector1 == null) {
+				throw new ArgumentNullException(nameof(valueSelector1));
+			}
+			if(valueSelector2 == null) {
+				throw new ArgumentNullException(nameof(valueSelector2));
+			}
+			if(!enumerable.Any()) {
+				return true;
+			}
+			T first = enumerable.First();
+			TValue1 sample1=valueSelector1(first);
+			TValue2 sample2 = valueSelector2(first);
+			return enumerable.All(e => sample1.Equals(valueSelector1(e)) && sample2.Equals(valueSelector2(e)));
+		}
+
+		/// <summary>
 		/// Returns distinct elements from a sequence using the provided value selector for equality comparison.
 		/// </summary>
 		/// <typeparam name="T1">The type of the elements of source.</typeparam>

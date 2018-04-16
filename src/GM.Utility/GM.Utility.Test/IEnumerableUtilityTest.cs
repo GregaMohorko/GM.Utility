@@ -37,7 +37,7 @@ namespace GM.Utility.Test
 	public class IEnumerableUtilityTest
 	{
 		[TestMethod]
-		public void AllSame()
+		public void AllSame1()
 		{
 			char valueSelector1(string s) => s[0];
 			char valueSelector3(string s) => s[2];
@@ -59,6 +59,41 @@ namespace GM.Utility.Test
 
 			// empty collections should return true, the same as LINQ All method
 			Assert.IsTrue(new List<string>().AllSame(valueSelector1));
+		}
+
+		[TestMethod]
+		public void AllSame2()
+		{
+			char valueSelector1(string s) => s[0];
+			char valueSelector2(string s) => s[1];
+			char valueSelector3(string s) => s[2];
+			char valueSelector4(string s) => s[3];
+			var example = new List<string> { "abcd", "aacd", "bacd" };
+
+			Assert.ThrowsException<ArgumentNullException>(delegate
+			{
+				IEnumerableUtility.AllSame<string, char, char>(null, valueSelector1, valueSelector1);
+			});
+			Assert.ThrowsException<ArgumentNullException>(delegate
+			{
+				IEnumerableUtility.AllSame<string, char, char>(example, null, valueSelector1);
+			});
+			Assert.ThrowsException<ArgumentNullException>(delegate
+			{
+				IEnumerableUtility.AllSame<string, char, char>(example, valueSelector1, null);
+			});
+
+			// all strings have the same character in the third and forth position
+			Assert.IsTrue(example.AllSame(valueSelector3,valueSelector4));
+			// not all strings have the same character in the first and third position
+			Assert.IsFalse(example.AllSame(valueSelector1, valueSelector3));
+			// not all strings have the same character in the third and first position
+			Assert.IsFalse(example.AllSame(valueSelector3, valueSelector1));
+			// not all strings have the same character in the first and second position
+			Assert.IsFalse(example.AllSame(valueSelector1, valueSelector2));
+
+			// empty collections should return true, the same as LINQ All method
+			Assert.IsTrue(new List<string>().AllSame(valueSelector1, valueSelector2));
 		}
 
 		[TestMethod]

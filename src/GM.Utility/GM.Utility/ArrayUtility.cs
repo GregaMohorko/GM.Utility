@@ -74,6 +74,39 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Sets all the values in this array to their default values.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <param name="array">The array to reset.</param>
+		public static void Reset<T>(this T[] array)
+		{
+			if(array == null) {
+				throw new ArgumentNullException(nameof(array));
+			}
+
+			for(int i = 0; i < array.Length; ++i) {
+				array[i] = default(T);
+			}
+		}
+
+		/// <summary>
+		/// Sets all the values in this array to the specified value.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <param name="array">The array to reset.</param>
+		/// <param name="value">The value to set to all the elements.</param>
+		public static void Reset<T>(this T[] array, T value)
+		{
+			if(array == null) {
+				throw new ArgumentNullException(nameof(array));
+			}
+			
+			for(int i = 0; i < array.Length; ++i) {
+				array[i] = value;
+			}
+		}
+
+		/// <summary>
 		/// Swaps two indexes in the array.
 		/// </summary>
 		/// <typeparam name="T">The type of the elements in the array.</typeparam>
