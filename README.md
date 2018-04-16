@@ -15,6 +15,7 @@
 **Utilities (static classes)**:
 - [Array](src/GM.Utility/GM.Utility/ArrayUtility.cs)
 - [Bool](src/GM.Utility/GM.Utility/BoolUtility.cs)
+- [Color](src/GM.Utility/GM.Utility/ColorUtility.cs)
 - [Cryptography](src/GM.Utility/GM.Utility/CryptographyUtility.cs)
 - [DateTime](src/GM.Utility/GM.Utility/DateTimeUtility.cs)
 - [DayOfWeek](src/GM.Utility/GM.Utility/DayOfWeekUtility.cs)
@@ -29,6 +30,7 @@
 - [Long](src/GM.Utility/GM.Utility/LongUtility.cs)
 - [Object](src/GM.Utility/GM.Utility/ObjectUtility.cs)
 - [Path](src/GM.Utility/GM.Utility/PathUtility.cs)
+- [Random](src/GM.Utility/GM.Utility/RandomUtility.cs)
 - [Reflection](src/GM.Utility/GM.Utility/ReflectionUtility.cs)
 - [SecureString](src/GM.Utility/GM.Utility/SecureStringUtility.cs)
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
