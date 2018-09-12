@@ -140,6 +140,13 @@ namespace GM.Utility
 		/// <param name="keySelectors">The key selectors that will be used to extract the keys on which to order from the elements.</param>
 		public static IOrderedEnumerable<T> OrderByMultipleKeys<T>(this IEnumerable<T> collection, IEnumerable<Tuple<Func<T, object>, bool>> keySelectors)
 		{
+			if(collection == null) {
+				throw new ArgumentNullException(nameof(collection));
+			}
+			if(keySelectors == null) {
+				throw new ArgumentNullException(nameof(keySelectors));
+			}
+
 			int sortKeySelectorsCount = keySelectors.Count();
 
 			if(sortKeySelectorsCount == 0) {

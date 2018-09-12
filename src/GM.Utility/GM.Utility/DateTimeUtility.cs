@@ -40,6 +40,23 @@ namespace GM.Utility
 	public static class DateTimeUtility
 	{
 		/// <summary>
+		/// Returns the end of the current month.
+		/// </summary>
+		public static DateTime EndOfMonth()
+		{
+			return EndOfMonth(DateTime.Today);
+		}
+
+		/// <summary>
+		/// Returns the end of the month of the specified date.
+		/// </summary>
+		/// <param name="date">The source date.</param>
+		public static DateTime EndOfMonth(this DateTime date)
+		{
+			return new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+		}
+
+		/// <summary>
 		/// Returns the end of the current week (sunday).
 		/// </summary>
 		public static DateTime EndOfWeek()
@@ -150,7 +167,7 @@ namespace GM.Utility
 		/// <param name="date">The source date.</param>
 		public static DateTime StartOfMonth(this DateTime date)
 		{
-			return date.Date.Subtract(TimeSpan.FromDays(date.Day - 1));
+			return new DateTime(date.Year, date.Month, 1);
 		}
 
 		/// <summary>

@@ -55,6 +55,7 @@
     <Compile Include="EnumUtilityTest.cs" />
     <Compile Include="DefaultedObjectTest.cs" />
     <Compile Include="ArrayUtilityTest.cs" />
+    <Compile Include="DateTimeUtilityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GM.Utility.Test.licenseheader" />
