@@ -103,6 +103,62 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Returns a new string in which the substring in the specified range (inclusive) is replaced with the provided replacement string.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="startIndex">The zero-based starting position of the substring to replace (inclusive).</param>
+		/// <param name="endIndex">The zero-based ending position of the substring to replace (inclusive).</param>
+		/// <param name="replacement">The string with which to replace the specified range.</param>
+		public static string Replace(this string text, int startIndex,int endIndex, string replacement)
+		{
+			if(text==null) {
+				throw new ArgumentNullException(nameof(text));
+			}
+			if(replacement==null) {
+				throw new ArgumentNullException(nameof(replacement));
+			}
+			if(endIndex<startIndex) {
+				throw new ArgumentOutOfRangeException(nameof(endIndex), "The end index must be bigger than start index.");
+			}
+
+			return text.Substring(0, startIndex)+replacement+text.Substring(endIndex+1, text.Length-endIndex-1);
+		}
+
+		/// <summary>
+		/// Returns a new string in which all occurrences of a specified string in the current instance are replaced with another specified string. The comparison is done in a case insensitive (invariant culture) way.
+		/// </summary>
+		/// <param name="text"></param>
+		/// <param name="oldValue">The string to be replaced.</param>
+		/// <param name="newValue">The string to replace all occurrences of oldValue.</param>
+		/// <returns></returns>
+		public static string ReplaceCaseInsensitive(this string text,string oldValue,string newValue)
+		{
+			if(text==null) {
+				throw new ArgumentNullException(nameof(text));
+			}
+			if(oldValue==null) {
+				throw new ArgumentNullException(nameof(oldValue));
+			}
+			if(newValue==null) {
+				throw new ArgumentNullException(nameof(newValue));
+			}
+			if(oldValue.Length==0) {
+				throw new ArgumentException("The old value must not be an empty string.", nameof(oldValue));
+			}
+
+			string textLower = text.ToLowerInvariant();
+			string oldValueLower = oldValue.ToLowerInvariant();
+
+			for(int i = text.Length-oldValue.Length; i>=0; --i) {
+				if(textLower.Substring(i, oldValue.Length)==oldValueLower) {
+					text=text.Replace(i, i+oldValue.Length-1, newValue);
+				}
+			}
+
+			return text;
+		}
+		
+		/// <summary>
 		/// Converts this string to a stream that can be read from.
 		/// </summary>
 		/// <param name="value">A string value that the stream will read from.</param>
