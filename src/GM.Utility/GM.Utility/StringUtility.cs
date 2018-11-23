@@ -47,8 +47,8 @@ namespace GM.Utility
 		/// <param name="value">A string value that the stream will read from.</param>
 		public static MemoryStream ConvertToStream(string value)
 		{
-			MemoryStream stream = new MemoryStream();
-			StreamWriter writer = new StreamWriter(stream);
+			var stream = new MemoryStream();
+			var writer = new StreamWriter(stream);
 			writer.Write(value);
 			writer.Flush();
 			stream.Position = 0;
@@ -109,55 +109,76 @@ namespace GM.Utility
 		/// <param name="startIndex">The zero-based starting position of the substring to replace (inclusive).</param>
 		/// <param name="endIndex">The zero-based ending position of the substring to replace (inclusive).</param>
 		/// <param name="replacement">The string with which to replace the specified range.</param>
-		public static string Replace(this string text, int startIndex,int endIndex, string replacement)
+		public static string Replace(this string text, int startIndex, int endIndex, string replacement)
 		{
-			if(text==null) {
+			if(text == null) {
 				throw new ArgumentNullException(nameof(text));
 			}
-			if(replacement==null) {
+			if(replacement == null) {
 				throw new ArgumentNullException(nameof(replacement));
 			}
-			if(endIndex<startIndex) {
+			if(endIndex < startIndex) {
 				throw new ArgumentOutOfRangeException(nameof(endIndex), "The end index must be bigger than start index.");
 			}
 
-			return text.Substring(0, startIndex)+replacement+text.Substring(endIndex+1, text.Length-endIndex-1);
+			return text.Substring(0, startIndex) + replacement + text.Substring(endIndex + 1, text.Length - endIndex - 1);
 		}
 
 		/// <summary>
 		/// Returns a new string in which all occurrences of a specified string in the current instance are replaced with another specified string. The comparison is done in a case insensitive (invariant culture) way.
 		/// </summary>
-		/// <param name="text"></param>
+		/// <param name="text">The text.</param>
 		/// <param name="oldValue">The string to be replaced.</param>
 		/// <param name="newValue">The string to replace all occurrences of oldValue.</param>
 		/// <returns></returns>
-		public static string ReplaceCaseInsensitive(this string text,string oldValue,string newValue)
+		public static string ReplaceCaseInsensitive(this string text, string oldValue, string newValue)
 		{
-			if(text==null) {
+			if(text == null) {
 				throw new ArgumentNullException(nameof(text));
 			}
-			if(oldValue==null) {
+			if(oldValue == null) {
 				throw new ArgumentNullException(nameof(oldValue));
 			}
-			if(newValue==null) {
+			if(newValue == null) {
 				throw new ArgumentNullException(nameof(newValue));
 			}
-			if(oldValue.Length==0) {
+			if(oldValue.Length == 0) {
 				throw new ArgumentException("The old value must not be an empty string.", nameof(oldValue));
 			}
 
 			string textLower = text.ToLowerInvariant();
 			string oldValueLower = oldValue.ToLowerInvariant();
 
-			for(int i = text.Length-oldValue.Length; i>=0; --i) {
-				if(textLower.Substring(i, oldValue.Length)==oldValueLower) {
-					text=text.Replace(i, i+oldValue.Length-1, newValue);
+			for(int i = text.Length - oldValue.Length; i >= 0; --i) {
+				if(textLower.Substring(i, oldValue.Length) == oldValueLower) {
+					text = text.Replace(i, i + oldValue.Length - 1, newValue);
 				}
 			}
 
 			return text;
 		}
-		
+
+		/// <summary>
+		/// Returns a new string from the provided text with the specified maximum length. If the original text is longer than the specified maximum length, 3 dots (...) are added.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="maxLength">The maximum length of the returned string (excluding the 3 dots).</param>
+		public static string ShortenWith3Dots(this string text, int maxLength)
+		{
+			if(text == null) {
+				throw new ArgumentNullException(nameof(text));
+			}
+			if(maxLength < 1) {
+				throw new ArgumentOutOfRangeException(nameof(maxLength), "The maximum length must not be less than 1.");
+			}
+
+			if(text.Length <= maxLength) {
+				return text;
+			}
+
+			return text.Substring(0, maxLength) + "...";
+		}
+
 		/// <summary>
 		/// Converts this string to a stream that can be read from.
 		/// </summary>
@@ -175,7 +196,7 @@ namespace GM.Utility
 		{
 			if(text.Length == 0)
 				return text;
-			
+
 			text = char.ToUpper(text[0]) + text.Substring(1);
 
 			return text;
