@@ -49,7 +49,7 @@ namespace GM.Utility
 		/// <typeparam name="TValue">The type of the values to compare.</typeparam>
 		/// <param name="enumerable">The collection.</param>
 		/// <param name="valueSelector">A transform function to apply to each element to select the value on which to compare elements.</param>
-		public static bool AllSame<T,TValue>(this IEnumerable<T> enumerable,Func<T, TValue> valueSelector)
+		public static bool AllSame<T, TValue>(this IEnumerable<T> enumerable, Func<T, TValue> valueSelector)
 		{
 			if(enumerable == null) {
 				throw new ArgumentNullException(nameof(enumerable));
@@ -73,7 +73,7 @@ namespace GM.Utility
 		/// <param name="enumerable">The collection.</param>
 		/// <param name="valueSelector1">A transform function to apply to each element to select the first value on which to compare elements.</param>
 		/// <param name="valueSelector2">A transform function to apply to each element to select the second value on which to compare elements.</param>
-		public static bool AllSame<T,TValue1,TValue2>(this IEnumerable<T> enumerable,Func<T,TValue1> valueSelector1, Func<T,TValue2> valueSelector2)
+		public static bool AllSame<T, TValue1, TValue2>(this IEnumerable<T> enumerable, Func<T, TValue1> valueSelector1, Func<T, TValue2> valueSelector2)
 		{
 			if(enumerable == null) {
 				throw new ArgumentNullException(nameof(enumerable));
@@ -88,7 +88,7 @@ namespace GM.Utility
 				return true;
 			}
 			T first = enumerable.First();
-			TValue1 sample1=valueSelector1(first);
+			TValue1 sample1 = valueSelector1(first);
 			TValue2 sample2 = valueSelector2(first);
 			return enumerable.All(e => sample1.Equals(valueSelector1(e)) && sample2.Equals(valueSelector2(e)));
 		}
@@ -180,6 +180,34 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Filters this collection in a way where successive duplicates are removed.
+		/// </summary>
+		/// <typeparam name="T">The type of elements.</typeparam>
+		/// <param name="collection">The source collection.</param>
+		public static IEnumerable<T> RemoveSuccessiveDuplicates<T>(this IEnumerable<T> collection)
+		{
+			if(collection == null) {
+				throw new ArgumentNullException(nameof(collection));
+			}
+
+			T previous = default(T);
+			bool isFirst = true;
+			IEnumerator<T> enumerator = collection.GetEnumerator();
+			while(enumerator.MoveNext()) {
+				if(isFirst) {
+					isFirst = false;
+				} else {
+					if(previous.Equals(enumerator.Current)) {
+						previous = enumerator.Current;
+						continue;
+					}
+				}
+				previous = enumerator.Current;
+				yield return enumerator.Current;
+			}
+		}
+
+		/// <summary>
 		/// Rotates this collection (moves the start by the specified number of elements). Can be negative.
 		/// <para>Example: If your collection is { 1, 2, 3, 4 } and you rotate by 1, result will be { 4, 1, 2, 3 }.</para>
 		/// <para>Example 2: If your collection is { 1, 2, 3, 4, 5 } and you rotate by -2, result will be { 3, 4, 5, 1, 2 }.</para>
@@ -255,6 +283,29 @@ namespace GM.Utility
 		public static Dictionary<TKey, List<TElement>> ToDictionaryFromGrouping<TKey, TElement>(this IEnumerable<IGrouping<TKey, TElement>> groupingCollection)
 		{
 			return groupingCollection.ToDictionary(g => g.Key, g => g.ToList());
+		}
+
+		/// <summary>
+		/// Returns a sequence of only those elements where the provided transform function returns a max value in the provided collection.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements in the collection.</typeparam>
+		/// <param name="collection">The source collection.</param>
+		/// <param name="valueSelector">A transform function to apply to each element that returns the value to compare items with.</param>
+		public static List<T> WhereMax<T>(this IEnumerable<T> collection, Func<T, int> valueSelector)
+		{
+			var list = new List<T>();
+			int max = int.MinValue;
+			foreach(T item in collection) {
+				int current = valueSelector(item);
+				if(current == max) {
+					list.Add(item);
+				} else if(current > max) {
+					list.Clear();
+					list.Add(item);
+					max = current;
+				}
+			}
+			return list;
 		}
 	}
 }
