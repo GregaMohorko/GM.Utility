@@ -56,7 +56,8 @@
     <Compile Include="DefaultedObjectTest.cs" />
     <Compile Include="ArrayUtilityTest.cs" />
     <Compile Include="DateTimeUtilityTest.cs" />
-    <Compile Include="StringTest.cs" />
+    <Compile Include="ReflectionUtilityTest.cs" />
+    <Compile Include="StringUtilityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GM.Utility.Test.licenseheader" />

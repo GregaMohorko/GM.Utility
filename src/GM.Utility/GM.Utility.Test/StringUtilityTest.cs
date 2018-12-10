@@ -32,7 +32,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace GM.Utility.Test
 {
 	[TestClass]
-	public class StringTest
+	public class StringUtilityTest
 	{
 		[TestMethod]
 		public void ShortenWith3Dots()

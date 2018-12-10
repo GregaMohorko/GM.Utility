@@ -166,7 +166,7 @@ namespace GM.Utility
 		/// <param name="assemblyType">The type of the assembly to look for.</param>
 		public static AssemblyInformation GetAssemblyInformation(AssemblyType assemblyType)
 		{
-			if(assemblyType == AssemblyType.CURRENT || assemblyType==AssemblyType.APPLICATION) {
+			if(assemblyType == AssemblyType.CURRENT || assemblyType == AssemblyType.APPLICATION) {
 				throw new InvalidEnumArgumentException("AssemblyType.Current and AssemblyType.Application are not allowed when getting the assembly information. Use GetAssembly() to get the assembly first, then call GetAssemblyInformation(Assembly) with it.");
 			}
 			var assembly = GetAssembly(assemblyType);
@@ -196,7 +196,7 @@ namespace GM.Utility
 			}
 			Version version = null;
 			if(versionS != null) {
-				version=Version.Parse(versionS);
+				version = Version.Parse(versionS);
 			}
 
 			return new AssemblyInformation(title, description, company, product, copyright, trademark, version);
@@ -367,6 +367,30 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Gets the field information by name for the type of the object.
+		/// </summary>
+		/// <param name="obj">Object with a type that has the specified field.</param>
+		/// <param name="fieldName">The name of the field.</param>
+		public static FieldInfo GetFieldInfo(this object obj, string fieldName)
+		{
+			return GetFieldInfo(obj.GetType(), fieldName);
+		}
+
+		/// <summary>
+		/// Gets the field information by name for the type.
+		/// </summary>
+		/// <param name="type">Type that has the specified field.</param>
+		/// <param name="fieldName">The name of the field.</param>
+		public static FieldInfo GetFieldInfo(this Type type, string fieldName)
+		{
+			FieldInfo field = type.GetField(fieldName,BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
+			if(field == null) {
+				throw new Exception($"The provided property name ({fieldName}) does not exist in type '{type.ToString()}'.");
+			}
+			return field;
+		}
+
+		/// <summary>
 		/// Returns the first definition of generic type of this generic type.
 		/// </summary>
 		/// <param name="type">The type from which to get the generic type.</param>
@@ -404,6 +428,18 @@ namespace GM.Utility
 		{
 			PropertyInfo property = GetPropertyInfo(obj, propertyName);
 			property.SetValue(obj, value);
+		}
+
+		/// <summary>
+		/// Sets the specified field to the provided value in the object.
+		/// </summary>
+		/// <param name="obj">The object with the field.</param>
+		/// <param name="fieldName">The name of the field to set.</param>
+		/// <param name="value">The value to set the field to.</param>
+		public static void SetField(this object obj, string fieldName, object value)
+		{
+			FieldInfo field = GetFieldInfo(obj, fieldName);
+			field.SetValue(obj, value);
 		}
 
 		/// <summary>
