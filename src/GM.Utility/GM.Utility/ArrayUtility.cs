@@ -53,6 +53,21 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Creates a 2-dimensional array with the specified dimensions.
+		/// </summary>
+		/// <typeparam name="T">The type of elements.</typeparam>
+		/// <param name="D1">Size of first dimension.</param>
+		/// <param name="D2">Size of second dimension.</param>
+		public static T[][] Create<T>(int D1, int D2)
+		{
+			var array = new T[D1][];
+			for(int i = D1 - 1; i >= 0; --i) {
+				array[i] = new T[D2];
+			}
+			return array;
+		}
+
+		/// <summary>
 		/// Performs the specified action for each element in the array. Supports multiple dimensions, the second parameter of the action are current indices for the dimensions.
 		/// <para>
 		/// To use the indices, you can use the <see cref="Array.GetValue(int[])"/> and <see cref="Array.SetValue(object, int[])"/>.
@@ -66,7 +81,7 @@ namespace GM.Utility
 				return;
 			}
 
-			ArrayTraverse walker = new ArrayTraverse(array);
+			var walker = new ArrayTraverse(array);
 
 			do {
 				action(array, walker.Position);
@@ -100,7 +115,7 @@ namespace GM.Utility
 			if(array == null) {
 				throw new ArgumentNullException(nameof(array));
 			}
-			
+
 			for(int i = 0; i < array.Length; ++i) {
 				array[i] = value;
 			}
@@ -135,7 +150,7 @@ namespace GM.Utility
 		private class ArrayTraverse
 		{
 			public int[] Position;
-			private int[] maxLengths;
+			private readonly int[] maxLengths;
 
 			public ArrayTraverse(Array array)
 			{
@@ -149,7 +164,7 @@ namespace GM.Utility
 
 			public bool Step()
 			{
-				for(int i = 0; i < Position.Length; i++)
+				for(int i = 0; i < Position.Length; i++) {
 					if(Position[i] < maxLengths[i]) {
 						Position[i]++;
 						for(int j = 0; j < i; j++) {
@@ -158,6 +173,7 @@ namespace GM.Utility
 
 						return true;
 					}
+				}
 
 				return false;
 			}

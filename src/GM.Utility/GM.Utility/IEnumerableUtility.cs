@@ -112,6 +112,62 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Returns the first element in a sequence whose provided transform function returns a max value in the provided collection.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements in the collection.</typeparam>
+		/// <param name="collection">The source collection.</param>
+		/// <param name="valueSelector">A transform function to apply to each element that returns the value to compare items with.</param>
+		public static T FirstMax<T>(this IEnumerable<T> collection, Func<T, int> valueSelector)
+		{
+			List<T> list = collection.ToList();
+
+			if(list.Count == 0) {
+				// will throw exception as it should anyway :)
+				return collection.First();
+			}
+
+			T itemWithMax = list[0];
+			int max = valueSelector(list[0]);
+			for(int i = 1; i < list.Count; ++i) {
+				T item = list[i];
+				int current = valueSelector(item);
+				if(current > max) {
+					max = current;
+					itemWithMax = item;
+				}
+			}
+			return itemWithMax;
+		}
+
+		/// <summary>
+		/// Returns the first element in a sequence whose provided transform function returns a min value in the provided collection.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements in the collection.</typeparam>
+		/// <param name="collection">The source collection.</param>
+		/// <param name="valueSelector">A transform function to apply to each element that returns the value to compare items with.</param>
+		public static T FirstMin<T>(this IEnumerable<T> collection, Func<T, int> valueSelector)
+		{
+			List<T> list = collection.ToList();
+
+			if(list.Count == 0) {
+				// will throw exception as it should anyway :)
+				return collection.First();
+			}
+
+			T itemWithMin = list[0];
+			int min = valueSelector(list[0]);
+			for(int i = 1; i < list.Count; ++i) {
+				T item = list[i];
+				int current = valueSelector(item);
+				if(current < min) {
+					min = current;
+					itemWithMin = item;
+				}
+			}
+			return itemWithMin;
+		}
+
+		/// <summary>
 		/// Determines whether the provided collection is null or is empty.
 		/// </summary>
 		/// <typeparam name="T">The type of the elements of the collection.</typeparam>
@@ -303,6 +359,29 @@ namespace GM.Utility
 					list.Clear();
 					list.Add(item);
 					max = current;
+				}
+			}
+			return list;
+		}
+
+		/// <summary>
+		/// Returns a sequence of only those elements where the provided transform function returns a min value in the provided collection.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements in the collection.</typeparam>
+		/// <param name="collection">The source collection.</param>
+		/// <param name="valueSelector">A transform function to apply to each element that returns the value to compare items with.</param>
+		public static List<T> WhereMin<T>(this IEnumerable<T> collection, Func<T, int> valueSelector)
+		{
+			var list = new List<T>();
+			int min = int.MaxValue;
+			foreach(T item in collection) {
+				int current = valueSelector(item);
+				if(current == min) {
+					list.Add(item);
+				} else if(current < min) {
+					list.Clear();
+					list.Add(item);
+					min = current;
 				}
 			}
 			return list;

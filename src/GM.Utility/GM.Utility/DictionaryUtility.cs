@@ -28,6 +28,7 @@ Author: Grega Mohorko
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,10 +41,21 @@ namespace GM.Utility
 	public static class DictionaryUtility
 	{
 		/// <summary>
+		/// Returns a read-only <see cref="ReadOnlyDictionary{TKey, TValue}"/> wrapper for the current dictionary.
+		/// </summary>
+		/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+		/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
+		/// <param name="dictionary">The dictionary.</param>
+		public static ReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)
+		{
+			return new ReadOnlyDictionary<TKey, TValue>(dictionary);
+		}
+
+		/// <summary>
 		/// Creates two dictionaries: singles, that contains objects that are the only ones with a unique key, and lists, that contains lists of objects with the same key. Key is selected with the provided key selecting function.
 		/// </summary>
-		/// <typeparam name="TKey">Type of the key.</typeparam>
-		/// <typeparam name="TObject">Type of the objects.</typeparam>
+		/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+		/// <typeparam name="TObject">The type of values in the dictionary.</typeparam>
 		/// <param name="objects">List of objects which to sort into the two dictionaries.</param>
 		/// <param name="singles">Dictionary with objects that have unique keys.</param>
 		/// <param name="lists">Dictionary with lists of objects that have the same key.</param>

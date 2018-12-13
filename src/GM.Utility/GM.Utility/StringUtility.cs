@@ -42,7 +42,7 @@ namespace GM.Utility
 	public static class StringUtility
 	{
 		/// <summary>
-		/// Converts the specified string to a stream that can be read from.
+		/// Converts the specified string to a stream by using UTF-8 encoding that can be read from.
 		/// </summary>
 		/// <param name="value">A string value that the stream will read from.</param>
 		public static MemoryStream ConvertToStream(string value)
@@ -180,7 +180,7 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Converts this string to a stream that can be read from.
+		/// Converts this string to a stream by using UTF-8 encoding that can be read from.
 		/// </summary>
 		/// <param name="value">A string value that the stream will read from.</param>
 		public static MemoryStream ToStream(this string value)
@@ -194,8 +194,9 @@ namespace GM.Utility
 		/// <param name="text">The text.</param>
 		public static string ToUpperFirstLetter(this string text)
 		{
-			if(text.Length == 0)
+			if(text.Length == 0) {
 				return text;
+			}
 
 			text = char.ToUpper(text[0]) + text.Substring(1);
 

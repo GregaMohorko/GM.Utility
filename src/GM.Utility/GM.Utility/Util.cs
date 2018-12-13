@@ -40,12 +40,40 @@ namespace GM.Utility
 	public static class Util
 	{
 		/// <summary>
+		/// Returns the item for which the provided transform function returns the max value of all the provided items. If multiple items have max value, the first is returned.
+		/// </summary>
+		/// <typeparam name="T">The type of the items.</typeparam>
+		/// <param name="valueSelector">A transform function to apply to each item that returns the value to compare items with.</param>
+		/// <param name="items">The items.</param>
+		public static T SelectOneWithMax<T>(Func<T, double> valueSelector, params T[] items)
+		{
+			if(items == null) {
+				throw new ArgumentNullException(nameof(items));
+			}
+			if(items.Length == 0) {
+				throw new ArgumentOutOfRangeException(nameof(items), "At least one item must be provided.");
+			}
+
+			T itemWithMax = items[0];
+			double max = valueSelector(items[0]);
+			for(int i = 1; i < items.Length; ++i) {
+				T item = items[i];
+				double current = valueSelector(item);
+				if(current > max) {
+					max = current;
+					itemWithMax = item;
+				}
+			}
+			return itemWithMax;
+		}
+
+		/// <summary>
 		/// Swaps the values in both provided variables.
 		/// </summary>
 		/// <typeparam name="T">The type of the variables.</typeparam>
 		/// <param name="A">First variable.</param>
 		/// <param name="B">Second variable.</param>
-		public static void Swap<T>(ref T A,ref T B)
+		public static void Swap<T>(ref T A, ref T B)
 		{
 			T swap = A;
 			A = B;

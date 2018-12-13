@@ -47,7 +47,7 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="x">Values of the independant (X-axis) variable.</param>
 		/// <param name="y">Values of the dependant (Y-axis) variable.</param>
-		public static Tuple<double,double> CalculateSimpleLinearRegressionLine(IEnumerable<double> x,IEnumerable<double> y)
+		public static Tuple<double, double> CalculateSimpleLinearRegressionLine(IEnumerable<double> x, IEnumerable<double> y)
 		{
 			int n;
 			{
@@ -59,7 +59,7 @@ namespace GM.Utility
 				}
 				n = xCount;
 			}
-			
+
 			double xMean = x.Sum() / n;
 			double yMean = y.Sum() / n;
 
@@ -104,7 +104,7 @@ namespace GM.Utility
 				}
 				n = xCount;
 			}
-			
+
 			double xMean = 0;
 			double yMean = 0;
 			double xyMean = 0;
@@ -146,22 +146,31 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Find the median, which is a value separating the higher half of the values from the lower half.
+		/// </summary>
+		/// <param name="values">The values.</param>
+		public static double FindMedianValue(IEnumerable<int> values)
+		{
+			return FindMedianValue(values.Select(i => (double)i));
+		}
+
+		/// <summary>
 		/// Finds the median, which is a value separating the higher half of the values from the lower half.
 		/// </summary>
 		/// <param name="values">The values.</param>
 		public static double FindMedianValue(IEnumerable<double> values)
 		{
-			int count = values.Count();
-			int center = count / 2;
-			if(count % 2 != 0) {
+			List<double> orderedList = values.OrderBy(v => v).ToList();
+			int center = orderedList.Count / 2;
+			if(orderedList.Count % 2 != 0) {
 				// is the value at the center
-				return values.ElementAt(center);
+				return orderedList[center];
 			}
 
 			// median is the average between the two values at the center
-			double left = values.ElementAt(center - 1);
-			double right = values.ElementAt(center);
-			return (left + right) / 2;
+			double left = orderedList[center - 1];
+			double right = orderedList[center];
+			return (left + right) / 2d;
 		}
 
 		/// <summary>
