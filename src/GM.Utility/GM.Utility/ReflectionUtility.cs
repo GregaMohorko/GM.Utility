@@ -383,7 +383,7 @@ namespace GM.Utility
 		/// <param name="fieldName">The name of the field.</param>
 		public static FieldInfo GetFieldInfo(this Type type, string fieldName)
 		{
-			FieldInfo field = type.GetField(fieldName,BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
+			FieldInfo field = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 			if(field == null) {
 				throw new Exception($"The provided property name ({fieldName}) does not exist in type '{type.ToString()}'.");
 			}
@@ -505,6 +505,25 @@ namespace GM.Utility
 
 			PropertyInfo propertyInfo = type.GetProperty(propertyName, bindingAttr);
 			return propertyInfo != null;
+		}
+
+		/// <summary>
+		/// Determines whether this type implements the specified parent type. Returns false if both types are the same.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="parentType">The type to check if it is implemented.</param>
+		public static bool Implements(this Type type, Type parentType)
+		{
+			if(type == null) {
+				throw new ArgumentNullException(nameof(type));
+			}
+			if(parentType == null) {
+				throw new ArgumentNullException(nameof(parentType));
+			}
+			if(type.Equals(parentType)) {
+				return false;
+			}
+			return parentType.IsAssignableFrom(type);
 		}
 
 		/// <summary>
