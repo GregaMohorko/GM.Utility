@@ -29,6 +29,7 @@
 - [Int](src/GM.Utility/GM.Utility/IntUtility.cs)
 - [IO](src/GM.Utility/GM.Utility/IOUtility.cs)
 - [Long](src/GM.Utility/GM.Utility/LongUtility.cs)
+- [Network](src/GM.Utility/GM.Utility/NetworkUtility.cs)
 - [Object](src/GM.Utility/GM.Utility/ObjectUtility.cs)
 - [Path](src/GM.Utility/GM.Utility/PathUtility.cs)
 - [Random](src/GM.Utility/GM.Utility/RandomUtility.cs)

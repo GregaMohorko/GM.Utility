@@ -32,6 +32,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -69,21 +70,54 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Loads an <see cref="XElement"/> from a file.
+		/// <para>Takes care of the invalid hexadecimal characters.</para>
+		/// </summary>
+		/// <param name="file">A URI string referencing the file to load into a new <see cref="XElement"/>.</param>
+		public static XElement LoadFromFile(string file)
+		{
+			string fileContent = File.ReadAllText(file);
+			return Parse(fileContent);
+		}
+
+		/// <summary>
+		/// Loads an <see cref="XElement"/> from a file.
+		/// <para>Takes care of the invalid hexadecimal characters.</para>
+		/// </summary>
+		/// <param name="file">A URI string referencing the file to load into a new <see cref="XElement"/>.</param>
+		[Obsolete("This method is obsolete. Please use XMLUtility.LoadFromFile instead.", false)]
+		public static XElement Load(string file)
+		{
+			// FIXME obsolete 2018-12-24
+			return LoadFromFile(file);
+		}
+
+		/// <summary>
 		/// Loads an XElement from the web. Supports HTTP/S and S/FTP.
+		/// <para>Takes care of the invalid hexadecimal characters.</para>
 		/// </summary>
 		/// <param name="address">The address from which to download the XML.</param>
 		/// <param name="credentials">The network credentials that are sent to the host and used to authenticate the request.</param>
 		public static XElement LoadFromWeb(string address, ICredentials credentials=null)
 		{
-			if(credentials == null) {
-				return XElement.Load(address);
-			}
-
 			using(var webClient = new WebClient()) {
-				webClient.Credentials = credentials;
+				if(credentials != null) {
+					webClient.Credentials = credentials;
+				}
 				string xmlContent = webClient.DownloadString(address);
-				return XElement.Parse(xmlContent);
+				return Parse(xmlContent);
 			}
+		}
+
+		/// <summary>
+		/// Loads an <see cref="XElement"/> from a string that contains XML.
+		/// <para>Takes care of the invalid hexadecimal characters.</para>
+		/// </summary>
+		/// <param name="text">A <see cref="string"/> that contains XML.</param>
+		public static XElement Parse(string text)
+		{
+			text = RemoveInvalidXmlCharacters(text);
+			return XElement.Parse(text);
 		}
 
 		/// <summary>
@@ -93,6 +127,23 @@ namespace GM.Utility
 		public static void RemoveAllComments(this XContainer xml)
 		{
 			xml.DescendantComments().Remove();
+		}
+
+		// filters control characters but allows only properly-formed surrogate sequences
+		private static readonly Regex _invalidXMLChars = new Regex(
+			@"(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\uFEFF\uFFFE\uFFFF]",
+			RegexOptions.Compiled);
+
+		/// <summary>
+		/// Removes any unusual unicode characters that can't be encoded into XML.
+		/// </summary>
+		/// <param name="text">The text to clean.</param>
+		public static string RemoveInvalidXmlCharacters(string text)
+		{
+			if(string.IsNullOrEmpty(text)) {
+				return "";
+			}
+			return _invalidXMLChars.Replace(text, "");
 		}
 
 		/// <summary>

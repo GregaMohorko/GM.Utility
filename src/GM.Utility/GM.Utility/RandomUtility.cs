@@ -68,36 +68,5 @@ namespace GM.Utility
 			var rand = new Random();
 			return NextIntegers(rand, minValue, maxValue, size);
 		}
-
-		/// <summary>
-		/// Creates and returns an array of the specified size containing random values within the [low, high] interval.
-		/// <para>This method is deprecated, please use <see cref="RandomIntegers(int, int, int)"/> instead.</para>
-		/// </summary>
-		/// <param name="minValue">The inclusive lower bound of the random numbers.</param>
-		/// <param name="maxValue">The exclusive upper bound of the random numbers. maxValue must be greater than or equal to minValue.</param>
-		/// <param name="size">The size of the array to create.</param>
-		[Obsolete("Method RandomInts is deprecated, please use RandomIntegers instead.",true)]
-		public static int[] RandomInts(int minValue, int maxValue, int size)
-		{
-			// FIXME obsolete 2018-4-16
-			return RandomIntegers(minValue, maxValue, size);
-		}
-
-		/// <summary>
-		/// Creates and returns an array of the specified size containing random values within the [low, high] interval.
-		/// <para>
-		/// This method is deprecated, please use <see cref="NextIntegers(Random, int, int, int)"/> instead.
-		/// </para>
-		/// </summary>
-		/// <param name="rand">The <see cref="Random"/> object to use to create random values.</param>
-		/// <param name="minValue">The inclusive lower bound of the random numbers.</param>
-		/// <param name="maxValue">The exclusive upper bound of the random numbers. maxValue must be greater than or equal to minValue.</param>
-		/// <param name="size">The size of the array to create.</param>
-		[Obsolete("Method RandomInts is deprecated, please use NextIntegers instead.",true)]
-		public static int[] RandomInts(this Random rand, int minValue, int maxValue, int size)
-		{
-			// FIXME obsolete 2018-4-16
-			return NextIntegers(rand, minValue, maxValue, size);
-		}
 	}
 }

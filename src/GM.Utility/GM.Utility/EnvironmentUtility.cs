@@ -41,19 +41,6 @@ namespace GM.Utility
 	public static class EnvironmentUtility
 	{
 		/// <summary>
-		/// Gets the bitness of the current Windows operating system. Either 32 or 64.
-		/// <para>
-		/// This method is deprecated, please use <see cref="GetOperatingSystemBitness"/> instead.
-		/// </para>
-		/// </summary>
-		[Obsolete("Method GetWindowsBit is deprecated, please use GetOperatingSystemBitness instead.",true)]
-		public static int GetWindowsBit()
-		{
-			// FIXME obsolete 2017-10-27
-			return GetOperatingSystemBitness();
-		}
-		
-		/// <summary>
 		/// Gets the bitness of the current operating system. Either 32 or 64.
 		/// </summary>
 		public static int GetOperatingSystemBitness()
