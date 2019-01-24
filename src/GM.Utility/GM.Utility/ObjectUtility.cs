@@ -32,6 +32,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using GM.Utility.EqualityComparers;
 
 namespace GM.Utility
 {
@@ -122,23 +123,6 @@ namespace GM.Utility
 			if(typeToReflect.BaseType != null) {
 				RecursiveDeepCopyBaseTypePrivateFields(original, visited, cloneObject, typeToReflect.BaseType);
 				DeepCopyFields(original, visited, cloneObject, typeToReflect.BaseType, BindingFlags.Instance | BindingFlags.NonPublic, fieldInfo => fieldInfo.IsPrivate);
-			}
-		}
-
-		private class ReferenceEqualityComparer : EqualityComparer<object>
-		{
-			public override bool Equals(object x, object y)
-			{
-				return ReferenceEquals(x, y);
-			}
-
-			public override int GetHashCode(object obj)
-			{
-				if(obj == null) {
-					return 0;
-				}
-
-				return obj.GetHashCode();
 			}
 		}
 	}

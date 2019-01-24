@@ -300,6 +300,118 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Projects each element of a sequence into a new form and returns a sequence of only those elements where the provided new form occurs the most (using a default equality comparer to compare values).
+		/// <para>Null (or default) values are also counted and considered as equal.</para>
+		/// </summary>
+		/// <typeparam name="T">The type of the elements of source.</typeparam>
+		/// <typeparam name="TResult">The type of the value returned by selector.</typeparam>
+		/// <param name="source">A sequence of values to invoke a transform function on.</param>
+		/// <param name="selector">A transform function to apply to each element.</param>
+		public static IEnumerable<TResult> SelectWhereMaxOccurrenceOf<T, TResult>(this IEnumerable<T> source, Func<T, TResult> selector)
+		{
+			if(source == null) {
+				throw new ArgumentNullException(nameof(source));
+			}
+			if(selector == null) {
+				throw new ArgumentNullException(nameof(selector));
+			}
+
+			var counts = new Dictionary<TResult, int>();
+
+			int defaultCounter = 0;
+
+			foreach(T element in source) {
+				TResult value = selector(element);
+				if(value.IsDefault()) {
+					++defaultCounter;
+				} else if(counts.ContainsKey(value)) {
+					++counts[value];
+				} else {
+					counts.Add(value, 1);
+				}
+			}
+
+			int max = counts.Count == 0 ? 0 : counts.Max(kvp => kvp.Value);
+			if(defaultCounter > max) {
+				return new List<TResult> { default(TResult) };
+			}
+
+			if(max == 0) {
+				// is empty
+				// calling this will also return an empty collection :)
+				return source.Select(selector);
+			}
+
+			IEnumerable<TResult> result = counts
+				.Where(kvp => kvp.Value == max)
+				.Select(kvp => kvp.Key);
+
+			if(defaultCounter == max) {
+				var resultList = new List<TResult>(result);
+				resultList.Add(default(TResult));
+				return resultList;
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Projects each element of a sequence into a new form and returns a sequence of only those elements where the provided new form occurs the least (using a default equality comparer to compare values).
+		/// <para>Null (or default) values are also counted and considered as equal.</para>
+		/// </summary>
+		/// <typeparam name="T">The type of the elements of source.</typeparam>
+		/// <typeparam name="TResult">The type of the value returned by selector.</typeparam>
+		/// <param name="source">A sequence of values to invoke a transform function on.</param>
+		/// <param name="selector">A transform function to apply to each element.</param>
+		public static IEnumerable<TResult> SelectWhereMinOccurenceOf<T, TResult>(this IEnumerable<T> source, Func<T, TResult> selector)
+		{
+			if(source == null) {
+				throw new ArgumentNullException(nameof(source));
+			}
+			if(selector == null) {
+				throw new ArgumentNullException(nameof(selector));
+			}
+
+			var counts = new Dictionary<TResult, int>();
+
+			int defaultCounter = 0;
+
+			foreach(T element in source) {
+				TResult value = selector(element);
+				if(value.IsDefault()) {
+					++defaultCounter;
+				} else if(counts.ContainsKey(value)) {
+					++counts[value];
+				} else {
+					counts.Add(value, 1);
+				}
+			}
+
+			int? min = counts.Count == 0 ? null : (int?)counts.Min(kvp => kvp.Value);
+			if(defaultCounter > 0 && (min == null || defaultCounter < min)) {
+				return new List<TResult> { default(TResult) };
+			}
+
+			if(min == null) {
+				// is empty
+				// calling this will also return an empty collection :)
+				return source.Select(selector);
+			}
+
+			IEnumerable<TResult> result = counts
+				.Where(kvp => kvp.Value == min.Value)
+				.Select(kvp => kvp.Key);
+
+			if(defaultCounter == min.Value) {
+				var resultList = new List<TResult>(result);
+				resultList.Add(default(TResult));
+				return resultList;
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Determines whether two sequences are equal by comparing the elements by using the default equality comparer for their type. Note that this method does not compare the order of elements and returns true even if the order is not equal.
 		/// </summary>
 		/// <typeparam name="T">The type of the elements of the input sequences.</typeparam>

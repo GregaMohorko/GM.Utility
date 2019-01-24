@@ -23,7 +23,9 @@
 - [Decimal](src/GM.Utility/GM.Utility/DecimalUtility.cs)
 - [Dictionary](src/GM.Utility/GM.Utility/DictionaryUtility.cs)
 - [Double](src/GM.Utility/GM.Utility/DoubleUtility.cs)
+- [Enum](src/GM.Utility/GM.Utility/EnumUtility.cs)
 - [Environment](src/GM.Utility/GM.Utility/EnvironmentUtility.cs)
+- [Equality](src/GM.Utility/GM.Utility/EqualityUtility.cs)
 - [Globalization](src/GM.Utility/GM.Utility/GlobalizationUtility.cs)
 - [IEnumerable](src/GM.Utility/GM.Utility/IEnumerableUtility.cs)
 - [Int](src/GM.Utility/GM.Utility/IntUtility.cs)
@@ -44,6 +46,9 @@
 - [ReloadableCollection](src/GM.Utility/GM.Utility/Collections/ReloadableCollection.cs)
 - [SortableBindingList](src/GM.Utility/GM.Utility/Collections/SortableBindingList.cs)
 
+**Equality comparers**:
+- [ReferenceEqualityComparer](src/GM.Utility/GM.Utility/EqualityComparers/ReferenceEqualityComparer.cs)
+
 **Net**:
 - [GMWebClient](src/GM.Utility/GM.Utility/Net/GMWebClient.cs)
 
@@ -51,6 +56,7 @@
 - [Singleton](src/GM.Utility/GM.Utility/Singleton.cs)
 
 **Other**:
+- [DefaultedObject](src/GM.Utility/GM.Utility/DefaultedObject.cs)
 - [KeyCodes](src/GM.Utility/GM.Utility/KeyCodes.cs)
 - [Util](src/GM.Utility/GM.Utility/Util.cs)
 
@@ -60,6 +66,6 @@
 ## Author and License
 Grega Mohorko ([www.mohorko.info](https://www.mohorko.info))
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2019 Grega Mohorko
 
 [MIT License](./LICENSE)

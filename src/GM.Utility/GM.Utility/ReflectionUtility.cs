@@ -300,6 +300,36 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Returns all the public properties of this object whose property type is <typeparamref name="T"/>.
+		/// </summary>
+		/// <typeparam name="T">The type of the properties.</typeparam>
+		/// <param name="obj">The object.</param>
+		public static IEnumerable<PropertyInfo> GetAllPropertiesOfType<T>(this object obj)
+		{
+			return GetAllPropertiesOfType<T>(obj.GetType());
+		}
+
+		/// <summary>
+		/// Returns all the public properties of this type whose property type is <typeparamref name="T"/>.
+		/// </summary>
+		/// <typeparam name="T">The type of the properties.</typeparam>
+		/// <param name="type">The type of which to get the properties.</param>
+		public static IEnumerable<PropertyInfo> GetAllPropertiesOfType<T>(this Type type)
+		{
+			return type.GetProperties().Where(pi => pi.PropertyType == typeof(T));
+		}
+
+		/// <summary>
+		/// Returns all the values of public properties of this object whose property type is <typeparamref name="T"/>.
+		/// </summary>
+		/// <typeparam name="T">The type of the properties.</typeparam>
+		/// <param name="obj">The object.</param>
+		public static IEnumerable<T> GetAllPropertiesValuesOfType<T>(this object obj)
+		{
+			return GetAllPropertiesOfType<T>(obj).Select(pi => (T)pi.GetValue(obj));
+		}
+
+		/// <summary>
 		/// Gets the value of the specified property in the object.
 		/// </summary>
 		/// <param name="obj">The object that has the property.</param>
@@ -463,7 +493,7 @@ namespace GM.Utility
 		/// <typeparam name="T">The type of the properties.</typeparam>
 		/// <param name="obj">The object.</param>
 		/// <param name="value">The value to set the properties to.</param>
-		public static void SetAllPropertiesOfType<T>(object obj, T value)
+		public static void SetAllPropertiesOfType<T>(this object obj, T value)
 		{
 			Type type = obj.GetType();
 

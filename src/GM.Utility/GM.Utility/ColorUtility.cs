@@ -40,6 +40,50 @@ namespace GM.Utility
 	public static class ColorUtility
 	{
 		/// <summary>
+		/// Returns either black or white, depending on the luminosity of the specified background color.
+		/// <para>Follows W3C recommendations (found at https://www.w3.org/TR/WCAG20/ ).</para>
+		/// </summary>
+		/// <param name="background">The color of the background.</param>
+		public static Color GetFontColorToBackground(Color background)
+		{
+			// https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
+
+			// The formula given for contrast in the W3C Recommendations is (L1 + 0.05) / (L2 + 0.05), where L1 is the luminance of the lightest color and L2 is the luminance of the darkest on a scale of 0.0-1.0.
+			// The luminance of black is 0.0 and white is 1.0, so substituting those values lets you determine the one with the highest contrast.
+			// If the contrast for black is greater than the contrast for white, use black, otherwise use white.
+
+			double r = background.R;
+			double g = background.G;
+			double b = background.B;
+
+			// compute L (the luminance of the background color)
+			double L;
+			{
+				// The formula is also given in the guidelines ( http://www.w3.org/TR/WCAG20/#relativeluminancedef ) and it looks like the conversion from sRGB to linear RGB followed by the ITU-R recommendation BT.709 ( http://en.wikipedia.org/wiki/Luma_(video)#Rec._601_luma_versus_Rec._709_luma_coefficients ) for luminance.
+				double rgbToSrgbITUR(double c)
+				{
+					c /= 255.0;
+					if(c <= 0.03928) {
+						return c / 12.92;
+					} else {
+						return Math.Pow((c + 0.055) / 1.055, 2.4);
+					}
+				}
+				r = rgbToSrgbITUR(r);
+				g = rgbToSrgbITUR(g);
+				b = rgbToSrgbITUR(b);
+				L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+			}
+
+			// Given the luminance of the background color as L the test becomes:
+			// if (L + 0.05) / (0.0 + 0.05) > (1.0 + 0.05) / (L + 0.05) use #000000 else use #ffffff
+			// This simplifies down algebraically to:
+			// if L > sqrt(1.05 * 0.05) - 0.05
+			// Or approximately:
+			return L > 0.179 ? Color.Black : Color.White;
+		}
+
+		/// <summary>
 		/// Converts from RGB to HSV.
 		/// </summary>
 		/// <param name="color">The color to convert.</param>
