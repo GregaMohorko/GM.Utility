@@ -146,6 +146,21 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Difference (in percentage 0-100) of this decimal to the specified decimal.
+		/// <para>If the result is negative, it means that this decimal is smaller than the specified decimal.</para>
+		/// <para>If the specified decimal is zero, <see cref="decimal.MaxValue"/> is returned.</para>
+		/// </summary>
+		/// <param name="d1">This decimal.</param>
+		/// <param name="d2">The decimal to compare to.</param>
+		public static decimal DifferenceInPercentage(this decimal d1, decimal d2)
+		{
+			if(d2 == 0m) {
+				return decimal.MaxValue;
+			}
+			return 100 * (-1m + (d1 / d2));
+		}
+
+		/// <summary>
 		/// Find the median, which is a value separating the higher half of the values from the lower half.
 		/// </summary>
 		/// <param name="values">The values.</param>
