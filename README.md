@@ -23,6 +23,7 @@
 - [Decimal](src/GM.Utility/GM.Utility/DecimalUtility.cs)
 - [Dictionary](src/GM.Utility/GM.Utility/DictionaryUtility.cs)
 - [Double](src/GM.Utility/GM.Utility/DoubleUtility.cs)
+- [Email](src/GM.Utility/GM.Utility/EmailUtility.cs)
 - [Enum](src/GM.Utility/GM.Utility/EnumUtility.cs)
 - [Environment](src/GM.Utility/GM.Utility/EnvironmentUtility.cs)
 - [Equality](src/GM.Utility/GM.Utility/EqualityUtility.cs)
