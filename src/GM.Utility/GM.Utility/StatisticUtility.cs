@@ -40,6 +40,18 @@ namespace GM.Utility
 	public static class StatisticUtility
 	{
 		/// <summary>
+		/// Calculates the coefficient of variation (CV), also known as relative standard deviation (RSD), of the provided values. It shows the extent of variability in relation to the mean of the population.
+		/// <para>
+		/// https://en.wikipedia.org/wiki/Coefficient_of_variation
+		/// </para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		public static double CalculateCV(IEnumerable<double> values)
+		{
+			return CalculateRSD(values);
+		}
+
+		/// <summary>
 		/// Calculates the linear regression line and returns the a and b parameters of the line. The equation for the line itself is: y = x*a + b.
 		/// <para>
 		/// https://en.wikipedia.org/wiki/Simple_linear_regression
@@ -130,6 +142,22 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Calculates the relative standard deviation (RSD), also known as coefficient of variation (CV), of the provided values. It shows the extent of variability in relation to the mean of the population.
+		/// <para>
+		/// https://en.wikipedia.org/wiki/Coefficient_of_variation
+		/// </para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		public static double CalculateRSD(IEnumerable<double> values)
+		{
+			double sd = CalculateStandardDeviation(values, out double mean);
+			if(mean == 0) {
+				return 0;
+			}
+			return sd / mean;
+		}
+
+		/// <summary>
 		/// Calculates the standard deviation of the provided values.
 		/// <para>
 		/// https://www.khanacademy.org/math/probability/data-distributions-a1/summarizing-spread-distributions/a/calculating-standard-deviation-step-by-step
@@ -138,9 +166,27 @@ namespace GM.Utility
 		/// <param name="values">The values.</param>
 		public static double CalculateStandardDeviation(IEnumerable<double> values)
 		{
+			return CalculateStandardDeviation(values, out double mean);
+		}
+
+		/// <summary>
+		/// Calculates the standard deviation of the provided values.
+		/// <para>
+		/// https://www.khanacademy.org/math/probability/data-distributions-a1/summarizing-spread-distributions/a/calculating-standard-deviation-step-by-step
+		/// </para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		/// <param name="mean">The mean value that is calculated during the calculation (in case you need it).</param>
+		public static double CalculateStandardDeviation(IEnumerable<double> values, out double mean)
+		{
 			int count = values.Count();
-			double mean = values.Sum() / count;
-			double standardDeviation = values.Sum(v => Math.Pow(Math.Abs(v - mean), 2));
+			if(count == 0) {
+				mean = 0;
+				return 0;
+			}
+			mean = values.Sum() / count;
+			double m = mean;
+			double standardDeviation = values.Sum(v => Math.Pow(Math.Abs(v - m), 2));
 			standardDeviation = Math.Sqrt(standardDeviation / count);
 			return standardDeviation;
 		}
