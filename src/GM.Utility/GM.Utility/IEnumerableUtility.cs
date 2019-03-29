@@ -112,6 +112,26 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Performs the specified action on each element of this collection.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <param name="collection">The source collection.</param>
+		/// <param name="action">The action to perform on each element of this collection.</param>
+		public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+		{
+			if(collection == null) {
+				throw new ArgumentNullException(nameof(collection));
+			}
+			if(action == null) {
+				throw new ArgumentNullException(nameof(action));
+			}
+
+			foreach(T element in collection) {
+				action(element);
+			}
+		}
+
+		/// <summary>
 		/// Returns the first element in a sequence whose provided transform function returns a max value in the provided collection.
 		/// </summary>
 		/// <typeparam name="T">The type of the elements in the collection.</typeparam>
@@ -168,7 +188,7 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Determines whether the provided collection is null or is empty.
+		/// Determines whether the provided collection is null or empty.
 		/// </summary>
 		/// <typeparam name="T">The type of the elements of the collection.</typeparam>
 		/// <param name="enumerable">The collection, which may be null or empty.</param>
@@ -300,7 +320,7 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Projects each element of a sequence into a new form and returns a sequence of only those elements where the provided new form occurs the most (using a default equality comparer to compare values).
+		/// Projects each element of a sequence into a new form and returns a sequence of only those forms that occurs the most (using a default equality comparer to compare values).
 		/// <para>Null (or default) values are also counted and considered as equal.</para>
 		/// </summary>
 		/// <typeparam name="T">The type of the elements of source.</typeparam>
@@ -356,14 +376,14 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Projects each element of a sequence into a new form and returns a sequence of only those elements where the provided new form occurs the least (using a default equality comparer to compare values).
+		/// Projects each element of a sequence into a new form and returns a sequence of only those forms that occurs the least (using a default equality comparer to compare values).
 		/// <para>Null (or default) values are also counted and considered as equal.</para>
 		/// </summary>
 		/// <typeparam name="T">The type of the elements of source.</typeparam>
 		/// <typeparam name="TResult">The type of the value returned by selector.</typeparam>
 		/// <param name="source">A sequence of values to invoke a transform function on.</param>
 		/// <param name="selector">A transform function to apply to each element.</param>
-		public static IEnumerable<TResult> SelectWhereMinOccurenceOf<T, TResult>(this IEnumerable<T> source, Func<T, TResult> selector)
+		public static IEnumerable<TResult> SelectWhereMinOccurrenceOf<T, TResult>(this IEnumerable<T> source, Func<T, TResult> selector)
 		{
 			if(source == null) {
 				throw new ArgumentNullException(nameof(source));
