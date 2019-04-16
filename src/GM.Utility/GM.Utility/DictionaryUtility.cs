@@ -55,20 +55,20 @@ namespace GM.Utility
 		/// Creates two dictionaries: singles, that contains objects that are the only ones with a unique key, and lists, that contains lists of objects with the same key. Key is selected with the provided key selecting function.
 		/// </summary>
 		/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
-		/// <typeparam name="TObject">The type of values in the dictionary.</typeparam>
+		/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
 		/// <param name="objects">List of objects which to sort into the two dictionaries.</param>
 		/// <param name="singles">Dictionary with objects that have unique keys.</param>
 		/// <param name="lists">Dictionary with lists of objects that have the same key.</param>
 		/// <param name="keySelector">Function with which to select the key from an object.</param>
-		public static void CreateKeyDictionaries<TKey, TObject>(List<TObject> objects, out Dictionary<TKey, TObject> singles, out Dictionary<TKey, List<TObject>> lists, Func<TObject, TKey> keySelector)
+		public static void CreateKeyDictionaries<TKey, TValue>(List<TValue> objects, out Dictionary<TKey, TValue> singles, out Dictionary<TKey, List<TValue>> lists, Func<TValue, TKey> keySelector)
 		{
-			singles = new Dictionary<TKey, TObject>();
-			lists = new Dictionary<TKey, List<TObject>>();
+			singles = new Dictionary<TKey, TValue>();
+			lists = new Dictionary<TKey, List<TValue>>();
 
-			IEnumerable<IGrouping<TKey, TObject>> groups = objects.GroupBy(keySelector);
+			IEnumerable<IGrouping<TKey, TValue>> groups = objects.GroupBy(keySelector);
 
-			foreach(IGrouping<TKey, TObject> group in groups) {
-				List<TObject> groupObjects = group.ToList();
+			foreach(IGrouping<TKey, TValue> group in groups) {
+				List<TValue> groupObjects = group.ToList();
 
 				if(groupObjects.Count > 1) {
 					lists.Add(group.Key, groupObjects);
@@ -76,6 +76,25 @@ namespace GM.Utility
 					singles.Add(group.Key, groupObjects[0]);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Gets the value associated with the specified key. If no entry with the specified key exists, it is created.
+		/// </summary>
+		/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+		/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
+		/// <param name="dictionary">The dictionary.</param>
+		/// <param name="key">The key whose value to get or create.</param>
+		public static TValue GetOrCreate<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key) where TValue : new()
+		{
+			if(dictionary == null) {
+				throw new ArgumentNullException(nameof(dictionary));
+			}
+			if(!dictionary.TryGetValue(key, out TValue value)) {
+				value = new TValue();
+				dictionary.Add(key, value);
+			}
+			return value;
 		}
 	}
 }
