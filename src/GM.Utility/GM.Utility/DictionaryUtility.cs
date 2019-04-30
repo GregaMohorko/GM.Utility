@@ -79,7 +79,7 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Gets the value associated with the specified key. If no entry with the specified key exists, it is created.
+		/// Gets the value associated with the specified key. If there is no entry associated with the specified key, a new entry is created and returned.
 		/// </summary>
 		/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
 		/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>

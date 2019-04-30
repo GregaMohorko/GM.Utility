@@ -339,6 +339,47 @@ namespace GM.Utility
 			PropertyInfo property = GetPropertyInfo(obj, propertyName);
 			return property.GetValue(obj);
 		}
+		
+		/// <summary>
+		/// Returns the value of the property of the provided object with the specified property path.
+		/// <para>The property path can contain the dot (.) character to search deeper into sub-properties.</para>
+		/// <para>The property path can also contain the [] brackets with an index for getting an element at the specified position inside the brackets.</para>
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <param name="propertyPath">The path of the property. Can contain dot (.) character.</param>
+		public static object GetPropertyValueFromPath(object obj, string propertyPath)
+		{
+			if(obj == null) {
+				throw new ArgumentNullException(nameof(obj));
+			}
+			if(propertyPath == null) {
+				throw new ArgumentNullException(nameof(propertyPath));
+			}
+			if(string.IsNullOrWhiteSpace(propertyPath)) {
+				throw new ArgumentException("The property path must not be empty.", nameof(propertyPath));
+			}
+
+			object value = obj;
+
+			string[] subPaths = propertyPath.Split('.');
+			foreach(string subPath in subPaths) {
+				if(subPath.EndsWith("]")) {
+					int start = subPath.LastIndexOf('[');
+					if(start >= 0) {
+						string subPathWithoutIndex = subPath.Substring(0, start);
+						string indexS = subPath.Substring(start + 1, subPath.Length - start - 2);
+						if(int.TryParse(indexS, out int index)) {
+							var list = (IList)value.GetPropertyValue(subPathWithoutIndex);
+							value = list[index];
+							continue;
+						}
+					}
+				}
+				value = value.GetPropertyValue(subPath);
+			}
+
+			return value;
+		}
 
 		/// <summary>
 		/// Gets the type of the specified property in the type.
