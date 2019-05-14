@@ -37,7 +37,8 @@ using System.Threading.Tasks;
 namespace GM.Utility
 {
 	/// <summary>
-	/// Utilities for string.
+	/// <summary>
+	/// Utilities for <see cref="string"/>.
 	/// </summary>
 	public static class StringUtility
 	{
@@ -189,16 +190,53 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Converts this string to title case (except for words that are entirely in uppercase, which are considered to be acronyms) using the invariant culture.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		public static string ToTitleCase(this string text)
+		{
+			if(text == null) {
+				throw new ArgumentNullException(nameof(text));
+			}
+			if(text.Length == 0) {
+				return "";
+			}
+			TextInfo textInfo = CultureInfo.InvariantCulture.TextInfo;
+			return textInfo.ToTitleCase(text);
+		}
+
+		/// <summary>
 		/// Transforms the first letter into upper case.
 		/// </summary>
 		/// <param name="text">The text.</param>
 		public static string ToUpperFirstLetter(this string text)
 		{
+			if(text == null) {
+				throw new ArgumentNullException(nameof(text));
+			}
 			if(text.Length == 0) {
-				return text;
+				return "";
 			}
 
 			text = char.ToUpper(text[0]) + text.Substring(1);
+
+			return text;
+		}
+
+		/// <summary>
+		/// Transforms the first letter into upper case and all other to lower case.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		public static string ToUpperFirstLetterOnly(this string text)
+		{
+			if(text == null) {
+				throw new ArgumentNullException(nameof(text));
+			}
+			if(text.Length == 0) {
+				return "";
+			}
+
+			text = char.ToUpperInvariant(text[0]) + text.Substring(1).ToLowerInvariant();
 
 			return text;
 		}
