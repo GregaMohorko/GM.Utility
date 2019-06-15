@@ -50,7 +50,7 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Gets only the decimal part of this double.
-		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
 		/// </summary>
 		/// <param name="value">The double value.</param>
 		public static double GetDecimals(this double value)
@@ -61,20 +61,48 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Gets only the decimal part of this double, rounded to the specified number of decimals.
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
+		/// </summary>
+		/// <param name="value">The double value.</param>
+		/// <param name="decimalCount">Number of decimals to round to.</param>
+		public static double GetDecimals(this double value, int decimalCount)
+		{
+			decimal decimalValue = Convert.ToDecimal(value);
+			decimal decimals = decimalValue.GetDecimals(decimalCount);
+			return decimal.ToDouble(decimals);
+		}
+
+		/// <summary>
 		/// Gets the specified number of decimals from the decimal part of this double as an integer.
-		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
 		/// </summary>
 		/// <param name="value">The double value.</param>
 		/// <param name="decimalCount">Number of decimals to get.</param>
+		[Obsolete("This method is obsolete and will be removed in next releases, please use GetDecimalPart(double value, int decimalCount, bool round).", false)]
 		public static int GetDecimalPart(this double value, int decimalCount)
 		{
+			// FIXMe obsolete 2019-06-15
+			return GetDecimalPart(value, decimalCount, false);
+		}
+
+		/// <summary>
+		/// Gets the specified number of decimals from the decimal part of this double as an integer.
+		/// <para>If the decimal part is below 0.1, the zeros at the beginning will be omitted.</para>
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
+		/// </summary>
+		/// <param name="value">The double value.</param>
+		/// <param name="decimalCount">Number of decimals to get.</param>
+		/// <param name="round">Determines whether or not it should round the number in case the decimalCount parameter is lower than the decimals in the value.</param>
+		public static int GetDecimalPart(this double value, int decimalCount, bool round)
+		{
 			decimal decimalValue = Convert.ToDecimal(value);
-			return decimalValue.GetDecimalPart(decimalCount);
+			return decimalValue.GetDecimalPart(decimalCount, round);
 		}
 
 		/// <summary>
 		/// Gets the whole decimal part of this double as an integer.
-		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
 		/// </summary>
 		/// <param name="value">The double value.</param>
 		public static int GetDecimalPart(this double value)
@@ -134,7 +162,7 @@ namespace GM.Utility
 		/// <param name="text">The text to parse.</param>
 		public static double? ParseNullable(string text)
 		{
-			if(double.TryParse(text,out double value)) {
+			if(double.TryParse(text, out double value)) {
 				return value;
 			}
 			return null;

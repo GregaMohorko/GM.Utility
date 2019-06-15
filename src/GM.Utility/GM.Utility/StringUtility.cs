@@ -28,6 +28,7 @@ Author: Grega Mohorko
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,6 @@ using System.Threading.Tasks;
 
 namespace GM.Utility
 {
-	/// <summary>
 	/// <summary>
 	/// Utilities for <see cref="string"/>.
 	/// </summary>

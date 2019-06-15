@@ -28,6 +28,7 @@ Author: Grega Mohorko
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,10 +48,10 @@ namespace GM.Utility
 		{
 			return texts.All(t => IsDecimal(t));
 		}
-		
+
 		/// <summary>
 		/// Gets only the decimal part of this decimal.
-		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
 		/// </summary>
 		/// <param name="value">The decimal value.</param>
 		public static decimal GetDecimals(this decimal value)
@@ -59,20 +60,50 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Gets only the decimal part of this decimal, rounded to the specified number of decimals.
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
+		/// </summary>
+		/// <param name="value">The decimal value.</param>
+		/// <param name="decimalCount">Number of decimals to round to.</param>
+		public static decimal GetDecimals(this decimal value, int decimalCount)
+		{
+			value = Math.Round(value, decimalCount);
+			return value - decimal.Truncate(value);
+		}
+
+		/// <summary>
 		/// Gets the specified number of decimals from the decimal part of this decimal number as an integer.
-		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
 		/// </summary>
 		/// <param name="value">The decimal value.</param>
 		/// <param name="decimalCount">Number of decimals to get.</param>
+		[Obsolete("This method is obsolete and will be removed in next releases, please use GetDecimalPart(decimal value, int decimalCount, bool round).", false)]
 		public static int GetDecimalPart(this decimal value, int decimalCount)
 		{
+			// FIXME obsolete 2019-06-15
+			return GetDecimalPart(value, decimalCount, false);
+		}
+
+		/// <summary>
+		/// Gets the specified number of decimals from the decimal part of this decimal number as an integer.
+		/// <para>If the decimal part is below 0.1, the zeros at the beginning will be omitted.</para>
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
+		/// </summary>
+		/// <param name="value">The decimal value.</param>
+		/// <param name="decimalCount">Number of decimals to get.</param>
+		/// <param name="round">Determines whether or not it should round the number in case the decimalCount parameter is lower than the decimals in the value.</param>
+		public static int GetDecimalPart(this decimal value, int decimalCount, bool round)
+		{
 			decimal decimals = GetDecimals(value);
-			return (int)(decimals * (int)(Math.Pow(10, decimalCount)));
+			if(round) {
+				decimals = Math.Round(decimals, decimalCount);
+			}
+			return (int)(decimals * (int)Math.Pow(10, decimalCount));
 		}
 
 		/// <summary>
 		/// Gets the whole decimal part of this decimal number as an integer.
-		/// <para>If the value is negative, the returned value will also be negative.</para>
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
 		/// </summary>
 		/// <param name="value">The decimal value.</param>
 		public static int GetDecimalPart(this decimal value)
@@ -92,6 +123,7 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Gets the whole part of this decimal number.
+		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
 		/// </summary>
 		/// <param name="value">The decimal value.</param>
 		public static int GetWholePart(this decimal value)
@@ -154,6 +186,63 @@ namespace GM.Utility
 				return value;
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Converts this decimal value to a string of fixed length.
+		/// </summary>
+		/// <param name="value">The decimal value to convert to string.</param>
+		/// <param name="length">The length of the string to convert to.</param>
+		/// <param name="cultureInfo">The culture to use. If not provided, the <see cref="CultureInfo.CurrentCulture"/> will be used.</param>
+		public static string ToStringFixedLength(this decimal value, int length, CultureInfo cultureInfo = null)
+		{
+			if(length < 1) {
+				throw new ArgumentOutOfRangeException(nameof(length), length, "The minimum length is 1.");
+			}
+
+			if(cultureInfo == null) {
+				cultureInfo = CultureInfo.CurrentCulture;
+			}
+
+			var sb = new StringBuilder(length);
+			// negative sign
+			if(value < 0) {
+				if(length < 1 + cultureInfo.NumberFormat.NegativeSign.Length) {
+					throw new ArgumentOutOfRangeException(nameof(length), length, $"The minimum length for a negative value is 1 plus the length of the negative sign (negative sign used: '{cultureInfo.NumberFormat.NegativeSign}').");
+				}
+				sb.Append(cultureInfo.NumberFormat.NegativeSign);
+			}
+			// the whole part
+			{
+				int wholePart = Math.Abs(value.GetWholePart());
+				if(wholePart > 0) {
+					sb.Append(wholePart.ToString());
+				}
+			}
+
+			if(sb.Length > length) {
+				throw new ArgumentOutOfRangeException(nameof(length), length, $"The value '{value}' could not be converted to a string of length {length} because the mandatory part of the value (negative sign plus the integral part) is longer. Either increase the desired length or provide a lower value.");
+			}
+
+			// decimals
+			if(sb.Length < length) {
+				int charsLeft = length - sb.Length;
+				// decimal separator
+				if(cultureInfo.NumberFormat.NumberDecimalSeparator.Length >= charsLeft) {
+					sb.Append(cultureInfo.NumberFormat.NumberDecimalSeparator.Substring(0, charsLeft));
+				} else {
+					sb.Append(cultureInfo.NumberFormat.NumberDecimalSeparator);
+					charsLeft -= cultureInfo.NumberFormat.NumberDecimalSeparator.Length;
+					decimal decimalPart = Math.Abs(value.GetDecimals(charsLeft));
+					string decimalPartString = decimalPart.ToString(cultureInfo).Substring(1 + cultureInfo.NumberFormat.NumberDecimalSeparator.Length);
+					if(decimalPartString.Length > charsLeft) {
+						decimalPartString = decimalPartString.Substring(0, charsLeft);
+					}
+					sb.Append(decimalPartString);
+				}
+			}
+
+			return sb.ToString();
 		}
 	}
 }

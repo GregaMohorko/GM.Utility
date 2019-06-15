@@ -45,16 +45,36 @@ namespace GM.Utility.Test
 		}
 
 		[TestMethod]
+		public void GetDecimals_WithRounding()
+		{
+			Assert.AreEqual(0.123, 42.123456789.GetDecimals(3));
+			Assert.AreEqual(-0.1235, -42.123456789.GetDecimals(4));
+			Assert.AreEqual(0.12346, 0.123456789.GetDecimals(5));
+			Assert.AreEqual(0.987654, 1.987654321.GetDecimals(6));
+			Assert.AreEqual(0d, 123d.GetDecimals(7));
+		}
+
+		[TestMethod]
 		public void GetDecimalPart()
 		{
-			Assert.AreEqual(1, 42.123.GetDecimalPart(1));
-			Assert.AreEqual(12, 42.123.GetDecimalPart(2));
-			Assert.AreEqual(123, 42.123.GetDecimalPart(3));
-			Assert.AreEqual(123456789, 42.123456789.GetDecimalPart(9));
-			Assert.AreEqual(1234567, 42.123456789.GetDecimalPart(7));
-			Assert.AreEqual(-98, -42.987.GetDecimalPart(2));
-			Assert.AreEqual(0, 42d.GetDecimalPart(1));
-			Assert.AreEqual(0, 1.23.GetDecimalPart(0));
+			Assert.AreEqual(1, 42.123.GetDecimalPart(1, false));
+			Assert.AreEqual(1, 42.123.GetDecimalPart(1, true));
+			Assert.AreEqual(7, 42.789.GetDecimalPart(1, false));
+			Assert.AreEqual(8, 42.789.GetDecimalPart(1, true));
+			Assert.AreEqual(12, 42.123.GetDecimalPart(2, false));
+			Assert.AreEqual(12, 42.123.GetDecimalPart(2, true));
+			Assert.AreEqual(123, 42.123.GetDecimalPart(3, false));
+			Assert.AreEqual(123, 42.123.GetDecimalPart(3, true));
+			Assert.AreEqual(123456789, 42.123456789.GetDecimalPart(9, false));
+			Assert.AreEqual(123456789, 42.123456789.GetDecimalPart(9, true));
+			Assert.AreEqual(1234567, 42.123456789.GetDecimalPart(7, false));
+			Assert.AreEqual(1234568, 42.123456789.GetDecimalPart(7, true));
+			Assert.AreEqual(-98, -42.987.GetDecimalPart(2, false));
+			Assert.AreEqual(-99, -42.987.GetDecimalPart(2, true));
+			Assert.AreEqual(0, 42d.GetDecimalPart(1, false));
+			Assert.AreEqual(0, 42d.GetDecimalPart(1, true));
+			Assert.AreEqual(0, 1.23.GetDecimalPart(0, false));
+			Assert.AreEqual(0, 1.23.GetDecimalPart(0, true));
 		}
 
 		[TestMethod]
