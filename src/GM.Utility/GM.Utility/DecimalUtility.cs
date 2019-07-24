@@ -77,7 +77,7 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="value">The decimal value.</param>
 		/// <param name="decimalCount">Number of decimals to get.</param>
-		[Obsolete("This method is obsolete and will be removed in next releases, please use GetDecimalPart(decimal value, int decimalCount, bool round).", false)]
+		[Obsolete("This method is obsolete and will be removed in the next release, please use GetDecimalPart(decimal value, int decimalCount, bool round).", false)]
 		public static int GetDecimalPart(this decimal value, int decimalCount)
 		{
 			// FIXME obsolete 2019-06-15
@@ -234,11 +234,15 @@ namespace GM.Utility
 					sb.Append(cultureInfo.NumberFormat.NumberDecimalSeparator);
 					charsLeft -= cultureInfo.NumberFormat.NumberDecimalSeparator.Length;
 					decimal decimalPart = Math.Abs(value.GetDecimals(charsLeft));
-					string decimalPartString = decimalPart.ToString(cultureInfo).Substring(1 + cultureInfo.NumberFormat.NumberDecimalSeparator.Length);
-					if(decimalPartString.Length > charsLeft) {
-						decimalPartString = decimalPartString.Substring(0, charsLeft);
+					if(decimalPart == 0) {
+						sb.Append('0', charsLeft);
+					} else {
+						string decimalPartString = decimalPart.ToString(cultureInfo).Substring(1 + cultureInfo.NumberFormat.NumberDecimalSeparator.Length);
+						if(decimalPartString.Length > charsLeft) {
+							decimalPartString = decimalPartString.Substring(0, charsLeft);
+						}
+						sb.Append(decimalPartString);
 					}
-					sb.Append(decimalPartString);
 				}
 			}
 
