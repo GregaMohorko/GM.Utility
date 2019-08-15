@@ -46,9 +46,23 @@ namespace GM.Utility
 		/// </para>
 		/// </summary>
 		/// <param name="values">The values.</param>
-		public static double CalculateCV(IEnumerable<double> values)
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		public static double CalculateCV(IEnumerable<double> values, bool forSample = false)
 		{
 			return CalculateRSD(values);
+		}
+
+		/// <summary>
+		/// Calculates the mean value of the provided values.
+		/// </summary>
+		/// <param name="values">The values.</param>
+		public static double CalculateMean(IEnumerable<double> values)
+		{
+			int count = values.Count();
+			if(count == 0) {
+				return 0;
+			}
+			return values.Sum() / count;
 		}
 
 		/// <summary>
@@ -148,9 +162,24 @@ namespace GM.Utility
 		/// </para>
 		/// </summary>
 		/// <param name="values">The values.</param>
-		public static double CalculateRSD(IEnumerable<double> values)
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		public static double CalculateRSD(IEnumerable<double> values, bool forSample = false)
 		{
-			double sd = CalculateStandardDeviation(values, out double mean);
+			return CalculateRSD(values, out double mean, forSample);
+		}
+
+		/// <summary>
+		/// Calculates the relative standard deviation (RSD), also known as coefficient of variation (CV), of the provided values. It shows the extent of variability in relation to the mean of the population.
+		/// <para>
+		/// https://en.wikipedia.org/wiki/Coefficient_of_variation
+		/// </para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		/// <param name="mean">The mean value that is calculated during the calculation (in case you need it).</param>
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		public static double CalculateRSD(IEnumerable<double> values, out double mean, bool forSample = false)
+		{
+			double sd = CalculateStandardDeviation(values, out mean, forSample);
 			if(mean == 0) {
 				return 0;
 			}
@@ -164,9 +193,10 @@ namespace GM.Utility
 		/// </para>
 		/// </summary>
 		/// <param name="values">The values.</param>
-		public static double CalculateStandardDeviation(IEnumerable<double> values)
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		public static double CalculateStandardDeviation(IEnumerable<double> values, bool forSample = false)
 		{
-			return CalculateStandardDeviation(values, out double mean);
+			return CalculateStandardDeviation(values, out double mean, forSample);
 		}
 
 		/// <summary>
@@ -177,7 +207,8 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="values">The values.</param>
 		/// <param name="mean">The mean value that is calculated during the calculation (in case you need it).</param>
-		public static double CalculateStandardDeviation(IEnumerable<double> values, out double mean)
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		public static double CalculateStandardDeviation(IEnumerable<double> values, out double mean, bool forSample = false)
 		{
 			int count = values.Count();
 			if(count == 0) {
@@ -187,6 +218,9 @@ namespace GM.Utility
 			mean = values.Sum() / count;
 			double m = mean;
 			double standardDeviation = values.Sum(v => Math.Pow(Math.Abs(v - m), 2));
+			if(forSample) {
+				--count;
+			}
 			standardDeviation = Math.Sqrt(standardDeviation / count);
 			return standardDeviation;
 		}
