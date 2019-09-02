@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2019 Grega Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -44,19 +44,49 @@ namespace GM.Utility
 		/// <para>
 		/// https://en.wikipedia.org/wiki/Coefficient_of_variation
 		/// </para>
+		/// <para>This method is equivalent to <see cref="CalculateRSD(IEnumerable{double}, bool, bool)"/>.</para>
 		/// </summary>
 		/// <param name="values">The values.</param>
 		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
-		public static double CalculateCV(IEnumerable<double> values, bool forSample = false)
+		/// <param name="asPercentage">If true, the result will be multiplied by 100 and will represent a percentage.</param>
+		public static double CalculateCV(IEnumerable<double> values, bool forSample = false, bool asPercentage = false)
 		{
-			return CalculateRSD(values);
+			return CalculateRSD(values, forSample, asPercentage);
+		}
+
+		/// <summary>
+		/// Calculates the coefficient of variation (CV), also known as relative standard deviation (RSD), of the provided values. It shows the extent of variability in relation to the mean of the population.
+		/// <para>
+		/// https://en.wikipedia.org/wiki/Coefficient_of_variation
+		/// </para>
+		/// <para>This method is equivalent to <see cref="CalculateRSD(IEnumerable{decimal}, bool, bool)"/>.</para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		/// <param name="asPercentage">If true, the result will be multiplied by 100 and will represent a percentage.</param>
+		public static decimal CalculateCV(IEnumerable<decimal> values, bool forSample = false, bool asPercentage = false)
+		{
+			return CalculateRSD(values, forSample, asPercentage);
 		}
 
 		/// <summary>
 		/// Calculates the mean value of the provided values.
 		/// </summary>
 		/// <param name="values">The values.</param>
-		public static double CalculateMean(IEnumerable<double> values)
+		public static double CalculateMean(ICollection<double> values)
+		{
+			int count = values.Count();
+			if(count == 0) {
+				return 0;
+			}
+			return values.Sum() / count;
+		}
+
+		/// <summary>
+		/// Calculates the mean value of the provided values.
+		/// </summary>
+		/// <param name="values">The values.</param>
+		public static decimal CalculateMean(ICollection<decimal> values)
 		{
 			int count = values.Count();
 			if(count == 0) {
@@ -163,9 +193,24 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="values">The values.</param>
 		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
-		public static double CalculateRSD(IEnumerable<double> values, bool forSample = false)
+		/// <param name="asPercentage">If true, the result will be multiplied by 100 and will represent a percentage.</param>
+		public static double CalculateRSD(IEnumerable<double> values, bool forSample = false, bool asPercentage = false)
 		{
-			return CalculateRSD(values, out double mean, forSample);
+			return CalculateRSD(values, out double mean, forSample, asPercentage);
+		}
+
+		/// <summary>
+		/// Calculates the relative standard deviation (RSD), also known as coefficient of variation (CV), of the provided values. It shows the extent of variability in relation to the mean of the population.
+		/// <para>
+		/// https://en.wikipedia.org/wiki/Coefficient_of_variation
+		/// </para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		/// <param name="asPercentage">If true, the result will be multiplied by 100 and will represent a percentage.</param>
+		public static decimal CalculateRSD(IEnumerable<decimal> values, bool forSample = false, bool asPercentage = false)
+		{
+			return CalculateRSD(values, out decimal mean, forSample, asPercentage);
 		}
 
 		/// <summary>
@@ -177,11 +222,37 @@ namespace GM.Utility
 		/// <param name="values">The values.</param>
 		/// <param name="mean">The mean value that is calculated during the calculation (in case you need it).</param>
 		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
-		public static double CalculateRSD(IEnumerable<double> values, out double mean, bool forSample = false)
+		/// <param name="asPercentage">If true, the result will be multiplied by 100 and will represent a percentage.</param>
+		public static double CalculateRSD(IEnumerable<double> values, out double mean, bool forSample = false, bool asPercentage = false)
 		{
 			double sd = CalculateStandardDeviation(values, out mean, forSample);
 			if(mean == 0) {
 				return 0;
+			}
+			if(asPercentage) {
+				sd *= 100;
+			}
+			return sd / mean;
+		}
+
+		/// <summary>
+		/// Calculates the relative standard deviation (RSD), also known as coefficient of variation (CV), of the provided values. It shows the extent of variability in relation to the mean of the population.
+		/// <para>
+		/// https://en.wikipedia.org/wiki/Coefficient_of_variation
+		/// </para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		/// <param name="mean">The mean value that is calculated during the calculation (in case you need it).</param>
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		/// <param name="asPercentage">If true, the result will be multiplied by 100 and will represent a percentage.</param>
+		public static decimal CalculateRSD(IEnumerable<decimal> values, out decimal mean, bool forSample = false, bool asPercentage = false)
+		{
+			decimal sd = CalculateStandardDeviation(values, out mean, forSample);
+			if(mean == 0) {
+				return 0;
+			}
+			if(asPercentage) {
+				sd *= 100;
 			}
 			return sd / mean;
 		}
@@ -197,6 +268,19 @@ namespace GM.Utility
 		public static double CalculateStandardDeviation(IEnumerable<double> values, bool forSample = false)
 		{
 			return CalculateStandardDeviation(values, out double mean, forSample);
+		}
+
+		/// <summary>
+		/// Calculates the standard deviation of the provided values.
+		/// <para>
+		/// https://www.khanacademy.org/math/probability/data-distributions-a1/summarizing-spread-distributions/a/calculating-standard-deviation-step-by-step
+		/// </para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		public static decimal CalculateStandardDeviation(IEnumerable<decimal> values, bool forSample = false)
+		{
+			return CalculateStandardDeviation(values, out decimal mean, forSample);
 		}
 
 		/// <summary>
@@ -222,6 +306,33 @@ namespace GM.Utility
 				--count;
 			}
 			standardDeviation = Math.Sqrt(standardDeviation / count);
+			return standardDeviation;
+		}
+
+		/// <summary>
+		/// Calculates the standard deviation of the provided values.
+		/// <para>
+		/// https://www.khanacademy.org/math/probability/data-distributions-a1/summarizing-spread-distributions/a/calculating-standard-deviation-step-by-step
+		/// </para>
+		/// </summary>
+		/// <param name="values">The values.</param>
+		/// <param name="mean">The mean value that is calculated during the calculation (in case you need it).</param>
+		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
+		public static decimal CalculateStandardDeviation(IEnumerable<decimal> values, out decimal mean, bool forSample = false)
+		{
+			int count = values.Count();
+			if(count == 0) {
+				mean = 0;
+				return 0;
+			}
+			mean = values.Sum() / count;
+			decimal m = mean;
+			decimal standardDeviation = values.Sum(v => (decimal)Math.Pow((double)(v - m), 2));
+			if(forSample) {
+				--count;
+			}
+			standardDeviation /= count;
+			standardDeviation = (decimal)Math.Sqrt((double)standardDeviation);
 			return standardDeviation;
 		}
 
