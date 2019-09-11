@@ -41,6 +41,29 @@ namespace GM.Utility
 	public static class DictionaryUtility
 	{
 		/// <summary>
+		/// Adds the provided element to the collection associated with the specified key. If the key doesn't exist in this <see cref="IDictionary{TKey, TValue}"/>, it creates a new collection containing the provided element.
+		/// </summary>
+		/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+		/// <typeparam name="TCollection">The type of collections in this dictionary.</typeparam>
+		/// <typeparam name="TElement">The type of elements in the collections in this dictionary.</typeparam>
+		/// <param name="dictionary">The dictionary.</param>
+		/// <param name="key">The key of whose collection to add or create.</param>
+		/// <param name="element">The element to add.</param>
+		public static void AddOrCreate<TKey, TCollection, TElement>(this IDictionary<TKey, TCollection> dictionary, TKey key, TElement element) where TCollection : ICollection<TElement>, new()
+		{
+			if(dictionary == null) {
+				throw new ArgumentNullException(nameof(dictionary));
+			}
+			if(dictionary.TryGetValue(key, out TCollection collection)) {
+				collection.Add(element);
+			} else {
+				var newCollection = new TCollection();
+				newCollection.Add(element);
+				dictionary.Add(key, newCollection);
+			}
+		}
+
+		/// <summary>
 		/// Returns a read-only <see cref="ReadOnlyDictionary{TKey, TValue}"/> wrapper for the current dictionary.
 		/// </summary>
 		/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
