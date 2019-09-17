@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2019 Grega Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -174,6 +174,23 @@ namespace GM.Utility
 				}
 			}
 			return itemWithMax;
+		}
+
+		/// <summary>
+		/// Invokes a transform function on each element of a sequence and returns the maximum <see cref="int"/> value, or zero if the sequence contains no elements.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements of source.</typeparam>
+		/// <param name="collection">A sequence of values to determine the maximum value of.</param>
+		/// <param name="selector">A transform function to apply to each element.</param>
+		public static int MaxOrZero<T>(this IEnumerable<T> collection, Func<T, int> selector)
+		{
+			if(collection == null) {
+				throw new ArgumentNullException(nameof(collection));
+			}
+			if(!collection.Any()) {
+				return 0;
+			}
+			return collection.Max(selector);
 		}
 
 		/// <summary>
