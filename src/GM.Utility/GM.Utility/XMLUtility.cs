@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2019 Grega Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace GM.Utility
 {
@@ -70,6 +71,44 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Deserializes the provided XML.
+		/// </summary>
+		/// <typeparam name="T">The type of the object to deserialize to.</typeparam>
+		/// <param name="xml">The path to the file containing the XML.</param>
+		/// <param name="rootElementName">The name of the XML root element.</param>
+		public static T Deserialize<T>(string xml, string rootElementName = null)
+		{
+			XmlSerializer xmlSerializer;
+			if(string.IsNullOrWhiteSpace(rootElementName)) {
+				xmlSerializer = new XmlSerializer(typeof(T));
+			} else {
+				xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootElementName));
+			}
+			using(var stringReader = new StringReader(xml)) {
+				return (T)xmlSerializer.Deserialize(stringReader);
+			}
+		}
+
+		/// <summary>
+		/// Deserializes the XML in the specified file.
+		/// </summary>
+		/// <typeparam name="T">The type of the object to deserialize to.</typeparam>
+		/// <param name="filePath">The path to the file containing the XML.</param>
+		/// <param name="rootElementName">The name of the XML root element.</param>
+		public static T DeserializeFromFile<T>(string filePath, string rootElementName = null)
+		{
+			XmlSerializer xmlSerializer;
+			if(string.IsNullOrWhiteSpace(rootElementName)) {
+				xmlSerializer = new XmlSerializer(typeof(T));
+			} else {
+				xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootElementName));
+			}
+			using(var fileReader = File.OpenRead(filePath)) {
+				return (T)xmlSerializer.Deserialize(fileReader);
+			}
+		}
+
+		/// <summary>
 		/// Loads an <see cref="XElement"/> from a file.
 		/// <para>Takes care of the invalid hexadecimal characters.</para>
 		/// </summary>
@@ -81,24 +120,12 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Loads an <see cref="XElement"/> from a file.
-		/// <para>Takes care of the invalid hexadecimal characters.</para>
-		/// </summary>
-		/// <param name="file">A URI string referencing the file to load into a new <see cref="XElement"/>.</param>
-		[Obsolete("This method is obsolete. Please use XMLUtility.LoadFromFile instead.", false)]
-		public static XElement Load(string file)
-		{
-			// FIXME obsolete 2018-12-24
-			return LoadFromFile(file);
-		}
-
-		/// <summary>
 		/// Loads an XElement from the web. Supports HTTP/S and S/FTP.
 		/// <para>Takes care of the invalid hexadecimal characters.</para>
 		/// </summary>
 		/// <param name="address">The address from which to download the XML.</param>
 		/// <param name="credentials">The network credentials that are sent to the host and used to authenticate the request.</param>
-		public static XElement LoadFromWeb(string address, ICredentials credentials=null)
+		public static XElement LoadFromWeb(string address, ICredentials credentials = null)
 		{
 			using(var webClient = new WebClient()) {
 				if(credentials != null) {
@@ -159,6 +186,67 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Serializes the specified object and returns the xml in a string representation.
+		/// </summary>
+		/// <typeparam name="T">The type of the object to serialize.</typeparam>
+		/// <param name="obj">The object to serialize.</param>
+		/// <param name="settings">Settings to use.</param>
+		/// <param name="rootElementName">The name of the XML root element.</param>
+		public static string Serialize<T>(T obj, XmlWriterSettings settings = null, string rootElementName = null)
+		{
+			if(obj == null) {
+				throw new ArgumentNullException(nameof(obj));
+			}
+			XmlSerializer xmlSerializer;
+			if(string.IsNullOrWhiteSpace(rootElementName)) {
+				xmlSerializer = new XmlSerializer(typeof(T));
+			} else {
+				xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootElementName));
+			}
+			if(settings == null) {
+				settings = new XmlWriterSettings();
+			}
+			using(var stringWriter = new StringWriter()) {
+				using(var xmlWriter = XmlWriter.Create(stringWriter, settings)) {
+					xmlSerializer.Serialize(xmlWriter, obj);
+					return stringWriter.ToString();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Serializes the specified object and writes the XML document to the specified file.
+		/// </summary>
+		/// <typeparam name="T">The type of the object to serialize.</typeparam>
+		/// <param name="obj">The object to serialize.</param>
+		/// <param name="filePath">The path to the file to which to serialize to.</param>
+		/// <param name="settings">Settings to use.</param>
+		/// <param name="rootElementName">The name of the XML root element.</param>
+		public static void SerializeToFile<T>(T obj, string filePath, XmlWriterSettings settings = null, string rootElementName = null)
+		{
+			if(obj == null) {
+				throw new ArgumentNullException(nameof(obj));
+			}
+			if(filePath == null) {
+				throw new ArgumentNullException(nameof(filePath));
+			}
+			XmlSerializer xmlSerializer;
+			if(string.IsNullOrWhiteSpace(rootElementName)) {
+				xmlSerializer = new XmlSerializer(typeof(T));
+			} else {
+				xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootElementName));
+			}
+			if(settings == null) {
+				settings = new XmlWriterSettings();
+			}
+			using(var fileWriter = File.Open(filePath, FileMode.Create)) {
+				using(var xmlWriter = XmlWriter.Create(fileWriter, settings)) {
+					xmlSerializer.Serialize(xmlWriter, obj);
+				}
+			}
+		}
+
+		/// <summary>
 		/// Validates the provided XML text according to XML Schema definition language (XSD) schemas and returns a list of any validation events (warnings or errors) that occured.
 		/// <para>XML Schemas are associated with namespace URIs either by using the schemaLocation attribute or the provided Schemas property.</para>
 		/// </summary>
@@ -209,7 +297,9 @@ namespace GM.Utility
 				// Create the XmlReader object.
 				using(XmlReader reader = XmlReader.Create(stream, settings)) {
 					// Parse the file.
-					while(reader.Read()) ;
+					while(reader.Read()) {
+						;
+					}
 				}
 			}
 

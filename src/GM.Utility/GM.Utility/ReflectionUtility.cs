@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2019 Grega Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -330,6 +330,53 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Gets the value of the property or field with the specified name in this object.
+		/// </summary>
+		/// <param name="obj">The object that has the property or field.</param>
+		/// <param name="propertyOrFieldName">The name of the property or field.</param>
+		public static object GetValue(this object obj, string propertyOrFieldName)
+		{
+			if(obj == null) {
+				throw new ArgumentNullException(nameof(obj));
+			}
+			Type type = obj.GetType();
+			PropertyInfo property = type.GetProperty(propertyOrFieldName);
+			if(property != null) {
+				return property.GetValue(obj);
+			}
+			FieldInfo field = type.GetField(propertyOrFieldName);
+			if(field != null) {
+				return field.GetValue(obj);
+			}
+			throw new Exception($"'{propertyOrFieldName}' is neither a property or a field of type '{type}'.");
+		}
+
+		/// <summary>
+		/// Sets the value of the property or field with the specified name in this object.
+		/// </summary>
+		/// <param name="obj">The object that has the property or field.</param>
+		/// <param name="propertyOrFieldName">The name of the property or field.</param>
+		/// <param name="value">The value to set.</param>
+		public static void SetValue(this object obj, string propertyOrFieldName, object value)
+		{
+			if(obj == null) {
+				throw new ArgumentNullException(nameof(obj));
+			}
+			Type type = obj.GetType();
+			PropertyInfo property = type.GetProperty(propertyOrFieldName);
+			if(property != null) {
+				property.SetValue(obj, value);
+				return;
+			}
+			FieldInfo field = type.GetField(propertyOrFieldName);
+			if(field != null) {
+				field.SetValue(obj, value);
+				return;
+			}
+			throw new Exception($"'{propertyOrFieldName}' is neither a property or a field of type '{type}'.");
+		}
+
+		/// <summary>
 		/// Gets the value of the specified property in the object.
 		/// </summary>
 		/// <param name="obj">The object that has the property.</param>
@@ -339,7 +386,18 @@ namespace GM.Utility
 			PropertyInfo property = GetPropertyInfo(obj, propertyName);
 			return property.GetValue(obj);
 		}
-		
+
+		/// <summary>
+		/// Gets the value of the specified field in the object.
+		/// </summary>
+		/// <param name="obj">The object that has the field.</param>
+		/// <param name="fieldName">The name of the field.</param>
+		public static object GetFieldValue(this object obj, string fieldName)
+		{
+			FieldInfo field = GetFieldInfo(obj, fieldName);
+			return field.GetValue(obj);
+		}
+
 		/// <summary>
 		/// Returns the value of the property of the provided object with the specified property path.
 		/// <para>The property path can contain the dot (.) character to search deeper into sub-properties.</para>
@@ -347,21 +405,35 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="obj">The object.</param>
 		/// <param name="propertyPath">The path of the property. Can contain dot (.) character.</param>
+		[Obsolete("This method is obsolete and will be removed in next releases, please use GetValueFromPath.", false)]
 		public static object GetPropertyValueFromPath(object obj, string propertyPath)
+		{
+			// FIXME obsolete 2019-10-08
+			return GetValueFromPath(obj, propertyPath);
+		}
+
+		/// <summary>
+		/// Returns the value of the property/field of the provided object with the specified path.
+		/// <para>The path can contain the dot (.) character to search deeper into sub-properties/fields.</para>
+		/// <para>The path can also contain the [] brackets with an index for getting an element at the specified position inside the brackets.</para>
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <param name="path">The path of the property/field. Can contain dot '.' character and '[]' brackets with an index for lists.</param>
+		public static object GetValueFromPath(object obj, string path)
 		{
 			if(obj == null) {
 				throw new ArgumentNullException(nameof(obj));
 			}
-			if(propertyPath == null) {
-				throw new ArgumentNullException(nameof(propertyPath));
+			if(path == null) {
+				throw new ArgumentNullException(nameof(path));
 			}
-			if(string.IsNullOrWhiteSpace(propertyPath)) {
-				throw new ArgumentException("The property path must not be empty.", nameof(propertyPath));
+			if(string.IsNullOrWhiteSpace(path)) {
+				throw new ArgumentException("The path must not be empty.", nameof(path));
 			}
 
-			object value = obj;
+			object current = obj;
 
-			string[] subPaths = propertyPath.Split('.');
+			string[] subPaths = path.Split('.');
 			foreach(string subPath in subPaths) {
 				if(subPath.EndsWith("]")) {
 					int start = subPath.LastIndexOf('[');
@@ -369,16 +441,58 @@ namespace GM.Utility
 						string subPathWithoutIndex = subPath.Substring(0, start);
 						string indexS = subPath.Substring(start + 1, subPath.Length - start - 2);
 						if(int.TryParse(indexS, out int index)) {
-							var list = (IList)value.GetPropertyValue(subPathWithoutIndex);
-							value = list[index];
+							var list = (IList)GetValue(current, subPathWithoutIndex);
+							current = list[index];
 							continue;
 						}
 					}
 				}
-				value = value.GetPropertyValue(subPath);
+				current = GetValue(current, subPath);
 			}
 
-			return value;
+			return current;
+		}
+
+		/// <summary>
+		/// Sets the value to the property/field of the provided object with the specified path.
+		/// <para>The path can contain the dot (.) character to search deeper into sub-properties/fields.</para>
+		/// <para>The path can also contain the [] brackets with an index for getting an element at the specified position inside the brackets.</para>
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <param name="path">The path of the property/field. Can contain dot '.' character and '[]' brackets with an index for lists.</param>
+		/// <param name="value">The value to set.</param>
+		public static void SetValueFromPath(object obj, string path, object value)
+		{
+			if(obj == null) {
+				throw new ArgumentNullException(nameof(obj));
+			}
+			if(path == null) {
+				throw new ArgumentNullException(nameof(path));
+			}
+			if(string.IsNullOrWhiteSpace(path)) {
+				throw new ArgumentException("The path must not be empty.", nameof(path));
+			}
+
+			object current = obj;
+
+			string[] subPaths = path.Split('.');
+			foreach(string subPath in subPaths.Take(subPaths.Length - 1)) {
+				if(subPath.EndsWith("]")) {
+					int start = subPath.LastIndexOf('[');
+					if(start >= 0) {
+						string subPathWithoutIndex = subPath.Substring(0, start);
+						string indexS = subPath.Substring(start + 1, subPath.Length - start - 2);
+						if(int.TryParse(indexS, out int index)) {
+							var list = (IList)GetValue(current, subPathWithoutIndex);
+							current = list[index];
+							continue;
+						}
+					}
+				}
+				current = GetValue(current, subPath);
+			}
+
+			SetValue(current, subPaths.Last(), value);
 		}
 
 		/// <summary>
@@ -682,7 +796,7 @@ namespace GM.Utility
 		/// <typeparam name="T">The type for which to get the default value.</typeparam>
 		public static T GetDefaultGeneric<T>()
 		{
-			return default(T);
+			return default;
 		}
 	}
 }
