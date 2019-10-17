@@ -35,14 +35,20 @@ namespace GM.Utility.EqualityComparers
 	/// <summary>
 	/// Equality comparer that uses the <see cref="object.ReferenceEquals(object, object)"/> to compare values.
 	/// </summary>
-	public class ReferenceEqualityComparer : EqualityComparer<object>
+	public class ReferenceEqualityComparer : ReferenceEqualityComparer<object> { }
+
+	/// <summary>
+	/// Equality comparer that uses the <see cref="object.ReferenceEquals(object, object)"/> to compare values.
+	/// </summary>
+	/// <typeparam name="T">The type of objects to compare.</typeparam>
+	public class ReferenceEqualityComparer<T> : EqualityComparer<T>
 	{
 		/// <summary>
 		/// Determines whether the provided objects are the same reference.
 		/// </summary>
 		/// <param name="x">First object.</param>
 		/// <param name="y">Second object.</param>
-		public override bool Equals(object x, object y)
+		public override bool Equals(T x, T y)
 		{
 			return ReferenceEquals(x, y);
 		}
@@ -51,7 +57,7 @@ namespace GM.Utility.EqualityComparers
 		/// Returns the hash code of the provided object.
 		/// </summary>
 		/// <param name="obj">The object.</param>
-		public override int GetHashCode(object obj)
+		public override int GetHashCode(T obj)
 		{
 			if(obj == null) {
 				return 0;
