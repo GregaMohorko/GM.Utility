@@ -330,16 +330,22 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Gets the value of the property or field with the specified name in this object.
+		/// Gets the value of the property or field with the specified name in this object or type.
 		/// </summary>
-		/// <param name="obj">The object that has the property or field.</param>
+		/// <param name="obj">The object or type that has the property or field.</param>
 		/// <param name="propertyOrFieldName">The name of the property or field.</param>
 		public static object GetValue(this object obj, string propertyOrFieldName)
 		{
 			if(obj == null) {
 				throw new ArgumentNullException(nameof(obj));
 			}
-			Type type = obj.GetType();
+			Type type;
+			if(obj is Type typeObj) {
+				// getting static properties/fields
+				type = typeObj;
+			} else {
+				type = obj.GetType();
+			}
 			PropertyInfo property = type.GetProperty(propertyOrFieldName);
 			if(property != null) {
 				return property.GetValue(obj);
@@ -352,9 +358,9 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Sets the value of the property or field with the specified name in this object.
+		/// Sets the value of the property or field with the specified name in this object or type.
 		/// </summary>
-		/// <param name="obj">The object that has the property or field.</param>
+		/// <param name="obj">The objector type that has the property or field.</param>
 		/// <param name="propertyOrFieldName">The name of the property or field.</param>
 		/// <param name="value">The value to set.</param>
 		public static void SetValue(this object obj, string propertyOrFieldName, object value)
@@ -362,7 +368,13 @@ namespace GM.Utility
 			if(obj == null) {
 				throw new ArgumentNullException(nameof(obj));
 			}
-			Type type = obj.GetType();
+			Type type;
+			if(obj is Type typeObj) {
+				// setting static properties/fields
+				type = typeObj;
+			} else {
+				type = obj.GetType();
+			}
 			PropertyInfo property = type.GetProperty(propertyOrFieldName);
 			if(property != null) {
 				property.SetValue(obj, value);
