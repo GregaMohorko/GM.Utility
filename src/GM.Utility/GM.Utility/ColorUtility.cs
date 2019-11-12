@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2019 Grega Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -217,7 +217,7 @@ namespace GM.Utility
 				return;
 			}
 
-			H = H * 6;
+			H *= 6;
 			if(H == 6) {
 				H = 0;
 			}
@@ -510,6 +510,29 @@ namespace GM.Utility
 			} else {
 				B *= 12.92;
 			}
+		}
+
+		/// <summary>
+		/// Returns a color at the specified offset in the specified 2-color linear gradient.
+		/// <para>Scales in the HSV space.</para>
+		/// </summary>
+		/// <param name="start">The color at the start of the gradient (offset 0).</param>
+		/// <param name="end">The color at the end of the gradient (offset 1).</param>
+		/// <param name="offset">The offset. Must be [0.0, 1.0].</param>
+		public static Color ScaleLinear(Color start, Color end, double offset)
+		{
+			if(offset < 0 || offset > 1) {
+				throw new ArgumentOutOfRangeException(nameof(offset), $"Must be [0.0, 1.0]. '{offset}' was given.");
+			}
+			RGBToHSV(start, out double startH, out double startS, out double startV);
+			RGBToHSV(end, out double endH, out double endS, out double endV);
+			double invertedOffset = 1 - offset;
+			double A = (start.A * invertedOffset + end.A * offset);
+			double H = startH * invertedOffset + endH * offset;
+			double S = startS * invertedOffset + endS * offset;
+			double V = startV * invertedOffset + endV * offset;
+			HSVToRGB(H, S, V, out byte R, out byte G, out byte B);
+			return Color.FromArgb((int)A, R, G, B);
 		}
 
 		/// <summary>

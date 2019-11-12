@@ -196,7 +196,7 @@ namespace GM.Utility
 		/// <param name="asPercentage">If true, the result will be multiplied by 100 and will represent a percentage.</param>
 		public static double CalculateRSD(IEnumerable<double> values, bool forSample = false, bool asPercentage = false)
 		{
-			return CalculateRSD(values, out double mean, forSample, asPercentage);
+			return CalculateRSD(values, out _, forSample, asPercentage);
 		}
 
 		/// <summary>
@@ -210,7 +210,7 @@ namespace GM.Utility
 		/// <param name="asPercentage">If true, the result will be multiplied by 100 and will represent a percentage.</param>
 		public static decimal CalculateRSD(IEnumerable<decimal> values, bool forSample = false, bool asPercentage = false)
 		{
-			return CalculateRSD(values, out decimal mean, forSample, asPercentage);
+			return CalculateRSD(values, out _, forSample, asPercentage);
 		}
 
 		/// <summary>
@@ -267,7 +267,7 @@ namespace GM.Utility
 		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
 		public static double CalculateStandardDeviation(IEnumerable<double> values, bool forSample = false)
 		{
-			return CalculateStandardDeviation(values, out double mean, forSample);
+			return CalculateStandardDeviation(values, out _, forSample);
 		}
 
 		/// <summary>
@@ -280,7 +280,7 @@ namespace GM.Utility
 		/// <param name="forSample">The default formula is for finding the standard deviation of a population. If you're dealing with a sample, you'll want to use a slightly different formula, which uses n-1 instead of N.</param>
 		public static decimal CalculateStandardDeviation(IEnumerable<decimal> values, bool forSample = false)
 		{
-			return CalculateStandardDeviation(values, out decimal mean, forSample);
+			return CalculateStandardDeviation(values, out _, forSample);
 		}
 
 		/// <summary>
@@ -337,7 +337,33 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Difference (in percentage 0-100) of this decimal to the specified decimal.
+		/// Returns the difference (in percentage [0.0, 1.0]) of the specified decimals.
+		/// <para>If both values are zero, 0.0 is returned.</para>
+		/// <para>If one value is zero, 1.0 is returned.</para>
+		/// <para>Both values must either be positive or negative.</para>
+		/// </summary>
+		/// <param name="d1">The first decimal.</param>
+		/// <param name="d2">The second decimal.</param>
+		public static decimal DifferencePercentage(decimal d1, decimal d2)
+		{
+			if(d1 == d2) {
+				return 0;
+			}
+			if(d1 == 0 || d2 == 0) {
+				return 1;
+			}
+			if((d1 < 0 && d2 > 0) || (d1 > 0 && d2 < 0)) {
+				throw new ArgumentException($"Both values must either be positive or negative. Given values were '{d1}' and '{d2}'.");
+			}
+			if((d1 > 0 && d1 < d2) || (d1 < 0 && d1 > d2)) {
+				return 1 - d1 / d2;
+			} else {
+				return 1 - d2 / d1;
+			}
+		}
+
+		/// <summary>
+		/// Returns the difference (in percentage [0, 100] or [0, -100]) of this decimal to the specified decimal.
 		/// <para>If the result is negative, it means that this decimal is smaller than the specified decimal.</para>
 		/// <para>If the specified decimal is zero, <see cref="decimal.MaxValue"/> is returned.</para>
 		/// </summary>
@@ -348,7 +374,7 @@ namespace GM.Utility
 			if(d2 == 0m) {
 				return decimal.MaxValue;
 			}
-			return 100 * (-1m + (d1 / d2));
+			return 100 * (-1 + (d1 / d2));
 		}
 
 		/// <summary>
