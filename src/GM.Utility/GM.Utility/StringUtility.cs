@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2019 Grega Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -44,16 +44,19 @@ namespace GM.Utility
 	{
 		/// <summary>
 		/// Converts the specified string to a stream by using UTF-8 encoding that can be read from.
+		/// <para>Don't forget to dispose the stream.</para>
 		/// </summary>
 		/// <param name="value">A string value that the stream will read from.</param>
 		public static MemoryStream ConvertToStream(string value)
 		{
+#pragma warning disable IDE0067 // Dispose objects before losing scope
 			var stream = new MemoryStream();
 			var writer = new StreamWriter(stream);
 			writer.Write(value);
 			writer.Flush();
 			stream.Position = 0;
 			return stream;
+#pragma warning restore IDE0067 // Dispose objects before losing scope
 		}
 
 		/// <summary>
@@ -178,6 +181,21 @@ namespace GM.Utility
 			}
 
 			return text.Substring(0, maxLength) + "...";
+		}
+
+		/// <summary>
+		/// Converts this string from PascalCase to Sentence case.
+		/// </summary>
+		/// <param name="text">The text in PascalCase.</param>
+		public static string ToSentenceCase(this string text)
+		{
+			if(text == null) {
+				throw new ArgumentNullException(nameof(text));
+			}
+			if(text.Length == 0) {
+				return "";
+			}
+			return Regex.Replace(text, "[a-z][A-Z]", m => $"{m.Value[0]} {char.ToLowerInvariant(m.Value[1])}");
 		}
 
 		/// <summary>

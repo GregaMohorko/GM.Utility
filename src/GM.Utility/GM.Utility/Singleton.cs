@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2019 Grega Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,12 +35,13 @@ using System.Threading.Tasks;
 namespace GM.Utility
 {
 	/// <summary>
-	/// Base class for a thread-safe singleton class.
+	/// Base class for a thread-safe (creation wise) singleton class.
+	/// <para>It will use the parameterless constructor to create the instance.</para>
 	/// </summary>
 	/// <typeparam name="T">The type of the actual singleton class.</typeparam>
-	public abstract class Singleton<T> where T:Singleton<T>
+	public abstract class Singleton<T> where T : Singleton<T>
 	{
-		private static object _lock_instance = new object();
+		private static readonly object _lock_instance = new object();
 		private static T _instance;
 		/// <summary>
 		/// Gets the instance of this singleton.
