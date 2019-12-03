@@ -7,20 +7,21 @@
     <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
     <Version>1.2.9.0</Version>
 	<Title>GM.Utility</Title>
-    <Authors>Grega Mohorko</Authors>
-    <Company>Grega Mohorko</Company>
-    <PackageLicenseUrl>https://github.com/GregaMohorko/GM.Utility/blob/master/LICENSE</PackageLicenseUrl>
+    <Authors>Gregor Mohorko</Authors>
+    <Company>Gregor Mohorko</Company>
     <PackageProjectUrl>https://github.com/GregaMohorko/GM.Utility</PackageProjectUrl>
     <PackageIconUrl>https://mohorko.info/favicon.ico</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageTags>utility extensions software design pattern</PackageTags>
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
-    <Copyright>Copyright © Grega Mohorko 2019</Copyright>
+    <Copyright>Copyright © Gregor Mohorko 2019</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>Added methods: DictionaryUtility.GetOrCreate; IEnumerableUtility.ForEach; ReflectionUtility.GetProperyValueFromPath; StatisticUtility.CalculateCV, CalculateRSD.</PackageReleaseNotes>
     <AssemblyVersion>1.2.9.0</AssemblyVersion>
     <FileVersion>1.2.9.0</FileVersion>
     <RepositoryUrl>https://github.com/GregaMohorko/GM.Utility</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -32,5 +33,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard2.0\GM.Utility.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+	<None Include="icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+	</None>
+  </ItemGroup>
 
 </Project>

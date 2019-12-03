@@ -69,4 +69,4 @@ Grega Mohorko ([www.mohorko.info](https://www.mohorko.info))
 
 Copyright (c) 2019 Grega Mohorko
 
-[MIT License](./LICENSE)
+[MIT License](./LICENSE.md)

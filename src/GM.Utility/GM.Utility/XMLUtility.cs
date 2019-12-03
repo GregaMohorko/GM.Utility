@@ -190,6 +190,25 @@ namespace GM.Utility
 		/// </summary>
 		/// <typeparam name="T">The type of the object to serialize.</typeparam>
 		/// <param name="obj">The object to serialize.</param>
+		/// <param name="rootElementName">The name of the XML root element.</param>
+		/// <param name="indent">Determines whether to indent elements.</param>
+		public static string Serialize<T>(T obj, string rootElementName = null, bool indent = true)
+		{
+			XmlWriterSettings settings = null;
+			if(indent) {
+				settings = new XmlWriterSettings
+				{
+					Indent = indent
+				};
+			}
+			return Serialize(obj, settings, rootElementName);
+		}
+
+		/// <summary>
+		/// Serializes the specified object and returns the xml in a string representation.
+		/// </summary>
+		/// <typeparam name="T">The type of the object to serialize.</typeparam>
+		/// <param name="obj">The object to serialize.</param>
 		/// <param name="settings">Settings to use.</param>
 		/// <param name="rootElementName">The name of the XML root element.</param>
 		public static string Serialize<T>(T obj, XmlWriterSettings settings = null, string rootElementName = null)
@@ -197,12 +216,7 @@ namespace GM.Utility
 			if(obj == null) {
 				throw new ArgumentNullException(nameof(obj));
 			}
-			XmlSerializer xmlSerializer;
-			if(string.IsNullOrWhiteSpace(rootElementName)) {
-				xmlSerializer = new XmlSerializer(typeof(T));
-			} else {
-				xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootElementName));
-			}
+			XmlSerializer xmlSerializer = CreateSerializer<T>(rootElementName);
 			if(settings == null) {
 				settings = new XmlWriterSettings();
 			}
@@ -212,6 +226,26 @@ namespace GM.Utility
 					return stringWriter.ToString();
 				}
 			}
+		}
+
+		/// <summary>
+		/// Serializes the specified object and writes the XML document to the specified file.
+		/// </summary>
+		/// <typeparam name="T">The type of the object to serialize.</typeparam>
+		/// <param name="obj">The object to serialize.</param>
+		/// <param name="filePath">The path to the file to which to serialize to.</param>
+		/// <param name="rootElementName">The name of the XML root element.</param>
+		/// <param name="indent">Determines whether to indent elements.</param>
+		public static void SerializeToFile<T>(T obj, string filePath, string rootElementName = null, bool indent = true)
+		{
+			XmlWriterSettings settings = null;
+			if(indent) {
+				settings = new XmlWriterSettings
+				{
+					Indent = indent
+				};
+			}
+			SerializeToFile(obj, filePath, settings, rootElementName);
 		}
 
 		/// <summary>
@@ -230,12 +264,7 @@ namespace GM.Utility
 			if(filePath == null) {
 				throw new ArgumentNullException(nameof(filePath));
 			}
-			XmlSerializer xmlSerializer;
-			if(string.IsNullOrWhiteSpace(rootElementName)) {
-				xmlSerializer = new XmlSerializer(typeof(T));
-			} else {
-				xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootElementName));
-			}
+			XmlSerializer xmlSerializer = CreateSerializer<T>(rootElementName);
 			if(settings == null) {
 				settings = new XmlWriterSettings();
 			}
@@ -245,6 +274,17 @@ namespace GM.Utility
 				}
 			}
 		}
+
+		#region SERIALIZE UTILITY
+		private static XmlSerializer CreateSerializer<T>(string rootElementName)
+		{
+			if(string.IsNullOrWhiteSpace(rootElementName)) {
+				return new XmlSerializer(typeof(T));
+			} else {
+				return new XmlSerializer(typeof(T), new XmlRootAttribute(rootElementName));
+			}
+		}
+		#endregion SERIALIZE UTILITY
 
 		/// <summary>
 		/// Validates the provided XML text according to XML Schema definition language (XSD) schemas and returns a list of any validation events (warnings or errors) that occured.
