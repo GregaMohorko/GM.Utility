@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2019 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -40,6 +40,40 @@ namespace GM.Utility
 	/// </summary>
 	public static class IOUtility
 	{
+		/// <summary>
+		/// Adds the <see cref="FileAttributes.ReadOnly"/> attribute to the file on the specified path.
+		/// <para>Returns false if the specified file was already set as read-only.</para>
+		/// </summary>
+		/// <param name="path">The path to the file.</param>
+		public static bool SetAsReadOnly(string path)
+		{
+			FileAttributes existing = File.GetAttributes(path);
+			if((existing & FileAttributes.ReadOnly) == FileAttributes.ReadOnly) {
+				// already set as read-only
+				return false;
+			}
+			FileAttributes newAttributes = existing | FileAttributes.ReadOnly;
+			File.SetAttributes(path, newAttributes);
+			return true;
+		}
+
+		/// <summary>
+		/// Removes the <see cref="FileAttributes.ReadOnly"/> attribute from the file on the specified path.
+		/// <para>Returns false if the specified file was already not set as read-only.</para>
+		/// </summary>
+		/// <param name="path">The path to the file.</param>
+		public static bool SetAsNotReadOnly(string path)
+		{
+			FileAttributes existing = File.GetAttributes(path);
+			if((existing & FileAttributes.ReadOnly) != FileAttributes.ReadOnly) {
+				// already not set as read-only
+				return false;
+			}
+			FileAttributes newAttributes = existing & ~FileAttributes.ReadOnly;
+			File.SetAttributes(path, newAttributes);
+			return true;
+		}
+
 		/// <summary>
 		/// Renames the specified directory (adds the specified suffix to the end of the name).
 		/// </summary>
@@ -200,14 +234,14 @@ namespace GM.Utility
 			}
 
 			if(!Directory.Exists(destinationDirectory)) {
-				Directory.CreateDirectory(destinationDirectory);
+				_ = Directory.CreateDirectory(destinationDirectory);
 			}
 
 			// get the files in the top directory and copy them to the new location
 			FileInfo[] files = sourceDirectory.GetFiles("*", SearchOption.TopDirectoryOnly);
 			foreach(FileInfo file in files) {
 				string fileNewPath = Path.Combine(destinationDirectory, file.Name);
-				file.CopyTo(fileNewPath, overwrite);
+				_ = file.CopyTo(fileNewPath, overwrite);
 			}
 
 			if(includeSubdirectories) {
@@ -273,13 +307,13 @@ namespace GM.Utility
 		public static void CopyAllFilesWithPrefix(DirectoryInfo sourceDirectory, string destinationDirectory, string prefix, SearchOption searchOption, bool overwrite = true)
 		{
 			if(!Directory.Exists(destinationDirectory)) {
-				Directory.CreateDirectory(destinationDirectory);
+				_ = Directory.CreateDirectory(destinationDirectory);
 			}
 
 			FileInfo[] topFiles = sourceDirectory.GetFiles($"{prefix}*", SearchOption.TopDirectoryOnly);
 			foreach(FileInfo topFile in topFiles) {
 				string fileNewPath = Path.Combine(destinationDirectory, topFile.Name);
-				topFile.CopyTo(fileNewPath, overwrite);
+				_ = topFile.CopyTo(fileNewPath, overwrite);
 			}
 
 			if(searchOption == SearchOption.AllDirectories) {
@@ -617,7 +651,7 @@ namespace GM.Utility
 		/// <param name="startDirectory">The relative or absolute path to the directory in which to start searching. This string is not case-sensitive.</param>
 		/// <param name="searchPattern">The search string to match against the names of files. This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but doesn't support regular expressions.</param>
 		/// <param name="throwExceptionIfMultipleFound">Determines whether or not to throw an exception if multiple files are found for the specified search pattern.</param>
-		public static string SearchUp(string startDirectory,string searchPattern,bool throwExceptionIfMultipleFound=false)
+		public static string SearchUp(string startDirectory, string searchPattern, bool throwExceptionIfMultipleFound = false)
 		{
 			string currentDirectory = startDirectory;
 			while(true) {
