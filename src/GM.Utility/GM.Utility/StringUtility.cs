@@ -43,6 +43,11 @@ namespace GM.Utility
 	public static class StringUtility
 	{
 		/// <summary>
+		/// Regex with pattern @"\s+".
+		/// </summary>
+		public static readonly Regex RegexWhitespace = new Regex(@"\s+", RegexOptions.Compiled);
+
+		/// <summary>
 		/// Converts the specified string to a stream by using UTF-8 encoding that can be read from.
 		/// <para>Don't forget to dispose the stream.</para>
 		/// </summary>
@@ -57,6 +62,15 @@ namespace GM.Utility
 			stream.Position = 0;
 			return stream;
 #pragma warning restore IDE0067 // Dispose objects before losing scope
+		}
+
+		/// <summary>
+		/// Determines whether this text contains any whitespace.
+		/// </summary>
+		/// <param name="text">The text to determine whether it contains any whitespace.</param>
+		public static bool ContainsWhitespace(this string text)
+		{
+			return RegexWhitespace.IsMatch(text);
 		}
 
 		/// <summary>
@@ -103,7 +117,7 @@ namespace GM.Utility
 		/// <param name="text">The text.</param>
 		public static string RemoveWhitespace(this string text)
 		{
-			return Regex.Replace(text, @"\s+", "");
+			return RegexWhitespace.Replace(text, "");
 		}
 
 		/// <summary>

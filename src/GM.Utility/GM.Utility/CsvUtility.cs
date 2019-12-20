@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2019 Grega Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -65,7 +65,7 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// A string array with one element: <see cref="Environment.NewLine"/>.
+		/// An array containing only <see cref="Environment.NewLine"/>.
 		/// </summary>
 		public static readonly string[] NEWLINES = { Environment.NewLine };
 
@@ -280,6 +280,19 @@ namespace GM.Utility
 								).ToArray();
 
 			return values;
+		}
+
+		/// <summary>
+		/// Returns the provided text data surrounded with double quotes (").
+		/// </summary>
+		/// <param name="data">The text data.</param>
+		/// <param name="onlyIfContainsCommaOrWhitespace">If true, double quotes are added only if data is null or it contains either comma or whitespace.</param>
+		public static string SurroundWithDoubleQuotes(string data, bool onlyIfContainsCommaOrWhitespace = false)
+		{
+			if(!onlyIfContainsCommaOrWhitespace || data == null || (data.Contains(',') || data.ContainsWhitespace())) {
+				return $"\"{data}\"";
+			}
+			return data;
 		}
 	}
 }
