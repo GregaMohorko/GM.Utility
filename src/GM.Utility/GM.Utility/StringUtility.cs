@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2019 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -42,10 +42,11 @@ namespace GM.Utility
 	/// </summary>
 	public static class StringUtility
 	{
+		private static readonly Lazy<Regex> REGEX_WHITESPACE = new Lazy<Regex>(() => new Regex(@"\s+", RegexOptions.Compiled));
 		/// <summary>
 		/// Regex with pattern @"\s+".
 		/// </summary>
-		public static readonly Regex RegexWhitespace = new Regex(@"\s+", RegexOptions.Compiled);
+		public static Regex RegexWhitespace => REGEX_WHITESPACE.Value;
 
 		/// <summary>
 		/// Converts the specified string to a stream by using UTF-8 encoding that can be read from.
@@ -197,10 +198,31 @@ namespace GM.Utility
 			return text.Substring(0, maxLength) + "...";
 		}
 
+		private static readonly Lazy<Regex> REGEX_SENTENCEORTITLE = new Lazy<Regex>(() => new Regex("(^| )[A-z]", RegexOptions.Compiled));
+
+		/// <summary>
+		/// Converts this string into PascalCase.
+		/// </summary>
+		/// <param name="text">The text to transform to PascalCase.</param>
+		public static string ToPascalCase(this string text)
+		{
+			if(text == null) {
+				throw new ArgumentNullException(nameof(text));
+			}
+			if(text.Length == 0) {
+				return "";
+			}
+			string textLower = text.ToLowerInvariant();
+			// leave out the space before the 2nd word, and transform the first letter of it to upper case
+			return REGEX_SENTENCEORTITLE.Value.Replace(textLower, m => $"{char.ToUpperInvariant(m.Value.Last())}");
+		}
+
+		private static readonly Lazy<Regex> REGEX_PASCAL = new Lazy<Regex>(() => new Regex("[a-z][A-Z]", RegexOptions.Compiled));
+
 		/// <summary>
 		/// Converts this string from PascalCase to Sentence case.
 		/// </summary>
-		/// <param name="text">The text in PascalCase.</param>
+		/// <param name="text">The text in PascalCase to transform to Sentence case.</param>
 		public static string ToSentenceCase(this string text)
 		{
 			if(text == null) {
@@ -209,7 +231,8 @@ namespace GM.Utility
 			if(text.Length == 0) {
 				return "";
 			}
-			return Regex.Replace(text, "[a-z][A-Z]", m => $"{m.Value[0]} {char.ToLowerInvariant(m.Value[1])}");
+			// add a space between and transform the first letter of the 2nd word to lower case
+			return REGEX_PASCAL.Value.Replace(text, m => $"{m.Value[0]} {char.ToLowerInvariant(m.Value[1])}");
 		}
 
 		/// <summary>
@@ -222,7 +245,7 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Converts this string to title case (except for words that are entirely in uppercase, which are considered to be acronyms) using the invariant culture.
+		/// Converts this string to Title Case (except for words that are entirely in uppercase, which are considered to be acronyms) using the invariant culture.
 		/// </summary>
 		/// <param name="text">The text.</param>
 		public static string ToTitleCase(this string text)
