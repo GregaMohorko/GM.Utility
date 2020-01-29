@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2019 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility.Test
 Created: 2018-12-13
-Author: GregaMohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -286,10 +286,10 @@ namespace GM.Utility
 		/// Returns the provided text data surrounded with double quotes (").
 		/// </summary>
 		/// <param name="data">The text data.</param>
-		/// <param name="onlyIfContainsCommaOrWhitespace">If true, double quotes are added only if data is null or it contains either comma or whitespace.</param>
+		/// <param name="onlyIfContainsCommaOrWhitespace">If true, double quotes are added only if data is null/empty or it contains either comma or whitespace.</param>
 		public static string SurroundWithDoubleQuotes(string data, bool onlyIfContainsCommaOrWhitespace = false)
 		{
-			if(!onlyIfContainsCommaOrWhitespace || data == null || (data.Contains(',') || data.ContainsWhitespace())) {
+			if(!onlyIfContainsCommaOrWhitespace || string.IsNullOrEmpty(data) || (data.Contains(',') || data.ContainsWhitespace())) {
 				return $"\"{data}\"";
 			}
 			return data;

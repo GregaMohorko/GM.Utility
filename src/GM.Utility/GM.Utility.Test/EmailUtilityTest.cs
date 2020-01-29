@@ -21,38 +21,28 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Project: GM.Utility
+Project: GM.Utility.Test
 Created: 2020-01-16
 Author: Gregor Mohorko
 */
 
 using System;
-using System.Collections.Generic;
-using System.Net.Mail;
-using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GM.Utility
+namespace GM.Utility.Test
 {
-	/// <summary>
-	/// Utilities for email.
-	/// </summary>
-	public static class EmailUtility
+	[TestClass]
+	public class EmailUtilityTest
 	{
-		/// <summary>
-		/// Determines whether the specified email address matches the pattern of a valid email address.
-		/// </summary>
-		/// <param name="emailAddress">The address to validate.</param>
-		public static bool IsValid(string emailAddress)
+		[TestMethod]
+		public void IsValid()
 		{
-			try {
-				var addr = new MailAddress(emailAddress);
-				if(addr.Host.OccurrencesOf('.') != 1) {
-					return false;
-				}
-				return addr.Address == emailAddress;
-			} catch {
-				return false;
-			}
+			Assert.IsTrue(EmailUtility.IsValid("example@mail.com"));
+			Assert.IsTrue(EmailUtility.IsValid("ExaMple.EXAMPLE@someDOMAIN.cOm"));
+			Assert.IsTrue(EmailUtility.IsValid("ALL.CAPS.MULTIPLE.DOTS@DOMAIN.COM"));
+			Assert.IsFalse(EmailUtility.IsValid("nodot@mailcom"));
+			Assert.IsFalse(EmailUtility.IsValid("no.dot@mail"));
+			Assert.IsFalse(EmailUtility.IsValid("no.no.no.no.dot@mydomain"));
 		}
 	}
 }

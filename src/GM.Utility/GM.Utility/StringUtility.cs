@@ -87,6 +87,30 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Returns the number of occurrences of the specified character in this string.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="character">The character to count occurrences for.</param>
+		/// <param name="caseSensitive">Determines whether or not to compare in case sensitive or case insensitive way.</param>
+		public static int OccurrencesOf(this string text, char character, bool caseSensitive = true)
+		{
+			if(text == null) {
+				throw new ArgumentNullException(nameof(text));
+			}
+			if(!caseSensitive) {
+				character = char.ToLowerInvariant(character);
+				text = text.ToLowerInvariant();
+			}
+			int count = 0;
+			foreach(char c in text) {
+				if(c == character) {
+					++count;
+				}
+			}
+			return count;
+		}
+
+		/// <summary>
 		/// Returns a new string in which all occurences of the specified value are removed.
 		/// </summary>
 		/// <param name="text">The text.</param>

@@ -58,6 +58,7 @@
     <Compile Include="DateTimeUtilityTest.cs" />
     <Compile Include="ReflectionUtilityTest.cs" />
     <Compile Include="StringUtilityTest.cs" />
+    <Compile Include="EmailUtilityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GM.Utility.Test.licenseheader" />
