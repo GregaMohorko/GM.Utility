@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2019 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -162,6 +162,9 @@ namespace GM.Utility
 				// will throw exception as it should anyway :)
 				return collection.First();
 			}
+			if(list.Count == 1) {
+				return list.First();
+			}
 
 			T itemWithMax = list[0];
 			int max = valueSelector(list[0]);
@@ -206,6 +209,9 @@ namespace GM.Utility
 			if(list.Count == 0) {
 				// will throw exception as it should anyway :)
 				return collection.First();
+			}
+			if(list.Count == 1) {
+				return list.First();
 			}
 
 			T itemWithMin = list[0];

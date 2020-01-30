@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2019 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -183,6 +183,39 @@ namespace GM.Utility
 			y2Mean /= n;
 
 			return Math.Pow((xyMean - xMean * yMean), 2) / ((x2Mean - xMean * xMean) * (y2Mean - yMean * yMean));
+		}
+
+		/// <summary>
+		/// Calculates the range between the biggest and smallest value in the provided list of values.
+		/// <para>Returns biggest - smallest.</para>
+		/// </summary>
+		/// <param name="values">The list of values.</param>
+		public static int CalculateRange(IEnumerable<int> values)
+		{
+			return (int)CalculateRange(values.Select(i => (double)i));
+		}
+
+		/// <summary>
+		/// Calculates the range between the biggest and smallest value in the provided list of values.
+		/// <para>Returns biggest - smallest.</para>
+		/// </summary>
+		/// <param name="values">The list of values.</param>
+		public static double CalculateRange(IEnumerable<double> values)
+		{
+			if(values == null) {
+				throw new ArgumentNullException(nameof(values));
+			}
+			double smallest = double.MaxValue;
+			double biggest = double.MinValue;
+			foreach(double value in values) {
+				if(value < smallest) {
+					smallest = value;
+				}
+				if(value > biggest) {
+					biggest = value;
+				}
+			}
+			return biggest - smallest;
 		}
 
 		/// <summary>

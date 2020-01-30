@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -53,6 +53,9 @@ namespace GM.Utility
 			if(items.Length == 0) {
 				throw new ArgumentOutOfRangeException(nameof(items), "At least one item must be provided.");
 			}
+			if(items.Length == 1) {
+				return items[0];
+			}
 
 			T itemWithMax = items[0];
 			double max = valueSelector(items[0]);
@@ -65,6 +68,40 @@ namespace GM.Utility
 				}
 			}
 			return itemWithMax;
+		}
+
+		/// <summary>
+		/// Returns all items for which the provided transform function returns the max value of all the provided items.
+		/// </summary>
+		/// <typeparam name="T">The type of the items.</typeparam>
+		/// <param name="valueSelector">A transform function to apply to each item that returns the value to compare items with.</param>
+		/// <param name="items">The items.</param>
+		public static List<T> SelectThoseWithMax<T>(Func<T, double> valueSelector, params T[] items)
+		{
+			if(items == null) {
+				throw new ArgumentNullException(nameof(items));
+			}
+			if(items.Length == 0) {
+				throw new ArgumentOutOfRangeException(nameof(items), "At least one item must be provided.");
+			}
+			if(items.Length == 1) {
+				return new List<T> { items[0] };
+			}
+
+			var itemsWithMax = new List<T> { items[0] };
+			double max = valueSelector(items[0]);
+			for(int i = 1; i < items.Length; ++i) {
+				T item = items[i];
+				double current = valueSelector(item);
+				if(current > max) {
+					max = current;
+					itemsWithMax.Clear();
+					itemsWithMax.Add(item);
+				} else if(current == max) {
+					itemsWithMax.Add(item);
+				}
+			}
+			return itemsWithMax;
 		}
 
 		/// <summary>

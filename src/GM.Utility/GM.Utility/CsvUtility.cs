@@ -248,10 +248,21 @@ namespace GM.Utility
 			List<string[]> resultByComma = ParseKnown(lines, LineSeparator.Comma).ToList();
 			List<string[]> resultByTab = ParseKnown(lines, LineSeparator.Tab).ToList();
 			List<string[]> resultBySemicolon = ParseKnown(lines, LineSeparator.Semicolon).ToList();
-			return Util.SelectOneWithMax(r => StatisticUtility.FindMedianValue(r.Select(s => s.Length)),
+
+			double median(List<string[]> values)
+			{
+				return Math.Round(StatisticUtility.FindMedianValue(values.Select(s => s.Length)));
+			}
+			int range(List<string[]> values)
+			{
+				return StatisticUtility.CalculateRange(values.Select(s => s.Length));
+			}
+
+			return Util.SelectThoseWithMax(median,
 				resultByComma,
 				resultByTab,
-				resultBySemicolon);
+				resultBySemicolon)
+				.FirstMin(range);
 		}
 
 		private static string[] ParseLineKnown(string line, LineSeparator lineSeparator)
