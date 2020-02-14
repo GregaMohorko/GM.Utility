@@ -297,10 +297,38 @@ namespace GM.Utility
 		/// Returns the provided text data surrounded with double quotes (").
 		/// </summary>
 		/// <param name="data">The text data.</param>
-		/// <param name="onlyIfContainsCommaOrWhitespace">If true, double quotes are added only if data is null/empty or it contains either comma or whitespace.</param>
-		public static string SurroundWithDoubleQuotes(string data, bool onlyIfContainsCommaOrWhitespace = false)
+		/// <param name="onlyIfEmptyOrContainsCommaOrWhitespace">If true, double quotes are added only if data is null/empty or it contains either comma or whitespace.</param>
+		public static string SurroundWithDoubleQuotes(string data, bool onlyIfEmptyOrContainsCommaOrWhitespace = false)
 		{
-			if(!onlyIfContainsCommaOrWhitespace || string.IsNullOrEmpty(data) || (data.Contains(',') || data.ContainsWhitespace())) {
+			if(!onlyIfEmptyOrContainsCommaOrWhitespace || string.IsNullOrEmpty(data) || (data.Contains(',') || data.ContainsWhitespace())) {
+				return $"\"{data}\"";
+			}
+			return data;
+		}
+
+		/// <summary>
+		/// Returns the provided text data surrounded with double quotes (") if any of the specified conditions are met.
+		/// </summary>
+		/// <param name="data">The text data.</param>
+		/// <param name="ifEmpty">If true, double quotes are added when data is null/empty.</param>
+		/// <param name="ifContainsWhitespace">If true, double quotes are added when data contains any whitespace.</param>
+		/// <param name="ifContainsAnyOfTheseCharacters">Double quotes are added then data contains any of these characters (case-sensitive).</param>
+		public static string SurroundWithDoubleQuotes(string data, bool ifEmpty, bool ifContainsWhitespace, params char[] ifContainsAnyOfTheseCharacters)
+		{
+			bool surround = false;
+			if(string.IsNullOrEmpty(data)) {
+				surround = ifEmpty;
+			} else if(data.ContainsWhitespace() && ifContainsWhitespace) {
+				surround = true;
+			} else {
+				foreach(char c in data) {
+					if(ifContainsAnyOfTheseCharacters.Contains(c)) {
+						surround = true;
+						break;
+					}
+				}
+			}
+			if(surround) {
 				return $"\"{data}\"";
 			}
 			return data;
