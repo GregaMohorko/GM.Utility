@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -45,11 +45,10 @@ namespace GM.Utility
 		/// <typeparam name="T">Type of the items in the array.</typeparam>
 		/// <param name="array">The array to add the item to.</param>
 		/// <param name="item">The item to add to the array.</param>
-		public static T[] Add<T>(this T[] array, T item)
+		public static void Add<T>(ref T[] array, T item)
 		{
 			Array.Resize(ref array, array.Length + 1);
 			array[array.Length - 1] = item;
-			return array;
 		}
 
 		/// <summary>
@@ -100,7 +99,7 @@ namespace GM.Utility
 			}
 
 			for(int i = 0; i < array.Length; ++i) {
-				array[i] = default(T);
+				array[i] = default;
 			}
 		}
 
