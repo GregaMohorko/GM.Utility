@@ -260,6 +260,21 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Returns a new string in which all occurences of '\r' and '\n' are removed.
+		/// </summary>
+		/// <param name="multilineText">The possibly multi-line text.</param>
+		public static string ToSingleLine(this string multilineText)
+		{
+			if(multilineText == null) {
+				throw new ArgumentNullException(nameof(multilineText));
+			}
+			if(multilineText.Length == 0) {
+				return "";
+			}
+			return multilineText.RemoveAllOf("\r").RemoveAllOf("\n");
+		}
+
+		/// <summary>
 		/// Converts this string to a stream by using UTF-8 encoding that can be read from.
 		/// </summary>
 		/// <param name="value">A string value that the stream will read from.</param>
