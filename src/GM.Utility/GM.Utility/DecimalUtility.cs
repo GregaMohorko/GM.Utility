@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -247,6 +247,22 @@ namespace GM.Utility
 			}
 
 			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Converts this decimal value to a string of the shortest general format.
+		/// <para>Uses the format: 0.##################...</para>
+		/// </summary>
+		/// <param name="value">The decimal value to convert to string.</param>
+		/// <param name="cultureInfo">The culture to use. If not provided, the <see cref="CultureInfo.CurrentCulture"/> will be used.</param>
+		public static string ToStringShortest(this decimal value, CultureInfo cultureInfo = null)
+		{
+			if(cultureInfo == null) {
+				cultureInfo = CultureInfo.CurrentCulture;
+			}
+
+			const string FORMAT = "0.##################################################################";
+			return value.ToString(FORMAT, cultureInfo);
 		}
 	}
 }
