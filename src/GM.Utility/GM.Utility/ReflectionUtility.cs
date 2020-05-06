@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2019 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -393,9 +393,10 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="obj">The object that has the property.</param>
 		/// <param name="propertyName">The name of the property.</param>
-		public static object GetPropertyValue(this object obj, string propertyName)
+		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
+		public static object GetPropertyValue(this object obj, string propertyName, BindingFlags? bindingAttr = null)
 		{
-			PropertyInfo property = GetPropertyInfo(obj, propertyName);
+			PropertyInfo property = GetPropertyInfo(obj, propertyName, bindingAttr);
 			return property.GetValue(obj);
 		}
 
@@ -515,9 +516,10 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="type">The type that has the specified property.</param>
 		/// <param name="propertyName">The name of the property.</param>
-		public static Type GetPropertyType(this Type type, string propertyName)
+		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
+		public static Type GetPropertyType(this Type type, string propertyName, BindingFlags? bindingAttr = null)
 		{
-			Type propertyType = GetPropertyTypeReal(type, propertyName);
+			Type propertyType = GetPropertyTypeReal(type, propertyName, bindingAttr);
 
 			// get the generic type of nullable, not THE nullable
 			if(propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>)) {
@@ -532,9 +534,10 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="type">The type that has the specified property.</param>
 		/// <param name="propertyName">The name of the property.</param>
-		public static Type GetPropertyTypeReal(this Type type, string propertyName)
+		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
+		public static Type GetPropertyTypeReal(this Type type, string propertyName, BindingFlags? bindingAttr = null)
 		{
-			PropertyInfo property = GetPropertyInfo(type, propertyName);
+			PropertyInfo property = GetPropertyInfo(type, propertyName, bindingAttr);
 			return property.PropertyType;
 		}
 
@@ -543,9 +546,10 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="obj">Object with a type that has the specified property.</param>
 		/// <param name="propertyName">The name of the property.</param>
-		public static PropertyInfo GetPropertyInfo(this object obj, string propertyName)
+		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
+		public static PropertyInfo GetPropertyInfo(this object obj, string propertyName, BindingFlags? bindingAttr = null)
 		{
-			return GetPropertyInfo(obj.GetType(), propertyName);
+			return GetPropertyInfo(obj.GetType(), propertyName, bindingAttr);
 		}
 
 		/// <summary>
@@ -553,9 +557,15 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="type">Type that has the specified property.</param>
 		/// <param name="propertyName">The name of the property.</param>
-		public static PropertyInfo GetPropertyInfo(this Type type, string propertyName)
+		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
+		public static PropertyInfo GetPropertyInfo(this Type type, string propertyName, BindingFlags? bindingAttr = null)
 		{
-			PropertyInfo property = type.GetProperty(propertyName);
+			PropertyInfo property;
+			if(bindingAttr == null) {
+				property = type.GetProperty(propertyName);
+			} else {
+				property = type.GetProperty(propertyName, bindingAttr.Value);
+			}
 			if(property == null) {
 				throw new Exception(string.Format("The provided property name ({0}) does not exist in type '{1}'.", propertyName, type.ToString()));
 			}
@@ -621,9 +631,10 @@ namespace GM.Utility
 		/// <param name="obj">The object with the property.</param>
 		/// <param name="propertyName">The name of the property to set.</param>
 		/// <param name="value">The value to set the property to.</param>
-		public static void SetProperty(this object obj, string propertyName, object value)
+		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
+		public static void SetProperty(this object obj, string propertyName, object value, BindingFlags? bindingAttr = null)
 		{
-			PropertyInfo property = GetPropertyInfo(obj, propertyName);
+			PropertyInfo property = GetPropertyInfo(obj, propertyName, bindingAttr);
 			property.SetValue(obj, value);
 		}
 
@@ -645,9 +656,10 @@ namespace GM.Utility
 		/// <param name="obj">The object with the property.</param>
 		/// <param name="propertyName">The name of the property to set.</param>
 		/// <param name="valueAsString">The string representation of the value to set to the property.</param>
-		public static void SetPropertyFromString(this object obj, string propertyName, string valueAsString)
+		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
+		public static void SetPropertyFromString(this object obj, string propertyName, string valueAsString, BindingFlags? bindingAttr = null)
 		{
-			PropertyInfo property = GetPropertyInfo(obj, propertyName);
+			PropertyInfo property = GetPropertyInfo(obj, propertyName, bindingAttr);
 			TypeConverter converter = TypeDescriptor.GetConverter(property.PropertyType);
 			object value = converter.ConvertFromString(valueAsString);
 			property.SetValue(obj, value);

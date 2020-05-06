@@ -111,5 +111,67 @@ namespace GM.Utility
 			_ = await RunOrCancel(action, ct);
 			ct.ThrowIfCancellationRequested();
 		}
+
+		/// <summary>
+		/// Creates a new thread with <see cref="ApartmentState.STA"/> apartment state that runs the the specified work and returns a <see cref="Task"/> that represents that work.
+		/// </summary>
+		/// <typeparam name="TResult">The return type of the task.</typeparam>
+		/// <param name="function">The work to execute asynchronously.</param>
+		public static Task<TResult> RunSTA<TResult>(Func<TResult> function)
+		{
+			if(function == null) {
+				throw new ArgumentNullException(nameof(function));
+			}
+			return RunSTA(function, null);
+		}
+
+		/// <summary>
+		/// Creates a new thread with <see cref="ApartmentState.STA"/> apartment state that runs the the specified work and returns a proxy for the task returned by function.
+		/// </summary>
+		/// <typeparam name="TResult">The type of the result returned by the proxy task.</typeparam>
+		/// <param name="function">The work to execute asynchronously.</param>
+		public static Task<TResult> RunSTA<TResult>(Func<Task<TResult>> function)
+		{
+			if(function == null) {
+				throw new ArgumentNullException(nameof(function));
+			}
+			return RunSTA(null, function);
+		}
+
+		private static Task<TResult> RunSTA<TResult>(Func<TResult> function, Func<Task<TResult>> asyncFunction)
+		{
+			if(function == null && asyncFunction == null) {
+				throw new ArgumentNullException("Both functions are null.");
+			}
+			if(function != null && asyncFunction != null) {
+				throw new ArgumentException("Only one function should be provided.");
+			}
+			var tcs = new TaskCompletionSource<TResult>();
+			ThreadStart threadStart;
+			if(function != null) {
+				threadStart = () =>
+				{
+					try {
+						tcs.SetResult(function());
+					} catch(Exception e) {
+						tcs.SetException(e);
+					}
+				};
+			} else {
+				threadStart = async () =>
+				{
+					try {
+						TResult result = await asyncFunction();
+						tcs.SetResult(result);
+					} catch(Exception e) {
+						tcs.SetException(e);
+					}
+				};
+			}
+			var thread = new Thread(threadStart);
+			thread.SetApartmentState(ApartmentState.STA);
+			thread.Start();
+			return tcs.Task;
+		}
 	}
 }
