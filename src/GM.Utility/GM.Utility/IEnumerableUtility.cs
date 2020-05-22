@@ -28,6 +28,7 @@ Author: Gregor Mohorko
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -306,7 +307,7 @@ namespace GM.Utility
 				throw new ArgumentNullException(nameof(collection));
 			}
 
-			T previous = default(T);
+			T previous = default;
 			bool isFirst = true;
 			IEnumerator<T> enumerator = collection.GetEnumerator();
 			while(enumerator.MoveNext()) {
@@ -393,7 +394,7 @@ namespace GM.Utility
 
 			int max = counts.Count == 0 ? 0 : counts.Max(kvp => kvp.Value);
 			if(defaultCounter > max) {
-				return new List<TResult> { default(TResult) };
+				return new List<TResult> { default };
 			}
 
 			if(max == 0) {
@@ -407,9 +408,7 @@ namespace GM.Utility
 				.Select(kvp => kvp.Key);
 
 			if(defaultCounter == max) {
-				var resultList = new List<TResult>(result);
-				resultList.Add(default(TResult));
-				return resultList;
+				return new List<TResult>(result) { default };
 			}
 
 			return result;
@@ -449,7 +448,7 @@ namespace GM.Utility
 
 			int? min = counts.Count == 0 ? null : (int?)counts.Min(kvp => kvp.Value);
 			if(defaultCounter > 0 && (min == null || defaultCounter < min)) {
-				return new List<TResult> { default(TResult) };
+				return new List<TResult> { default };
 			}
 
 			if(min == null) {
@@ -463,9 +462,7 @@ namespace GM.Utility
 				.Select(kvp => kvp.Key);
 
 			if(defaultCounter == min.Value) {
-				var resultList = new List<TResult>(result);
-				resultList.Add(default(TResult));
-				return resultList;
+				return new List<TResult>(result) { default };
 			}
 
 			return result;
@@ -511,6 +508,16 @@ namespace GM.Utility
 		public static Dictionary<TKey, List<TElement>> ToDictionaryFromGrouping<TKey, TElement>(this IEnumerable<IGrouping<TKey, TElement>> groupingCollection)
 		{
 			return groupingCollection.ToDictionary(g => g.Key, g => g.ToList());
+		}
+
+		/// <summary>
+		/// Creates a <see cref="ObservableCollection{T}"/> that contains elements copied from the specified collection.
+		/// </summary>
+		/// <typeparam name="TElement">Type of the elements.</typeparam>
+		/// <param name="collection">The collection from which the elements are copied.</param>
+		public static ObservableCollection<TElement> ToObservableCollection<TElement>(this IEnumerable<TElement> collection)
+		{
+			return new ObservableCollection<TElement>(collection);
 		}
 
 		/// <summary>
