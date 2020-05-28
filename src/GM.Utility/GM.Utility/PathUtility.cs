@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2018-3-9
-Author: GregaMohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -116,6 +116,28 @@ namespace GM.Utility
 		public static string GetSafeFileNameWithoutExtension(string name)
 		{
 			return GetSafeFileName(name).Replace('.', '_');
+		}
+
+		/// <summary>
+		/// Determines whether or not the specified path is a network drive.
+		/// <para>All UNC paths are considered as network paths.</para>
+		/// </summary>
+		/// <param name="path">The path to check if it is a network drive.</param>
+		public static bool IsNetworkDrive(string path)
+		{
+			if(path == null) {
+				throw new ArgumentNullException(nameof(path));
+			}
+			if(path.Length == 0) {
+				return false;
+			}
+			if(path[0] == '/' || path[0] == '\\') {
+				return true; // is a UNC path
+			}
+			// get drive's letter
+			string rootPath = Path.GetPathRoot(path);
+			var driveInfo = new DriveInfo(rootPath);
+			return driveInfo.DriveType == DriveType.Network;
 		}
 
 		private static readonly Regex safeFileNameValidIdentifier = new Regex("^[a-zA-Z_][a-zA-Z0-9_]*$", RegexOptions.Compiled | RegexOptions.Singleline);
