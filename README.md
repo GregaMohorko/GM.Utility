@@ -27,19 +27,24 @@
 - [Enum](src/GM.Utility/GM.Utility/EnumUtility.cs)
 - [Environment](src/GM.Utility/GM.Utility/EnvironmentUtility.cs)
 - [Equality](src/GM.Utility/GM.Utility/EqualityUtility.cs)
+- [Excel](src/GM.Utility/GM.Utility/ExcelUtility.cs)
+- [Exception](src/GM.Utility/GM.Utility/ExceptionUtility.cs)
 - [Globalization](src/GM.Utility/GM.Utility/GlobalizationUtility.cs)
 - [IEnumerable](src/GM.Utility/GM.Utility/IEnumerableUtility.cs)
-- [Int](src/GM.Utility/GM.Utility/IntUtility.cs)
 - [IO](src/GM.Utility/GM.Utility/IOUtility.cs)
+- [Int](src/GM.Utility/GM.Utility/IntUtility.cs)
+- [List](src/GM.Utility/GM.Utility/ListUtility.cs)
 - [Long](src/GM.Utility/GM.Utility/LongUtility.cs)
 - [Network](src/GM.Utility/GM.Utility/NetworkUtility.cs)
 - [Object](src/GM.Utility/GM.Utility/ObjectUtility.cs)
+- [Parse](src/GM.Utility/GM.Utility/ParseUtility.cs)
 - [Path](src/GM.Utility/GM.Utility/PathUtility.cs)
 - [Random](src/GM.Utility/GM.Utility/RandomUtility.cs)
 - [Reflection](src/GM.Utility/GM.Utility/ReflectionUtility.cs)
 - [SecureString](src/GM.Utility/GM.Utility/SecureStringUtility.cs)
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
 - [String](src/GM.Utility/GM.Utility/StringUtility.cs)
+- [Task](src/GM.Utility/GM.Utility/TaskUtility.cs)
 - [Type](src/GM.Utility/GM.Utility/TypeUtility.cs)
 - [XML](src/GM.Utility/GM.Utility/XMLUtility.cs)
 
@@ -65,8 +70,8 @@
 .NET Standard 2.0
 
 ## Author and License
-Grega Mohorko ([www.mohorko.info](https://www.mohorko.info))
+Gregor Mohorko ([www.mohorko.info](https://www.mohorko.info))
 
-Copyright (c) 2019 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 [MIT License](./LICENSE.md)
