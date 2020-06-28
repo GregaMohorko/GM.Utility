@@ -77,10 +77,11 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="value">The decimal value.</param>
 		/// <param name="decimalCount">Number of decimals to get.</param>
-		[Obsolete("This method is obsolete and will be removed in the next release, please use GetDecimalPart(decimal value, int decimalCount, bool round).", false)]
+		[Obsolete("This method is obsolete and will be removed in the next releases, please use GetDecimalPart(this decimal, int, bool).", false)]
 		public static int GetDecimalPart(this decimal value, int decimalCount)
 		{
-			// FIXME obsolete 2019-06-15
+			// FIXME obsolete v1.3.0.0
+			// 2020-06-28
 			return GetDecimalPart(value, decimalCount, false);
 		}
 
@@ -137,7 +138,7 @@ namespace GM.Utility
 		/// <param name="text">The text.</param>
 		public static bool IsDecimal(string text)
 		{
-			return decimal.TryParse(text, out decimal value);
+			return decimal.TryParse(text, out _);
 		}
 
 		/// <summary>

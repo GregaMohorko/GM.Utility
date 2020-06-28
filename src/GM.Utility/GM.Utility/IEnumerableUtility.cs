@@ -45,6 +45,7 @@ namespace GM.Utility
 	{
 		/// <summary>
 		/// Determines whether all elements in this collection are equal to each other. Compares using the <see cref="object.Equals(object)"/> method.
+		/// <para>This method returns true if the collection is empty or it contains only one element.</para>
 		/// </summary>
 		/// <typeparam name="T">The type of the elements.</typeparam>
 		/// <param name="enumerable">The collection.</param>
@@ -62,6 +63,7 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Determines whether all elements in this collection produce the same value with the provided value selector. Compares using the <see cref="object.Equals(object)"/> method.
+		/// <para>This method returns true if the collection is empty or it contains only one element.</para>
 		/// </summary>
 		/// <typeparam name="T">The type of the elements.</typeparam>
 		/// <typeparam name="TValue">The type of the values to compare.</typeparam>
@@ -84,6 +86,7 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Determines whether all elements in this collection produce the same values with the provided value selectors. Compares using the <see cref="object.Equals(object)"/> method.
+		/// <para>This method returns true if the collection is empty or it contains only one element.</para>
 		/// </summary>
 		/// <typeparam name="T">The type of the elements.</typeparam>
 		/// <typeparam name="TValue1">The type of the first values to compare.</typeparam>

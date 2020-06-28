@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -115,6 +115,15 @@ namespace GM.Utility
 		public static bool IsCurrentMonth(this DateTime date)
 		{
 			return DateTime.Today.Month == date.Month;
+		}
+
+		/// <summary>
+		/// Determines whether the provided text represents a valid <see cref="DateTime"/>.
+		/// </summary>
+		/// <param name="text">A string, possibly representing a valid date and time.</param>
+		public static bool IsDateTime(string text)
+		{
+			return DateTime.TryParse(text, out _);
 		}
 
 		/// <summary>

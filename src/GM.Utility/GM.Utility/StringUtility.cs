@@ -142,6 +142,9 @@ namespace GM.Utility
 		/// <param name="text">The text.</param>
 		public static string RemoveWhitespace(this string text)
 		{
+			// TESTME
+			// what is faster?
+			//return new string(text.Where(c => !char.IsWhiteSpace(c)).ToArray());
 			return RegexWhitespace.Replace(text, "");
 		}
 
@@ -222,6 +225,20 @@ namespace GM.Utility
 			return text.Substring(0, maxLength) + "...";
 		}
 
+		/// <summary>
+		/// Retrieves a substring from this instance. Starts at the beginnning and takes the specified number of characters.
+		/// <para>If <paramref name="count"/> is bigger than the length of this string, a copy of this instance is returned.</para>
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="count">The number of characters to take.</param>
+		public static string TakeS(this string text, int count)
+		{
+			if(text == null) {
+				throw new ArgumentNullException(nameof(text));
+			}
+			return new string(text.Take(count).ToArray());
+		}
+
 		private static readonly Lazy<Regex> REGEX_SENTENCEORTITLE = new Lazy<Regex>(() => new Regex("(^| )[A-z]", RegexOptions.Compiled));
 
 		/// <summary>
@@ -297,6 +314,29 @@ namespace GM.Utility
 			}
 			TextInfo textInfo = CultureInfo.InvariantCulture.TextInfo;
 			return textInfo.ToTitleCase(text);
+
+			// old implementation
+			/*
+			var sb = new StringBuilder();
+			var word = new StringBuilder();
+			foreach(char c in text) {
+				if(!char.IsWhiteSpace(c)) {
+					word.Append(c);
+					continue;
+				}
+				if(word.Length > 0) {
+					string titleCaseWord = word.ToString().ToLowerInvariant().ToUpperFirstLetter();
+					sb.Append(titleCaseWord);
+				}
+				sb.Append(c);
+				word.Clear();
+			}
+			if(word.Length > 0) {
+				string titleCaseWord = word.ToString().ToLowerInvariant().ToUpperFirstLetter();
+				sb.Append(titleCaseWord);
+			}
+			return sb.ToString();
+			//*/
 		}
 
 		/// <summary>

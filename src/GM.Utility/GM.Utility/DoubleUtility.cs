@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2017 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-10-27
-Author: Grega Mohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -79,10 +79,11 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="value">The double value.</param>
 		/// <param name="decimalCount">Number of decimals to get.</param>
-		[Obsolete("This method is obsolete and will be removed in next releases, please use GetDecimalPart(double value, int decimalCount, bool round).", false)]
+		[Obsolete("This method is obsolete and will be removed in next releases, please use GetDecimalPart(this double, int, bool).", false)]
 		public static int GetDecimalPart(this double value, int decimalCount)
 		{
-			// FIXMe obsolete 2019-06-15
+			// FIXMe obsolete v1.3.0.0
+			// 2020-06-28
 			return GetDecimalPart(value, decimalCount, false);
 		}
 

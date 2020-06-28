@@ -421,7 +421,8 @@ namespace GM.Utility
 		[Obsolete("This method is obsolete and will be removed in next releases, please use GetValueFromPath.", false)]
 		public static object GetPropertyValueFromPath(object obj, string propertyPath)
 		{
-			// FIXME obsolete 2019-10-08
+			// FIXME obsolete v1.3.0.0
+			// 2019-10-08
 			return GetValueFromPath(obj, propertyPath);
 		}
 
