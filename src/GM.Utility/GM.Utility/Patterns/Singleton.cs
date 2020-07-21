@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2019 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2017-12-19
-Author: GregaMohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -32,16 +32,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GM.Utility
+namespace GM.Utility.Patterns
 {
 	/// <summary>
 	/// Base class for a thread-safe (creation wise) singleton class.
 	/// <para>It will use the parameterless constructor to create the instance.</para>
 	/// </summary>
 	/// <typeparam name="T">The type of the actual singleton class.</typeparam>
-	[Obsolete("This class has been moved to GM.Utility.Patterns.Singleton, please use that one. This one will be removed in the next releases.")]
-	public abstract class Singleton<T> : Patterns.Singleton<T> where T:Singleton<T>
+	public abstract class Singleton<T> where T : Singleton<T>
 	{
-		// FIXME new obsolete
+		private static readonly object _lock_instance = new object();
+		private static T _instance;
+		/// <summary>
+		/// Gets the instance of this singleton.
+		/// </summary>
+		public static T Instance
+		{
+			get
+			{
+				if(_instance == null) {
+					lock(_lock_instance) {
+						if(_instance == null) {
+							// create an instance of T using the public, protected or private parameterless constructor
+							_instance = (T)Activator.CreateInstance(typeof(T), true);
+						}
+					}
+				}
+				return _instance;
+			}
+		}
 	}
 }

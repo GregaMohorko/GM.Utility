@@ -59,7 +59,8 @@
 - [GMWebClient](src/GM.Utility/GM.Utility/Net/GMWebClient.cs)
 
 **Software design patterns**:
-- [Singleton](src/GM.Utility/GM.Utility/Singleton.cs)
+- [Singleton](src/GM.Utility/GM.Utility/Patterns/Singleton.cs)
+- [Undo/Redo](src/GM.Utility/GM.Utility/Patterns/UndoRedo/GMUndoRedo.cs)
 
 **Other**:
 - [DefaultedObject](src/GM.Utility/GM.Utility/DefaultedObject.cs)
