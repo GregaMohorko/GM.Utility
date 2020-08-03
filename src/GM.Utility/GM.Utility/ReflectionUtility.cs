@@ -512,7 +512,7 @@ namespace GM.Utility
 		/// <summary>
 		/// Gets the type of the specified property in the type.
 		/// <para>
-		/// If the type is nullable, this function gets its generic definition. To get the real type, use <see cref="GetPropertyTypeReal(Type, string)"/>.
+		/// If the type is nullable, this function gets its generic definition. To get the real type, use <see cref="GetPropertyTypeReal(Type, string, BindingFlags?)"/>.
 		/// </para>
 		/// </summary>
 		/// <param name="type">The type that has the specified property.</param>
@@ -637,6 +637,20 @@ namespace GM.Utility
 		{
 			PropertyInfo property = GetPropertyInfo(obj, propertyName, bindingAttr);
 			property.SetValue(obj, value);
+		}
+
+		/// <summary>
+		/// Sets the specified static property of the specified type to the provided value.
+		/// </summary>
+		/// <param name="type">The type with the static property.</param>
+		/// <param name="propertyName">The name of the static property to set.</param>
+		/// <param name="value">The value to set the static property to.</param>
+		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
+		public static void SetProperty(Type type, string propertyName, object value, BindingFlags? bindingAttr = null)
+		{
+			bindingAttr = bindingAttr != null ? bindingAttr | BindingFlags.Static : BindingFlags.Static;
+			PropertyInfo property = GetPropertyInfo(type, propertyName, bindingAttr);
+			property.SetValue(null, value);
 		}
 
 		/// <summary>
