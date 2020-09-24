@@ -46,9 +46,12 @@ namespace GM.Utility
 		{
 			try {
 				var addr = new MailAddress(emailAddress);
+				// host can have multiple dots (subdomains)
+				/*
 				if(addr.Host.OccurrencesOf('.') != 1) {
 					return false;
 				}
+				//*/
 				return addr.Address == emailAddress;
 			} catch {
 				return false;
