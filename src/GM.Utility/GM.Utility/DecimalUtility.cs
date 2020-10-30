@@ -77,11 +77,11 @@ namespace GM.Utility
 		/// </summary>
 		/// <param name="value">The decimal value.</param>
 		/// <param name="decimalCount">Number of decimals to get.</param>
-		[Obsolete("This method is obsolete and will be removed in the next releases, please use GetDecimalPart(this decimal, int, bool).", false)]
+		[Obsolete("This method is obsolete and will be removed in the next releases, please use GetDecimalPart(this decimal, int, bool).", true)]
 		public static int GetDecimalPart(this decimal value, int decimalCount)
 		{
-			// FIXME obsolete v1.3.0.0
-			// 2020-06-28
+			// FIXME obsolete v1.3.1.0
+			// 2020-10-30
 			return GetDecimalPart(value, decimalCount, false);
 		}
 

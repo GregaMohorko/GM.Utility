@@ -39,9 +39,10 @@ namespace GM.Utility
 	/// <para>It will use the parameterless constructor to create the instance.</para>
 	/// </summary>
 	/// <typeparam name="T">The type of the actual singleton class.</typeparam>
-	[Obsolete("This class has been moved to GM.Utility.Patterns.Singleton, please use that one. This one will be removed in the next releases.")]
+	[Obsolete("This class has been moved to GM.Utility.Patterns.Singleton, please use that one. This one will be removed in the next releases.", false)]
 	public abstract class Singleton<T> : Patterns.Singleton<T> where T:Singleton<T>
 	{
-		// FIXME new obsolete
+		// FIXME obsolete v1.3.1.0
+		// 2020-10-30
 	}
 }

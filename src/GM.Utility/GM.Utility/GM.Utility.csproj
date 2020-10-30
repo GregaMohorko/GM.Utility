@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
-    <Version>1.3.0.0</Version>
+    <Version>1.3.1.0</Version>
 	<Title>GM.Utility</Title>
     <Authors>Gregor Mohorko</Authors>
     <Company>Gregor Mohorko</Company>
@@ -15,9 +15,12 @@
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
     <Copyright>Copyright © Gregor Mohorko 2020</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Enabled SourceLink. Added utility classes: ExcelUtility, ExceptionUtility, ListUtility, ParseUtility, TaskUtility. Added utility methods: ColorUtility.ScaleLinear; CsvUtility.SurroundWithDoubleQuotes; DateTimeUtility.IsDateTime; DecimalUtility.GetDecimals(decimalCount), ToStringFixedLength, ToStringShortest; DictionaryUtility.AddOrCreate; IEnumerableUtility.AllSame, MaxOrZero, ToObservableCollection; IOUtility.SetAs(Not)ReadOnly; PathUtility.IsNetworkDrive; StatisticUtility.DifferencePercentage, RSD; ReflectionUtility.GetValue, SetValue; StringUtility.ContainsWhitespace, OccurencesOf, TakeS, ToPascalCase, ToSentenceCase, ToSingleLine, ToTitleCase, ToUpperCaseFirstLetterOnly; XMLUtility.(De)Serialize(To/From File).</PackageReleaseNotes>
-    <AssemblyVersion>1.3.0.0</AssemblyVersion>
-    <FileVersion>1.3.0.0</FileVersion>
+    <PackageReleaseNotes>Added UndoRedo pattern.
+Added GMHttpClient.
+Added ReflectionUtility.SetProperty for static properties.
+EmailUtility.IsValid: Added support for subdomains.</PackageReleaseNotes>
+    <AssemblyVersion>1.3.1.0</AssemblyVersion>
+    <FileVersion>1.3.1.0</FileVersion>
     <RepositoryUrl>https://github.com/GregaMohorko/GM.Utility</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

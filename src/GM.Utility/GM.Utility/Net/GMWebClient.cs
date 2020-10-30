@@ -35,7 +35,8 @@ using System.Threading.Tasks;
 
 namespace GM.Utility.Net
 {
-	// FIXME new obsolete
+	// FIXME obsolete v1.3.1.0
+	// 2020-10-30
 	/// <summary>
 	/// A version of <see cref="WebClient"/> with added functionalities.
 	/// <para>Added support for request timeout. Default timeout is 10000 ms.</para>
