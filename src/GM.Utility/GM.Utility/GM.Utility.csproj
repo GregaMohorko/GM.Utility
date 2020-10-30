@@ -10,7 +10,6 @@
     <Authors>Gregor Mohorko</Authors>
     <Company>Gregor Mohorko</Company>
     <PackageProjectUrl>https://github.com/GregaMohorko/GM.Utility</PackageProjectUrl>
-    <PackageIconUrl>https://mohorko.info/favicon.ico</PackageIconUrl>
     <PackageIcon>icon.png</PackageIcon>
     <PackageTags>utility extensions software design pattern</PackageTags>
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>

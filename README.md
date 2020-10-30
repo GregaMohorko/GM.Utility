@@ -56,7 +56,7 @@
 - [ReferenceEqualityComparer](src/GM.Utility/GM.Utility/EqualityComparers/ReferenceEqualityComparer.cs)
 
 **Net**:
-- [GMWebClient](src/GM.Utility/GM.Utility/Net/GMWebClient.cs)
+- [GMHttpClient](src/GM.Utility/GM.Utility/Net/GMHttpClient.cs)
 
 **Software design patterns**:
 - [Singleton](src/GM.Utility/GM.Utility/Patterns/Singleton.cs)

@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2020 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility
 Created: 2018-2-1
-Author: GregaMohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -35,10 +35,12 @@ using System.Threading.Tasks;
 
 namespace GM.Utility.Net
 {
+	// FIXME new obsolete
 	/// <summary>
 	/// A version of <see cref="WebClient"/> with added functionalities.
 	/// <para>Added support for request timeout. Default timeout is 10000 ms.</para>
 	/// </summary>
+	[Obsolete("This class is deprecated and will be removed in the next release, please use GMHttpClient instead.", false)]
 	public class GMWebClient:IDisposable
     {
 		/// <summary>
