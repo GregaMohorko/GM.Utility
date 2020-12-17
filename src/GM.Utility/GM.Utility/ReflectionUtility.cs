@@ -628,12 +628,13 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Sets the specified property to the provided value in the object.
+		/// <para>By default, uses <see cref="BindingFlags.Instance"/> | <see cref="BindingFlags.Public"/> | <see cref="BindingFlags.NonPublic"/>.</para>
 		/// </summary>
 		/// <param name="obj">The object with the property.</param>
 		/// <param name="propertyName">The name of the property to set.</param>
 		/// <param name="value">The value to set the property to.</param>
-		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
-		public static void SetProperty(this object obj, string propertyName, object value, BindingFlags? bindingAttr = null)
+		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null. Default value is <see cref="BindingFlags.Instance"/> | <see cref="BindingFlags.Public"/> | <see cref="BindingFlags.NonPublic"/>.</param>
+		public static void SetProperty(this object obj, string propertyName, object value, BindingFlags? bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
 		{
 			PropertyInfo property = GetPropertyInfo(obj, propertyName, bindingAttr);
 			property.SetValue(obj, value);
@@ -642,20 +643,22 @@ namespace GM.Utility
 		/// <summary>
 		/// Sets the specified static property of the specified type to the provided value.
 		/// <para><see cref="BindingFlags.Static"/> is always included.</para>
+		/// <para>By default, uses <see cref="BindingFlags.Public"/> | <see cref="BindingFlags.NonPublic"/>.</para>
 		/// </summary>
 		/// <param name="type">The type with the static property.</param>
 		/// <param name="propertyName">The name of the static property to set.</param>
 		/// <param name="value">The value to set the static property to.</param>
 		/// <param name="bindingAttr">A bitmask comprised of one or more <see cref="BindingFlags"/> that specify how the search is conducted. -or- Zero, to return null.</param>
-		public static void SetProperty(Type type, string propertyName, object value, BindingFlags? bindingAttr = null)
+		public static void SetProperty(Type type, string propertyName, object value, BindingFlags? bindingAttr = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
 		{
-			bindingAttr = bindingAttr != null ? bindingAttr | BindingFlags.Static : BindingFlags.Static;
+			bindingAttr |= BindingFlags.Static;
 			PropertyInfo property = GetPropertyInfo(type, propertyName, bindingAttr);
 			property.SetValue(null, value);
 		}
 
 		/// <summary>
 		/// Sets the specified field to the provided value in the object.
+		/// <para>Works for public, protected, private and readonly fields.</para>
 		/// </summary>
 		/// <param name="obj">The object with the field.</param>
 		/// <param name="fieldName">The name of the field to set.</param>
