@@ -641,6 +641,7 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Sets the specified static property of the specified type to the provided value.
+		/// <para><see cref="BindingFlags.Static"/> is always included.</para>
 		/// </summary>
 		/// <param name="type">The type with the static property.</param>
 		/// <param name="propertyName">The name of the static property to set.</param>
@@ -729,6 +730,65 @@ namespace GM.Utility
 
 			PropertyInfo propertyInfo = type.GetProperty(propertyName, bindingAttr);
 			return propertyInfo != null;
+		}
+
+		/// <summary>
+		/// Determines whether all the public properties of the provided objects have the same value. Compares using the <see cref="object.Equals(object)"/> method.
+		/// <para>All objects must be of the same type.</para>
+		/// </summary>
+		/// <param name="obj1">The first object whose properties are checked to be equal to others.</param>
+		/// <param name="obj2">The second object whose properties are checked to be equal to thers.</param>
+		/// <param name="objects">Any additional objects whose properties are checked to be equal.</param>
+		/// <returns>True if all the public properties in the provided objects are equal.</returns>
+		/// <exception cref="ArgumentException" />
+		public static bool AreAllPropertiesEqual(object obj1, object obj2, params object[] objects)
+		{
+			object[] objectsToPassOn = new object[] { obj1, obj2 };
+			if(!objects.IsNullOrEmpty()) {
+				objectsToPassOn = objectsToPassOn.Concat(objects).ToArray();
+			}
+			return AreAllPropertiesEqual(objectsToPassOn);
+		}
+
+		/// <summary>
+		/// Determines whether all the public properties of the provided objects have the same value. Compares using the <see cref="object.Equals(object)"/> method.
+		/// <para>All objects must be of the same type.</para>
+		/// </summary>
+		/// <param name="objects">The objects whose properties are checked to be equal.</param>
+		/// <returns>True if all the public properties in the provided objects are equal.</returns>
+		/// <exception cref="ArgumentNullException" />
+		/// <exception cref="ArgumentOutOfRangeException" />
+		/// <exception cref="ArgumentException" />
+		public static bool AreAllPropertiesEqual(object[] objects)
+		{
+			if(objects == null) {
+				throw new ArgumentNullException(nameof(objects));
+			}
+			if(objects.Length < 2) {
+				throw new ArgumentOutOfRangeException(nameof(objects), "At least two objects must be provided.");
+			}
+			if(objects.Any(obj => obj == null)) {
+				throw new ArgumentException("Null objects are not allowed.");
+			}
+			if(!objects.AllSame(obj => obj.GetType())) {
+				throw new ArgumentException("All objects must be of the same type.");
+			}
+			
+			Type type = objects[0].GetType();
+			if(IsPrimitive(type)) {
+				throw new ArgumentException("Primitive types are not allowed.");
+			}
+
+			// go through all the public properties
+			PropertyInfo[] properties = type.GetProperties();
+			foreach(var property in properties) {
+				// check that all objects have the same value of this property
+				if(!objects.AllSame(obj => property.GetValue(obj))) {
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		/// <summary>
