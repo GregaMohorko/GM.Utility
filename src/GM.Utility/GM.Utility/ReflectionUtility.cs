@@ -862,17 +862,20 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Determines whether this type is a primitive.
-		/// <para><see cref="string"/> is considered a primitive.</para>
 		/// </summary>
 		/// <param name="type">The type.</param>
 		public static bool IsPrimitive(this Type type)
 		{
-			if(type == typeof(string)) {
-				// string is considered as a primitive
-				return true;
-			}
-
-			return type.IsValueType && type.IsPrimitive;
+			return type.IsValueType
+				|| type.IsPrimitive
+				// below types are considered primitive
+				|| type == typeof(string)
+				|| type == typeof(decimal)
+				|| type == typeof(DateTime)
+				|| type == typeof(DateTimeOffset)
+				|| type == typeof(TimeSpan)
+				|| type == typeof(Guid)
+				|| Convert.GetTypeCode(type) != TypeCode.Object;
 		}
 
 		/// <summary>
