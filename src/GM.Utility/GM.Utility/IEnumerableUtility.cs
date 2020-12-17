@@ -81,7 +81,13 @@ namespace GM.Utility
 				return true;
 			}
 			TValue sample = valueSelector(enumerable.First());
-			return enumerable.Skip(1).All(e => sample.Equals(valueSelector(e)));
+			Func<T, bool> predicate;
+			if(sample == null) {
+				predicate = e => valueSelector(e) == null;
+			} else {
+				predicate = e => sample.Equals(valueSelector(e));
+			}
+			return enumerable.Skip(1).All(predicate);
 		}
 
 		/// <summary>
