@@ -593,7 +593,7 @@ namespace GM.Utility
 		{
 			FieldInfo field = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 			if(field == null) {
-				throw new Exception($"The provided property name ({fieldName}) does not exist in type '{type.ToString()}'.");
+				throw new Exception($"The provided property name ({fieldName}) does not exist in type '{type}'.");
 			}
 			return field;
 		}
@@ -795,22 +795,114 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Determines whether this type implements the specified parent type. Returns false if both types are the same.
+		/// Determines whether this type implements the specified type.
+		/// <para>Returns false if both types are the same.</para>
+		/// <para>If the <paramref name="type"/> is generic (without specified generic type arguments), this method will return true if this type actually implements it (even though the <paramref name="type"/> is not directly assignable from this type).</para>
 		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="parentType">The type to check if it is implemented.</param>
-		public static bool Implements(this Type type, Type parentType)
+		/// <param name="source">The parent type.</param>
+		/// <param name="type">The child type to check if the parent type implements it.</param>
+		public static bool Implements(this Type source, Type type)
 		{
+			return Implements(source, type, out _);
+		}
+
+		/// <summary>
+		/// Determines whether this type implements the specified type.
+		/// <para>Returns false if both types are the same.</para>
+		/// <para>If the <paramref name="type"/> is generic (without specified generic type arguments), this method will return true if this type actually implements it (even though the <paramref name="type"/> is not directly assignable from this type).</para>
+		/// </summary>
+		/// <param name="source">The parent type.</param>
+		/// <param name="type">The child type to check if the parent type implements it.</param>
+		/// <param name="genericType">If the <paramref name="type"/> is generic (without specified generic type arguments) and the result of this method is true, then this will represent the actual generic type that this type implements.</param>
+		public static bool Implements(this Type source, Type type, out Type genericType)
+		{
+			if(source == null) {
+				throw new ArgumentNullException(nameof(source));
+			}
 			if(type == null) {
 				throw new ArgumentNullException(nameof(type));
 			}
-			if(parentType == null) {
-				throw new ArgumentNullException(nameof(parentType));
-			}
-			if(type.Equals(parentType)) {
+
+			genericType = null;
+
+			if(type.Equals(source)) {
 				return false;
 			}
-			return parentType.IsAssignableFrom(type);
+
+			if(type.IsAssignableFrom(source)) {
+				// is directly assignable
+				return true;
+			}
+
+			// check if type is generic and generic type arguments are not provided
+			// in that case, it is still possible that the source type implements the type, but we need to check without generic type arguments
+
+			if(!type.IsGenericType) {
+				// type is not generic, nothing more to do
+				return false;
+			}
+			if(type.GenericTypeArguments.Length > 0) {
+				// type arguments are provided, nothing more to dos
+				return false;
+			}
+
+			bool IsAssignableFromGeneric(Type parent, Type child)
+			{
+				if(child.IsGenericType) {
+					Type genericChild = child.GetGenericTypeDefinition();
+					if(parent.IsAssignableFrom(genericChild)) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			if(IsAssignableFromGeneric(type, source)) {
+				return true;
+			}
+
+			if(!type.IsInterface) {
+				// go through all the parent types
+				Type currentType = source.BaseType;
+				while(currentType != null) {
+					if(IsAssignableFromGeneric(type, currentType)) {
+						return true;
+					}
+					currentType = currentType.BaseType;
+				}
+			} else {
+				// go through all the implemented interfaces
+				foreach(Type implementedInterface in source.GetInterfaces()) {
+					if(IsAssignableFromGeneric(type, implementedInterface)) {
+						genericType = implementedInterface;
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Returns the generic type arguments that this type has specified when it implemented the specified generic parent type.
+		/// </summary>
+		/// <param name="source">The type that implemented the <paramref name="genericParentType"/>.</param>
+		/// <param name="genericParentType">The generic type that this type implemented. Must be without generic type arguments.</param>
+		public static Type[] GetGenericTypeArgumentsFor(this Type source, Type genericParentType)
+		{
+			if(genericParentType == null) {
+				throw new ArgumentNullException(nameof(genericParentType));
+			}
+			if(!genericParentType.IsGenericType) {
+				throw new ArgumentException($"'{nameof(genericParentType)}' must be generic.", nameof(genericParentType));
+			}
+			if(!genericParentType.GenericTypeArguments.IsNullOrEmpty()) {
+				throw new ArgumentException($"'{nameof(genericParentType)}' must not have generic type arguments.", nameof(genericParentType));
+			}
+			if(!Implements(source, genericParentType, out Type implementedGenericParentType)) {
+				throw new ArgumentException($"'{nameof(source)}' must implement '{nameof(genericParentType)}'. '{nameof(source)}'='{source.FullName}'. '{nameof(genericParentType)}'='{genericParentType.FullName}'");
+			}
+			return implementedGenericParentType.GenericTypeArguments;
 		}
 
 		/// <summary>
