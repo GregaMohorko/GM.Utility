@@ -40,6 +40,30 @@ namespace GM.Utility
 	public static class Util
 	{
 		/// <summary>
+		/// Returns combined array with the mandatory parameter in the 1st index, following with params array.
+		/// </summary>
+		/// <typeparam name="T">The type of elements.</typeparam>
+		/// <param name="mandatoryParameter">The mandatory parameter. Must not be default.</param>
+		/// <param name="paramsArray">The params array.</param>
+		/// <exception cref="ArgumentNullException">Thrown when the <paramref name="mandatoryParameter"/> is default.</exception>
+		public static T[] CombineWithParams<T>(T mandatoryParameter, T[] paramsArray)
+		{
+			if(Equals(mandatoryParameter, default(T))) {
+				throw new ArgumentNullException(nameof(mandatoryParameter));
+			}
+
+			if(paramsArray.IsNullOrEmpty()) {
+				return new T[1] { mandatoryParameter };
+			}
+
+			// combine
+			var combinedArray = new T[paramsArray.Length + 1];
+			combinedArray[0] = mandatoryParameter;
+			Array.Copy(paramsArray, 0, combinedArray, 1, paramsArray.Length);
+			return combinedArray;
+		}
+
+		/// <summary>
 		/// Returns the item for which the provided transform function returns the max value of all the provided items. If multiple items have max value, the first is returned.
 		/// </summary>
 		/// <typeparam name="T">The type of the items.</typeparam>
