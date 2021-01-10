@@ -41,6 +41,7 @@
 - [Path](src/GM.Utility/GM.Utility/PathUtility.cs)
 - [Random](src/GM.Utility/GM.Utility/RandomUtility.cs)
 - [Reflection](src/GM.Utility/GM.Utility/ReflectionUtility.cs)
+- [Regex](src/GM.Utility/GM.Utility/RegexUtility.cs)
 - [SecureString](src/GM.Utility/GM.Utility/SecureStringUtility.cs)
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
 - [String](src/GM.Utility/GM.Utility/StringUtility.cs)
