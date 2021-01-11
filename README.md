@@ -41,12 +41,12 @@
 - [Path](src/GM.Utility/GM.Utility/PathUtility.cs)
 - [Random](src/GM.Utility/GM.Utility/RandomUtility.cs)
 - [Reflection](src/GM.Utility/GM.Utility/ReflectionUtility.cs)
-- [Regex](src/GM.Utility/GM.Utility/RegexUtility.cs)
 - [SecureString](src/GM.Utility/GM.Utility/SecureStringUtility.cs)
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
 - [String](src/GM.Utility/GM.Utility/StringUtility.cs)
 - [Task](src/GM.Utility/GM.Utility/TaskUtility.cs)
 - [Type](src/GM.Utility/GM.Utility/TypeUtility.cs)
+- [Wildcard](src/GM.Utility/GM.Utility/WildcardUtility.cs)
 - [XML](src/GM.Utility/GM.Utility/XMLUtility.cs)
 
 **Collections**:

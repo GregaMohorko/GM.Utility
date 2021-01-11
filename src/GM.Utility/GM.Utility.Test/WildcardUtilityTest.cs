@@ -37,13 +37,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace GM.Utility.Test
 {
 	[TestClass]
-	public class RegexUtilityTest
+	public class WildcardUtilityTest
 	{
+		[TestMethod]
+		public void Insert()
+		{
+			string wildcard = "*/some/example/*/wildcard/*";
+			string result = WildcardUtility.Insert(wildcard, new string[] { "first", "second", "last" });
+			Assert.AreEqual("first/some/example/second/wildcard/last", result);
+		}
+
 		[TestMethod]
 		public void WildcardToRegex()
 		{
 			string wildcard = "*/some/example/*/wildcard/*";
-			string regexPattern = RegexUtility.WildcardToRegex(wildcard);
+			string regexPattern = WildcardUtility.WildcardToRegex(wildcard);
 			var regex = new Regex(regexPattern);
 
 			Assert.IsTrue(regex.IsMatch("test/some/example/test/wildcard/test"));
