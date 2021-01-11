@@ -57,6 +57,7 @@
     <Compile Include="ArrayUtilityTest.cs" />
     <Compile Include="DateTimeUtilityTest.cs" />
     <Compile Include="ReflectionUtilityTest.cs" />
+    <Compile Include="UtilTest.cs" />
     <Compile Include="WildcardUtilityTest.cs" />
     <Compile Include="StringUtilityTest.cs" />
     <Compile Include="EmailUtilityTest.cs" />

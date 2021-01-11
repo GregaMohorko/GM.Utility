@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2020 Gregor Mohorko
+Copyright (c) 2021 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ namespace GM.Utility
 		/// <exception cref="ArgumentNullException">Thrown when the <paramref name="mandatoryParameter"/> is default.</exception>
 		public static T[] CombineWithParams<T>(T mandatoryParameter, T[] paramsArray)
 		{
-			if(Equals(mandatoryParameter, default(T))) {
+			if(!typeof(T).IsValueType && Equals(mandatoryParameter, default(T))) {
 				throw new ArgumentNullException(nameof(mandatoryParameter));
 			}
 
