@@ -83,19 +83,17 @@ namespace GM.Utility
 				throw new ArgumentNullException(nameof(pattern));
 			}
 			if(pattern.Length == 0) {
-				return pattern;
+				return string.Empty;
 			}
-			string result = "";
-			if(pattern[0] != '^') {
-				result += "^";
+			if(pattern[0] == '^') {
+				pattern = pattern.Substring(1);
 			}
-			result += Regex.Escape(pattern)
+			if(pattern.Last() == '$') {
+				pattern = pattern.Substring(0, pattern.Length - 1);
+			}
+			return "^" + Regex.Escape(pattern)
 				.Replace(@"\*", ".*")
-				.Replace(@"\?", ".");
-			if(pattern.Last() != '$') {
-				result += "$";
-			}
-			return result;
+				.Replace(@"\?", ".") + "$";
 		}
 	}
 }

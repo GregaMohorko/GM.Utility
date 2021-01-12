@@ -50,14 +50,22 @@ namespace GM.Utility.Test
 		[TestMethod]
 		public void WildcardToRegex()
 		{
-			string wildcard = "*/some/example/*/wildcard/*";
-			string regexPattern = WildcardUtility.WildcardToRegex(wildcard);
-			var regex = new Regex(regexPattern);
+			string[] wildcards =
+			{
+				"*/some/example/*/wildcard/*",
+				"^*/some/example/*/wildcard/*",
+				"*/some/example/*/wildcard/*$",
+				"^*/some/example/*/wildcard/*$"
+			};
+			foreach(string wildcard in wildcards) {
+				string regexPattern = WildcardUtility.WildcardToRegex(wildcard);
+				var regex = new Regex(regexPattern);
 
-			Assert.IsTrue(regex.IsMatch("test/some/example/test/wildcard/test"));
-			Assert.IsFalse(regex.IsMatch("some/example/test/wildcard/test"));
-			Assert.IsFalse(regex.IsMatch("test/some/example/wildcard/test"));
-			Assert.IsFalse(regex.IsMatch("test/some/example/test/wildcard"));
+				Assert.IsTrue(regex.IsMatch("test/some/example/test/wildcard/test"));
+				Assert.IsFalse(regex.IsMatch("some/example/test/wildcard/test"));
+				Assert.IsFalse(regex.IsMatch("test/some/example/wildcard/test"));
+				Assert.IsFalse(regex.IsMatch("test/some/example/test/wildcard"));
+			}
 		}
 	}
 }
