@@ -67,21 +67,35 @@ namespace GM.Utility
 			int currentPos = result.Length - 1;
 			for(int i = wildcardCount - 1; i >= 0; --i) {
 				currentPos = result.LastIndexOf('*', currentPos);
-				result = result.Substring(0, currentPos) + values[i] + result.Substring(1+currentPos);
+				result = result.Substring(0, currentPos) + values[i] + result.Substring(1 + currentPos);
 			}
 			return result;
 		}
 
 		/// <summary>
 		/// Escapes the provided wildcard pattern and then replaces '*' with '.*' and '?' with '.'.
-		/// <para>Also surrounds the pattern in ^...$.</para>
+		/// <para>Also surrounds the pattern in ^...$ (if not already present).</para>
 		/// </summary>
 		/// <param name="pattern">A regular expression with possible wildcards (*).</param>
 		public static string WildcardToRegex(string pattern)
 		{
-			return Regex.Escape(pattern)
+			if(pattern == null) {
+				throw new ArgumentNullException(nameof(pattern));
+			}
+			if(pattern.Length == 0) {
+				return pattern;
+			}
+			string result = "";
+			if(pattern[0] != '^') {
+				result += "^";
+			}
+			result += Regex.Escape(pattern)
 				.Replace(@"\*", ".*")
 				.Replace(@"\?", ".");
+			if(pattern.Last() != '$') {
+				result += "$";
+			}
+			return result;
 		}
 	}
 }
