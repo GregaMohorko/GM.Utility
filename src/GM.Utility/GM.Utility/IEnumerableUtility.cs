@@ -520,6 +520,43 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Creates a <see cref="Dictionary{TKey, TValue}"/> from a grouping collection according to the specified element selector function.
+		/// </summary>
+		/// <typeparam name="TKey">The type of the key.</typeparam>
+		/// <typeparam name="TElement">The type of the original elements.</typeparam>
+		/// <typeparam name="TSelectedElement">The type of the selected elements.</typeparam>
+		/// <param name="groupingCollection">An <see cref="IEnumerable{T}"/> of <see cref="IGrouping{TKey, TElement}"/> to create a <see cref="Dictionary{TKey, TValue}"/> from.</param>
+		/// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
+		public static Dictionary<TKey, List<TSelectedElement>> ToDictionaryFromGrouping<TKey, TElement, TSelectedElement>(this IEnumerable<IGrouping<TKey, TElement>> groupingCollection, Func<TElement, TSelectedElement> elementSelector)
+		{
+			if(groupingCollection == null) {
+				throw new ArgumentNullException(nameof(groupingCollection));
+			}
+			return groupingCollection.ToDictionary(g => g.Key, g => g.Select(elementSelector).ToList());
+		}
+
+		/// <summary>
+		/// Creates a <see cref="Dictionary{TKey, TValue}"/> from a grouping collection according to the specified key selector and element selector functions.
+		/// </summary>
+		/// <typeparam name="TKey">The type of the original key.</typeparam>
+		/// <typeparam name="TElement">The type of the original elements.</typeparam>
+		/// <typeparam name="TSelectedKey">The type of the selected key.</typeparam>
+		/// <typeparam name="TSelectedElement">The type of the selected elements.</typeparam>
+		/// <param name="groupingCollection">An <see cref="IEnumerable{T}"/> of <see cref="IGrouping{TKey, TElement}"/> to create a <see cref="Dictionary{TKey, TValue}"/> from.</param>
+		/// <param name="keySelector">A function to transform a key.</param>
+		/// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
+		public static Dictionary<TSelectedKey, List<TSelectedElement>> ToDictionaryFromGrouping<TKey, TElement, TSelectedKey, TSelectedElement>(this IEnumerable<IGrouping<TKey, TElement>> groupingCollection, Func<TKey, TSelectedKey> keySelector, Func<TElement, TSelectedElement> elementSelector)
+		{
+			if(groupingCollection == null) {
+				throw new ArgumentNullException(nameof(groupingCollection));
+			}
+			if(keySelector == null) {
+				throw new ArgumentNullException(nameof(keySelector));
+			}
+			return groupingCollection.ToDictionary(g => keySelector(g.Key), g => g.Select(elementSelector).ToList());
+		}
+
+		/// <summary>
 		/// Creates a <see cref="ObservableCollection{T}"/> that contains elements copied from the specified collection.
 		/// </summary>
 		/// <typeparam name="TElement">Type of the elements.</typeparam>
