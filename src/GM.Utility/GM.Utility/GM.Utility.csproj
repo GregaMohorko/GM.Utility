@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
-    <Version>1.3.1.0</Version>
+    <Version>1.3.2.0</Version>
 	<Title>GM.Utility</Title>
     <Authors>Gregor Mohorko</Authors>
     <Company>Gregor Mohorko</Company>
@@ -13,14 +13,19 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageTags>utility extensions software design pattern</PackageTags>
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
-    <Copyright>Copyright © Gregor Mohorko 2020</Copyright>
+    <Copyright>Copyright © Gregor Mohorko 2021</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added UndoRedo pattern.
-Added GMHttpClient.
-Added ReflectionUtility.SetProperty for static properties.
-EmailUtility.IsValid: Added support for subdomains.</PackageReleaseNotes>
-    <AssemblyVersion>1.3.1.0</AssemblyVersion>
-    <FileVersion>1.3.1.0</FileVersion>
+    <PackageReleaseNotes>Added WildcardUtility.
+Added ExcelUtility.ExcelColumnNameToNumber.
+Added ReflectionUtility.AreAllPropertiesEqual.
+Added Util.CombineWithParams.
+Added IEnumerableUtility.ToDictionaryFromGrouping with additional key/element selectors.
+Added support for non-public properties in ReflectionUtility.SetProperty.
+Improved ReflectionUtility.IsPrimitive to include other primitive types (decimal, DateTime, DateTimeOffset, TimeSpan, Guid).
+Fixed an error in GMHttpClient: 'Uri string is too long'.
+Fixed a bug in IEnumerableUtility.AllSame when a value selector selected a null value.</PackageReleaseNotes>
+    <AssemblyVersion>1.3.2.0</AssemblyVersion>
+    <FileVersion>1.3.2.0</FileVersion>
     <RepositoryUrl>https://github.com/GregaMohorko/GM.Utility</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
