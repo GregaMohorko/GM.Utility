@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2020 Gregor Mohorko
+Copyright (c) 2021 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,8 @@ Author: Gregor Mohorko
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -87,7 +89,16 @@ namespace GM.Utility.Net
 		public async Task<string> UploadValuesAsync(string address, IEnumerable<KeyValuePair<string, string>> nameValueCollection, System.Net.Http.HttpMethod method, CancellationToken cancellationToken)
 		{
 			using(var request = new HttpRequestMessage(method, address)) {
-				request.Content = new FormUrlEncodedContent(nameValueCollection);
+				{
+					// the constructor of FormUrlEncodedContent has a problem with large amount of data (>2000 characters)
+					//request.Content = new FormUrlEncodedContent(nameValueCollection);
+
+					// therefore, let's do it ourselves:
+					// (idea from: https://stackoverflow.com/a/51854330/6277755)
+					var encodedItems = nameValueCollection
+						.Select(x => $"{WebUtility.UrlEncode(x.Key)}={WebUtility.UrlEncode(x.Value)}");
+					request.Content = new StringContent(string.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
+				}
 
 				HttpResponseMessage response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 				try {
