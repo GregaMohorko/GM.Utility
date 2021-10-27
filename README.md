@@ -45,6 +45,7 @@
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
 - [String](src/GM.Utility/GM.Utility/StringUtility.cs)
 - [Task](src/GM.Utility/GM.Utility/TaskUtility.cs)
+- [ToString](src/GM.Utility/GM.Utility/ToStringUtility.cs)
 - [Type](src/GM.Utility/GM.Utility/TypeUtility.cs)
 - [Wildcard](src/GM.Utility/GM.Utility/WildcardUtility.cs)
 - [XML](src/GM.Utility/GM.Utility/XMLUtility.cs)
