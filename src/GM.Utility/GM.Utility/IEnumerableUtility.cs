@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2020 Gregor Mohorko
+Copyright (c) 2021 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -255,6 +255,64 @@ namespace GM.Utility
 				return collection.Count < 1;
 			}
 			return enumerable.Any();
+		}
+
+		/// <summary>
+		/// Returns the minimum value in a generic sequence, or a default value if the sequence contains no elements.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <param name="sequence">The sequence.</param>
+		public static T MinOrDefault<T>(this IEnumerable<T> sequence)
+		{
+			return sequence.Any()
+				? sequence.Min()
+				: default;
+		}
+
+		/// <summary>
+		/// Invokes a transform function on each element of a generic sequence and returns the minimum resulting value, or a default value if the sequence contains no elements.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <typeparam name="TResult">The type of the value returned by selector.</typeparam>
+		/// <param name="sequence">A sequence of values to determine the minimum value of.</param>
+		/// <param name="selector">A transform function to apply to each element.</param>
+		public static TResult MinOrDefault<T, TResult>(
+			this IEnumerable<T> sequence,
+			Func<T, TResult> selector
+			)
+		{
+			return sequence.Any()
+				? sequence.Min(selector)
+				: default;
+		}
+
+		/// <summary>
+		/// Returns the maximum value in a generic sequence, or a default value if the sequence contains no elements.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <param name="sequence">The sequence.</param>
+		public static T MaxOrDefault<T>(this IEnumerable<T> sequence)
+		{
+			return sequence.Any()
+				? sequence.Max()
+				: default;
+		}
+
+		/// <summary>
+		/// Invokes a transform function on each element of a generic sequence and returns the maximum resulting value, or a default value if the sequence contains no elements.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <typeparam name="TResult">The type of the value returned by selector.</typeparam>
+		/// <param name="sequence">A sequence of values to determine the maximum value of.</param>
+		/// <param name="selector">A transform function to apply to each element.</param>
+		public static TResult MaxOrDefault<T, TResult>(
+			this IEnumerable<T> sequence,
+			Func<T, TResult> selector
+			)
+		{
+			return sequence.Any()
+				? sequence.Max(selector)
+				: default;
 		}
 
 		/// <summary>
