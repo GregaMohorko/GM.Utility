@@ -30,6 +30,7 @@
 - [Excel](src/GM.Utility/GM.Utility/ExcelUtility.cs)
 - [Exception](src/GM.Utility/GM.Utility/ExceptionUtility.cs)
 - [Globalization](src/GM.Utility/GM.Utility/GlobalizationUtility.cs)
+- [HashCode](src/GM.Utility/GM.Utility/HashCodeUtility.cs)
 - [IEnumerable](src/GM.Utility/GM.Utility/IEnumerableUtility.cs)
 - [IO](src/GM.Utility/GM.Utility/IOUtility.cs)
 - [Int](src/GM.Utility/GM.Utility/IntUtility.cs)
