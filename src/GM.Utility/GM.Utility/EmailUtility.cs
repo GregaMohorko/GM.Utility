@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2020 Gregor Mohorko
+Copyright (c) 2022 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,11 +47,9 @@ namespace GM.Utility
 			try {
 				var addr = new MailAddress(emailAddress);
 				// host can have multiple dots (subdomains)
-				/*
-				if(addr.Host.OccurrencesOf('.') != 1) {
+				if(addr.Host.OccurrencesOf('.') == 0) {
 					return false;
 				}
-				//*/
 				return addr.Address == emailAddress;
 			} catch {
 				return false;
