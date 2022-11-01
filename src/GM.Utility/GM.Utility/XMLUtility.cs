@@ -78,14 +78,25 @@ namespace GM.Utility
 		/// <param name="rootElementName">The name of the XML root element.</param>
 		public static T Deserialize<T>(string xml, string rootElementName = null)
 		{
+			return (T)Deserialize(typeof(T), xml, rootElementName);
+		}
+
+		/// <summary>
+		/// Deserializes the provided XML into the specified type.
+		/// </summary>
+		/// <param name="type">The type to deserialize to.</param>
+		/// <param name="xml">The xml string.</param>
+		/// <param name="rootElementName">The name of the XML root element.</param>
+		public static object Deserialize(Type type, string xml, string rootElementName = null)
+		{
 			XmlSerializer xmlSerializer;
 			if(string.IsNullOrWhiteSpace(rootElementName)) {
-				xmlSerializer = new XmlSerializer(typeof(T));
+				xmlSerializer = new XmlSerializer(type);
 			} else {
-				xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootElementName));
+				xmlSerializer = new XmlSerializer(type, new XmlRootAttribute(rootElementName));
 			}
 			using(var stringReader = new StringReader(xml)) {
-				return (T)xmlSerializer.Deserialize(stringReader);
+				return xmlSerializer.Deserialize(stringReader);
 			}
 		}
 
