@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2021 Gregor Mohorko
+Copyright (c) 2022 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -117,6 +117,18 @@ namespace GM.Utility
 		public static string GetMonthNameAbbreviated(DateTime date)
 		{
 			return GlobalizationUtility.GetMonthNameAbbreviated(date);
+		}
+
+		/// <summary>
+		/// Calculates the offset or difference between the time in local time zone and Coordinated Universal Time (UTC) for the current date and time.
+		/// <para>Uses <see cref="TimeZone.CurrentTimeZone"/> and <see cref="DateTime.Now"/>.</para>
+		/// </summary>
+		public static TimeSpan GetUtcOffsetForLocalTime()
+		{
+			TimeZoneInfo localZone = TimeZoneInfo.Local;
+			DateTime currentDate = DateTime.Now;
+
+			return localZone.GetUtcOffset(currentDate);
 		}
 
 		/// <summary>
