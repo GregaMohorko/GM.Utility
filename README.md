@@ -49,6 +49,7 @@
 - [ToString](src/GM.Utility/GM.Utility/ToStringUtility.cs)
 - [Type](src/GM.Utility/GM.Utility/TypeUtility.cs)
 - [Uri](src/GM.Utility/GM.Utility/UriUtility.cs)
+- [ValueType](src/GM.Utility/GM.Utility/ValueTypeUtility.cs)
 - [Wildcard](src/GM.Utility/GM.Utility/WildcardUtility.cs)
 - [XML](src/GM.Utility/GM.Utility/XMLUtility.cs)
 
