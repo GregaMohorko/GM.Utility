@@ -73,20 +73,6 @@ namespace GM.Utility
 
 		/// <summary>
 		/// Gets the specified number of decimals from the decimal part of this decimal number as an integer.
-		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
-		/// </summary>
-		/// <param name="value">The decimal value.</param>
-		/// <param name="decimalCount">Number of decimals to get.</param>
-		[Obsolete("This method is obsolete and will be removed in the next releases, please use GetDecimalPart(this decimal, int, bool).", true)]
-		public static int GetDecimalPart(this decimal value, int decimalCount)
-		{
-			// FIXME obsolete v1.3.1.0
-			// 2020-10-30
-			return GetDecimalPart(value, decimalCount, false);
-		}
-
-		/// <summary>
-		/// Gets the specified number of decimals from the decimal part of this decimal number as an integer.
 		/// <para>If the decimal part is below 0.1, the zeros at the beginning will be omitted.</para>
 		/// <para>If the value is negative, the returned value will also be negative (except if the returned value is zero, then the information about the sign is lost).</para>
 		/// </summary>
