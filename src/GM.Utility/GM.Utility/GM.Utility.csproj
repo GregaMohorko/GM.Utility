@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
-    <Version>1.3.2.0</Version>
+    <Version>1.4.0.0</Version>
 	<Title>GM.Utility</Title>
     <Authors>Gregor Mohorko</Authors>
     <Company>Gregor Mohorko</Company>
@@ -13,17 +13,18 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageTags>utility extensions software design pattern</PackageTags>
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
-    <Copyright>Copyright © Gregor Mohorko 2021</Copyright>
+    <Copyright>Copyright © Gregor Mohorko 2022</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added WildcardUtility.
-Added ExcelUtility.ExcelColumnNameToNumber.
-Added ReflectionUtility.AreAllPropertiesEqual.
-Added Util.CombineWithParams.
-Added IEnumerableUtility.ToDictionaryFromGrouping with additional key/element selectors.
-Added support for non-public properties in ReflectionUtility.SetProperty.
-Improved ReflectionUtility.IsPrimitive to include other primitive types (decimal, DateTime, DateTimeOffset, TimeSpan, Guid).
-Fixed an error in GMHttpClient: 'Uri string is too long'.
-Fixed a bug in IEnumerableUtility.AllSame when a value selector selected a null value.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added HashCodeUtility.
+Added ToStringUtility.
+Added UriUtility.
+Added ValueTypeUtility.
+Added to DateTimeUtility: DurationBetween, GetUtcOffsetForLocalTime.
+Added to IEnumerableUtility: MinOrDefault, MaxOrDefault.
+Added to XMLUtility: Deserialize.
+Improved EmailUtility.IsValid.
+Improved PathUtility.GetSafeFileName.
+Removed deprecated methods and classes.</PackageReleaseNotes>
     <AssemblyVersion>1.3.2.0</AssemblyVersion>
     <FileVersion>1.3.2.0</FileVersion>
     <RepositoryUrl>https://github.com/GregaMohorko/GM.Utility</RepositoryUrl>
@@ -35,7 +36,7 @@ Fixed a bug in IEnumerableUtility.AllSame when a value selector selected a null 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
 

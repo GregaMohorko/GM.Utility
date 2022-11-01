@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2020 Gregor Mohorko
+Copyright (c) 2022 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,19 @@ namespace GM.Utility
 	/// </summary>
 	public static class DateTimeUtility
 	{
+		/// <summary>
+		/// Calculates and returns the duration between the two specified date times.
+		/// <para>The order of both date times is not important.</para>
+		/// </summary>
+		/// <param name="dateTime1">The first date time. Can be before or after the second date time.</param>
+		/// <param name="dateTime2">The second date time. Can be before or after the first date time.</param>
+		public static TimeSpan DurationBetween(DateTime dateTime1, DateTime dateTime2)
+		{
+			return dateTime1 < dateTime2
+				? dateTime2.Subtract(dateTime1)
+				: dateTime1.Subtract(dateTime2);
+		}
+
 		/// <summary>
 		/// Returns the end of the current month.
 		/// </summary>
@@ -104,6 +117,18 @@ namespace GM.Utility
 		public static string GetMonthNameAbbreviated(DateTime date)
 		{
 			return GlobalizationUtility.GetMonthNameAbbreviated(date);
+		}
+
+		/// <summary>
+		/// Calculates the offset or difference between the time in local time zone and Coordinated Universal Time (UTC) for the current date and time.
+		/// <para>Uses <see cref="TimeZone.CurrentTimeZone"/> and <see cref="DateTime.Now"/>.</para>
+		/// </summary>
+		public static TimeSpan GetUtcOffsetForLocalTime()
+		{
+			TimeZoneInfo localZone = TimeZoneInfo.Local;
+			DateTime currentDate = DateTime.Now;
+
+			return localZone.GetUtcOffset(currentDate);
 		}
 
 		/// <summary>

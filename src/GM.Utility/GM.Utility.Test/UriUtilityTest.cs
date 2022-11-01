@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2019 Grega Mohorko
+Copyright (c) 2022 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,27 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Project: GM.Utility
-Created: 2017-12-19
-Author: GregaMohorko
+Created: 2022-03-09
+Author: Gregor Mohorko
 */
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GM.Utility
+namespace GM.Utility.Test
 {
-	/// <summary>
-	/// Base class for a thread-safe (creation wise) singleton class.
-	/// <para>It will use the parameterless constructor to create the instance.</para>
-	/// </summary>
-	/// <typeparam name="T">The type of the actual singleton class.</typeparam>
-	[Obsolete("This class has been moved to GM.Utility.Patterns.Singleton, please use that one. This one will be removed in the next releases.", false)]
-	public abstract class Singleton<T> : Patterns.Singleton<T> where T:Singleton<T>
+	[TestClass]
+	public class UriUtilityTest
 	{
-		// FIXME obsolete v1.3.1.0
-		// 2020-10-30
+		[TestMethod]
+		public void Combine()
+		{
+			Assert.AreEqual("http://www.google.com/additional/paths/test", UriUtility.Combine("http://www.google.com/", "/additional/paths", "test").ToString());
+		}
 	}
 }

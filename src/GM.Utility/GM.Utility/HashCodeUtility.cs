@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2022 Gregor Mohorko
+Copyright (c) 2021 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,37 +22,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Project: GM.Utility
-Created: 2020-01-16
+Created: 2021-11-02
 Author: Gregor Mohorko
 */
 
 using System;
 using System.Collections.Generic;
-using System.Net.Mail;
 using System.Text;
 
 namespace GM.Utility
 {
 	/// <summary>
-	/// Utilities for email.
+	/// Utilities for calculating the hash code when overriding <see cref="object.GetHashCode"/>.
 	/// </summary>
-	public static class EmailUtility
+	public static class HashCodeUtility
 	{
 		/// <summary>
-		/// Determines whether the specified email address matches the pattern of a valid email address.
+		/// Calculates the hash code from the provided values.
+		/// <para>The order of the values is important.</para>
+		/// <para>Values can be null.</para>
 		/// </summary>
-		/// <param name="emailAddress">The address to validate.</param>
-		public static bool IsValid(string emailAddress)
+		/// <param name="value">The first value.</param>
+		/// <param name="additionalValues">Any additional values to include in the calculation.</param>
+		public static int GetHashCode(object value, params object[] additionalValues)
 		{
-			try {
-				var addr = new MailAddress(emailAddress);
-				// host can have multiple dots (subdomains)
-				if(addr.Host.OccurrencesOf('.') == 0) {
-					return false;
+			object[] values = Util.CombineWithParams(value, additionalValues);
+
+			// https://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-overriding-gethashcode
+
+			unchecked {
+				int hash = (int)2166136261;
+				foreach(object val in values) {
+					hash = (hash * 16777619) ^ (val?.GetHashCode() ?? 0);
 				}
-				return addr.Address == emailAddress;
-			} catch {
-				return false;
+				return hash;
 			}
 		}
 	}

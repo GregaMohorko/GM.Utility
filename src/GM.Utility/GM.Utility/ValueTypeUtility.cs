@@ -1,3 +1,4 @@
+﻿/*
 MIT License
 
 Copyright (c) 2022 Gregor Mohorko
@@ -19,3 +20,32 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Project: GM.WPF
+Created: 2022-11-1
+Author: Gregor Mohorko
+*/
+
+using System;
+using System.Globalization;
+
+namespace GM.Utility
+{
+	/// <summary>
+	/// Utilities for <see cref="ValueType"/>.
+	/// </summary>
+	public static class ValueTypeUtility
+	{
+		/// <summary>
+		/// Returns true if this nullable value is null or if it equals to zero.
+		/// <para>The zero equality check is done with <see cref="ValueType.Equals(object)"/>.</para>
+		/// </summary>
+		/// <typeparam name="T">The nullable (number) type.</typeparam>
+		/// <param name="value">The nullable (number) value.</param>
+		public static bool IsNullOrZero<T>(this T? value) where T : struct, IConvertible
+		{
+			return value == null
+				|| value.Value.ToInt32(CultureInfo.CurrentCulture).Equals(0);
+		}
+	}
+}

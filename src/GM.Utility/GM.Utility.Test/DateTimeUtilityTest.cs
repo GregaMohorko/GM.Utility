@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2021 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 Project: GM.Utility.Test
 Created: 2018-9-12
-Author: GregaMohorko
+Author: Gregor Mohorko
 */
 
 using System;
@@ -34,6 +34,31 @@ namespace GM.Utility.Test
 	[TestClass]
 	public class DateTimeUtilityTest
 	{
+		[TestMethod]
+		public void DurationBetween()
+		{
+			const int MS_IN_ONE_DAY = 24 * 60 * 60 * 1000;
+
+			DateTime date1;
+			DateTime date2;
+			TimeSpan durationBetween;
+
+			// ascending order
+			date1 = new DateTime(2021, 12, 17);
+			date2 = new DateTime(2021, 12, 18);
+			durationBetween = DateTimeUtility.DurationBetween(date1, date2);
+			Assert.AreEqual(1, durationBetween.Days);
+			Assert.AreEqual(MS_IN_ONE_DAY, durationBetween.TotalMilliseconds);
+
+			// descending order
+			date1 = new DateTime(2021, 12, 18);
+			date2 = new DateTime(2021, 12, 17);
+			durationBetween = DateTimeUtility.DurationBetween(date1, date2);
+			Assert.AreEqual(1, durationBetween.Days);
+			Assert.AreEqual(MS_IN_ONE_DAY, durationBetween.TotalMilliseconds);
+
+		}
+
 		[TestMethod]
 		public void EndOfMonth()
 		{

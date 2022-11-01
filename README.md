@@ -30,6 +30,7 @@
 - [Excel](src/GM.Utility/GM.Utility/ExcelUtility.cs)
 - [Exception](src/GM.Utility/GM.Utility/ExceptionUtility.cs)
 - [Globalization](src/GM.Utility/GM.Utility/GlobalizationUtility.cs)
+- [HashCode](src/GM.Utility/GM.Utility/HashCodeUtility.cs)
 - [IEnumerable](src/GM.Utility/GM.Utility/IEnumerableUtility.cs)
 - [IO](src/GM.Utility/GM.Utility/IOUtility.cs)
 - [Int](src/GM.Utility/GM.Utility/IntUtility.cs)
@@ -45,7 +46,10 @@
 - [Statistic](src/GM.Utility/GM.Utility/StatisticUtility.cs)
 - [String](src/GM.Utility/GM.Utility/StringUtility.cs)
 - [Task](src/GM.Utility/GM.Utility/TaskUtility.cs)
+- [ToString](src/GM.Utility/GM.Utility/ToStringUtility.cs)
 - [Type](src/GM.Utility/GM.Utility/TypeUtility.cs)
+- [Uri](src/GM.Utility/GM.Utility/UriUtility.cs)
+- [ValueType](src/GM.Utility/GM.Utility/ValueTypeUtility.cs)
 - [Wildcard](src/GM.Utility/GM.Utility/WildcardUtility.cs)
 - [XML](src/GM.Utility/GM.Utility/XMLUtility.cs)
 
@@ -74,6 +78,6 @@
 ## Author and License
 Gregor Mohorko ([www.mohorko.info](https://www.mohorko.info))
 
-Copyright (c) 2021 Gregor Mohorko
+Copyright (c) 2022 Gregor Mohorko
 
 [MIT License](./LICENSE.md)

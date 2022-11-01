@@ -412,21 +412,6 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Returns the value of the property of the provided object with the specified property path.
-		/// <para>The property path can contain the dot (.) character to search deeper into sub-properties.</para>
-		/// <para>The property path can also contain the [] brackets with an index for getting an element at the specified position inside the brackets.</para>
-		/// </summary>
-		/// <param name="obj">The object.</param>
-		/// <param name="propertyPath">The path of the property. Can contain dot (.) character.</param>
-		[Obsolete("This method is obsolete and will be removed in next releases, please use GetValueFromPath.", true)]
-		public static object GetPropertyValueFromPath(object obj, string propertyPath)
-		{
-			// FIXME obsolete v1.3.1.0
-			// 2020-10-30
-			return GetValueFromPath(obj, propertyPath);
-		}
-
-		/// <summary>
 		/// Returns the value of the property/field of the provided object with the specified path.
 		/// <para>The path can contain the dot (.) character to search deeper into sub-properties/fields.</para>
 		/// <para>The path can also contain the [] brackets with an index for getting an element at the specified position inside the brackets.</para>

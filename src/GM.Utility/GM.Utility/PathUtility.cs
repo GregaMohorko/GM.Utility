@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2020 Gregor Mohorko
+Copyright (c) 2021 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -90,10 +90,15 @@ namespace GM.Utility
 		/// <summary>
 		/// Converts the specified name to a valid file name.
 		/// <para>Any invalid characters are replaced with '_'.</para>
-		/// <para>Spaces are removed.</para>
 		/// </summary>
 		/// <param name="name">The name to convert.</param>
-		public static string GetSafeFileName(string name)
+		/// <param name="removeSpaces">Determines whether to remove spaces.</param>
+		/// <param name="capitalizeFirstLetter">Determines whether to convert the first letter to upper case.</param>
+		public static string GetSafeFileName(
+			string name,
+			bool removeSpaces = true,
+			bool capitalizeFirstLetter = true
+			)
 		{
 			var buffer = new StringBuilder(name);
 
@@ -101,8 +106,12 @@ namespace GM.Utility
 			foreach(char c in invalidChars) {
 				buffer = buffer.Replace(c, '_');
 			}
-			buffer[0] = char.ToUpperInvariant(buffer[0]);
-			buffer = buffer.Replace(" ", "");
+			if(capitalizeFirstLetter) {
+				buffer[0] = char.ToUpperInvariant(buffer[0]);
+			}
+			if(removeSpaces) {
+				buffer = buffer.Replace(" ", "");
+			}
 
 			return buffer.ToString();
 		}
@@ -110,12 +119,18 @@ namespace GM.Utility
 		/// <summary>
 		/// Converts the specified name to a valid file name (without extension).
 		/// <para>Any invalid characters (including dots) are replaced with '_'.</para>
-		/// <para>Spaces are removed.</para>
 		/// </summary>
 		/// <param name="name">The name to convert.</param>
-		public static string GetSafeFileNameWithoutExtension(string name)
+		/// <param name="removeSpaces">Determines whether to remove spaces.</param>
+		/// <param name="capitalizeFirstLetter">Determines whether to convert the first letter to upper case.</param>
+		public static string GetSafeFileNameWithoutExtension(
+			string name,
+			bool removeSpaces = true,
+			bool capitalizeFirstLetter = true
+			)
 		{
-			return GetSafeFileName(name).Replace('.', '_');
+			return GetSafeFileName(name, removeSpaces, capitalizeFirstLetter)
+				.Replace('.', '_');
 		}
 
 		/// <summary>
