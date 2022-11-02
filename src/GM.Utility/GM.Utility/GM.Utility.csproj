@@ -25,8 +25,8 @@ Added to XMLUtility: Deserialize.
 Improved EmailUtility.IsValid.
 Improved PathUtility.GetSafeFileName.
 Removed deprecated methods and classes.</PackageReleaseNotes>
-    <AssemblyVersion>1.3.2.0</AssemblyVersion>
-    <FileVersion>1.3.2.0</FileVersion>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
     <RepositoryUrl>https://github.com/GregaMohorko/GM.Utility</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
