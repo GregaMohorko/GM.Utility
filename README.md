@@ -14,6 +14,7 @@
 
 **Utilities (static classes)**:
 - [Array](src/GM.Utility/GM.Utility/ArrayUtility.cs)
+- [BigInteger](src/GM.Utility/GM.Utility/BigIntegerUtility.cs)
 - [Bool](src/GM.Utility/GM.Utility/BoolUtility.cs)
 - [Color](src/GM.Utility/GM.Utility/ColorUtility.cs)
 - [Cryptography](src/GM.Utility/GM.Utility/CryptographyUtility.cs)
@@ -59,6 +60,9 @@
 
 **Equality comparers**:
 - [ReferenceEqualityComparer](src/GM.Utility/GM.Utility/EqualityComparers/ReferenceEqualityComparer.cs)
+
+**Framework**:
+- [Enumeration](src/GM.Utility/GM.Utility/Framework/Enumeration.cs)
 
 **Net**:
 - [GMHttpClient](src/GM.Utility/GM.Utility/Net/GMHttpClient.cs)
