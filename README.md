@@ -73,6 +73,7 @@
 
 **Other**:
 - [DefaultedObject](src/GM.Utility/GM.Utility/DefaultedObject.cs)
+- [Defensive utilities](src/GM.Utility/GM.Utility/DefensiveUtility.cs)
 - [KeyCodes](src/GM.Utility/GM.Utility/KeyCodes.cs)
 - [Util](src/GM.Utility/GM.Utility/Util.cs)
 
