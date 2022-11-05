@@ -42,29 +42,17 @@ namespace GM.Utility.Net;
 public class GMHttpClient : IDisposable
 {
 	private readonly HttpClient _httpClient;
-
-	/// <summary>
-	/// Creates a new instance of <see cref="GMHttpClient"/> with the specified timeout.
-	/// </summary>
-	/// <param name="timeout">The timespan to wait before the request times out.</param>
-	public GMHttpClient(TimeSpan timeout)
-	{
-		_httpClient.Timeout = timeout;
-	}
+	private readonly bool _disposeHttpClient;
 
 	/// <summary>
 	/// Creates a new instance of <see cref="GMHttpClient"/>.
+	/// <param name="httpClient">The http client to use. If null, creates a new one.</param>
+	/// <param name="disposeHttpClient">Determines whether to dispose the http client when this instance is disposed. Is automatically set to true if <paramref name="httpClient"/> is null.</param>
 	/// </summary>
-	public GMHttpClient()
-		: this(new HttpClient())
-	{ }
-
-	/// <summary>
-	/// Creates a new instance of <see cref="GMHttpClient"/>.
-	/// </summary>
-	public GMHttpClient(HttpClient httpClient)
+	public GMHttpClient(HttpClient httpClient = null, bool disposeHttpClient = true)
 	{
-		_httpClient = httpClient;
+		_httpClient = httpClient ?? new HttpClient();
+		_disposeHttpClient = disposeHttpClient || httpClient == null;
 	}
 
 	/// <summary>
@@ -72,7 +60,9 @@ public class GMHttpClient : IDisposable
 	/// </summary>
 	public void Dispose()
 	{
-		_httpClient?.Dispose();
+		if(_disposeHttpClient) {
+			_httpClient?.Dispose();
+		}
 	}
 
 	/// <summary>
@@ -81,7 +71,13 @@ public class GMHttpClient : IDisposable
 	public TimeSpan Timeout
 	{
 		get => _httpClient.Timeout;
-		set => _httpClient.Timeout = value;
+		set
+		{
+			if(_disposeHttpClient == false) {
+				throw new InvalidOperationException("Since http client will not be disposed, this class assumes it will be needed later and thus modifying the timeout is not possible. Modify the timeout directly on the http client that was provided to create this instance.");
+			}
+			_httpClient.Timeout = value;
+		}
 	}
 
 	/// <summary>
