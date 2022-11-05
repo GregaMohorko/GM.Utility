@@ -16,13 +16,7 @@
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
     <Copyright>Copyright © Gregor Mohorko 2022</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Upgraded language version to 10.
-Added BigIntegerUtility.
-Added DefensiveUtility.
-Added Framework/Enumeration class.
-Added ValueTypeUtility.
-Added to StringUtility: EqualsInvariantIgnoreCase.
-Added to GMHttpClient: Ability to specify custom HttpClient.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix unnecessary disposal of http client in GMHttpClient.</PackageReleaseNotes>
     <AssemblyVersion>1.4.2.0</AssemblyVersion>
     <FileVersion>1.4.2.0</FileVersion>
     <RepositoryUrl>https://github.com/GregaMohorko/GM.Utility</RepositoryUrl>
