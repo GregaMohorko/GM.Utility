@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2021 Gregor Mohorko
+Copyright (c) 2022 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,84 +31,89 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GM.Utility.Net
+namespace GM.Utility.Net;
+
+/// <summary>
+/// Uses <see cref="HttpClient"/> internally.
+/// </summary>
+public class GMHttpClient : IDisposable
 {
+	private readonly HttpClient _httpClient;
+
 	/// <summary>
-	/// Uses <see cref="HttpClient"/> internally.
+	/// Creates a new instance of <see cref="GMHttpClient"/> with the specified timeout.
 	/// </summary>
-	public class GMHttpClient : IDisposable
+	/// <param name="timeout">The timespan to wait before the request times out.</param>
+	public GMHttpClient(TimeSpan timeout)
 	{
-		private readonly HttpClient httpClient;
+		_httpClient.Timeout = timeout;
+	}
 
-		/// <summary>
-		/// Creates a new instance of <see cref="GMHttpClient"/> with the specified timeout.
-		/// </summary>
-		/// <param name="timeout">The timespan to wait before the request times out.</param>
-		public GMHttpClient(TimeSpan timeout)
-		{
-			httpClient.Timeout = timeout;
-		}
+	/// <summary>
+	/// Creates a new instance of <see cref="GMHttpClient"/>.
+	/// </summary>
+	public GMHttpClient()
+		: this(new HttpClient())
+	{ }
 
-		/// <summary>
-		/// Creates a new instance of <see cref="GMHttpClient"/>.
-		/// </summary>
-		public GMHttpClient()
-		{
-			httpClient = new HttpClient();
-		}
+	/// <summary>
+	/// Creates a new instance of <see cref="GMHttpClient"/>.
+	/// </summary>
+	public GMHttpClient(HttpClient httpClient)
+	{
+		_httpClient = httpClient;
+	}
 
-		/// <summary>
-		/// Releases all resources used by this http client.
-		/// </summary>
-		public void Dispose()
-		{
-			httpClient?.Dispose();
-		}
+	/// <summary>
+	/// Releases all resources used by this http client.
+	/// </summary>
+	public void Dispose()
+	{
+		_httpClient?.Dispose();
+	}
 
-		/// <summary>
-		/// Gets or sets the timespan to wait before the request times out.
-		/// </summary>
-		public TimeSpan Timeout
-		{
-			get => httpClient.Timeout;
-			set => httpClient.Timeout = value;
-		}
+	/// <summary>
+	/// Gets or sets the timespan to wait before the request times out.
+	/// </summary>
+	public TimeSpan Timeout
+	{
+		get => _httpClient.Timeout;
+		set => _httpClient.Timeout = value;
+	}
 
-		/// <summary>
-		/// Sends an HTTP request as an asynchronous operation with the specified name/value collection.
-		/// </summary>
-		/// <param name="address">A string that represents the request <see cref="Uri"/>.</param>
-		/// <param name="nameValueCollection">A collection of name/value pairs.</param>
-		/// <param name="method">The HTTP method.</param>
-		/// <param name="cancellationToken">The cancellation token to cancel operation.</param>
-		/// <exception cref="HttpRequestException" />
-		public async Task<string> UploadValuesAsync(string address, IEnumerable<KeyValuePair<string, string>> nameValueCollection, System.Net.Http.HttpMethod method, CancellationToken cancellationToken)
-		{
-			using(var request = new HttpRequestMessage(method, address)) {
-				{
-					// the constructor of FormUrlEncodedContent has a problem with large amount of data (>2000 characters)
-					//request.Content = new FormUrlEncodedContent(nameValueCollection);
+	/// <summary>
+	/// Sends an HTTP request as an asynchronous operation with the specified name/value collection.
+	/// </summary>
+	/// <param name="address">A string that represents the request <see cref="Uri"/>.</param>
+	/// <param name="nameValueCollection">A collection of name/value pairs.</param>
+	/// <param name="method">The HTTP method.</param>
+	/// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+	/// <exception cref="HttpRequestException" />
+	public async Task<string> UploadValuesAsync(string address, IEnumerable<KeyValuePair<string, string>> nameValueCollection, System.Net.Http.HttpMethod method, CancellationToken cancellationToken)
+	{
+		using(var request = new HttpRequestMessage(method, address)) {
+			{
+				// the constructor of FormUrlEncodedContent has a problem with large amount of data (>2000 characters)
+				//request.Content = new FormUrlEncodedContent(nameValueCollection);
 
-					// therefore, let's do it ourselves:
-					// (idea from: https://stackoverflow.com/a/51854330/6277755)
-					var encodedItems = nameValueCollection
-						.Select(x => $"{WebUtility.UrlEncode(x.Key)}={WebUtility.UrlEncode(x.Value)}");
-					request.Content = new StringContent(string.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
+				// therefore, let's do it ourselves:
+				// (idea from: https://stackoverflow.com/a/51854330/6277755)
+				var encodedItems = nameValueCollection
+					.Select(x => $"{WebUtility.UrlEncode(x.Key)}={WebUtility.UrlEncode(x.Value)}");
+				request.Content = new StringContent(string.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
+			}
+
+			HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+			try {
+				if(response.Content == null) {
+					return null;
 				}
-
-				HttpResponseMessage response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-				try {
-					if(response.Content == null) {
-						return null;
-					}
-					return await response.Content.ReadAsStringAsync();
-				} finally {
-					response?.Dispose();
-				}
+				return await response.Content.ReadAsStringAsync();
+			} finally {
+				response?.Dispose();
 			}
 		}
 	}
