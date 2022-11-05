@@ -6,7 +6,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
-    <Version>1.4.0.0</Version>
+    <Version>1.4.1.0</Version>
 	<Title>GM.Utility</Title>
     <Authors>Gregor Mohorko</Authors>
     <Company>Gregor Mohorko</Company>
@@ -16,18 +16,15 @@
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
     <Copyright>Copyright © Gregor Mohorko 2022</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added HashCodeUtility.
-Added ToStringUtility.
-Added UriUtility.
+    <PackageReleaseNotes>Upgraded language version to 10.
+Added BigIntegerUtility.
+Added DefensiveUtility.
+Added Framework/Enumeration class.
 Added ValueTypeUtility.
-Added to DateTimeUtility: DurationBetween, GetUtcOffsetForLocalTime.
-Added to IEnumerableUtility: MinOrDefault, MaxOrDefault.
-Added to XMLUtility: Deserialize.
-Improved EmailUtility.IsValid.
-Improved PathUtility.GetSafeFileName.
-Removed deprecated methods and classes.</PackageReleaseNotes>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
+Added to StringUtility: EqualsInvariantIgnoreCase.
+Added to GMHttpClient: Ability to specify custom HttpClient.</PackageReleaseNotes>
+    <AssemblyVersion>1.4.1.0</AssemblyVersion>
+    <FileVersion>1.4.1.0</FileVersion>
     <RepositoryUrl>https://github.com/GregaMohorko/GM.Utility</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
