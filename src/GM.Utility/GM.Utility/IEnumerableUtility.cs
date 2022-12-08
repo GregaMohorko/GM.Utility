@@ -254,7 +254,7 @@ namespace GM.Utility
 			if(enumerable is ICollection<T> collection) {
 				return collection.Count < 1;
 			}
-			return enumerable.Any();
+			return enumerable.Any() == false;
 		}
 
 		/// <summary>
