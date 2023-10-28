@@ -42,7 +42,7 @@ public class ThrottlerPerTime
 	/// </summary>
 	public TimeSpan Time { get; }
 	/// <summary>
-	/// The max number of executions that are allowed in the time frame set in <see cref="Time"/>.
+	/// The max number of executions that are allowed in the time frame set in <see cref="Time"/>. Zero means no limit.
 	/// </summary>
 	public int MaxExecutions { get; }
 
@@ -53,9 +53,13 @@ public class ThrottlerPerTime
 	/// Creates a new instance of <see cref="ThrottlerPerTime"/>.
 	/// </summary>
 	/// <param name="time">The time frame.</param>
-	/// <param name="maxExecutions">The max number of executions that are allowed in the specified time frame.</param>
+	/// <param name="maxExecutions">The max number of executions that are allowed in the specified time frame. Zero means no limit.</param>
 	public ThrottlerPerTime(TimeSpan time, int maxExecutions)
 	{
+		if(maxExecutions < 0) {
+			throw new ArgumentOutOfRangeException(nameof(maxExecutions), maxExecutions, "Should be non-negative.");
+		}
+
 		Time = time;
 		MaxExecutions = maxExecutions;
 
@@ -70,6 +74,11 @@ public class ThrottlerPerTime
 	/// <param name="ct">Cancellation token.</param>
 	public async Task WaitExecutionLimit(CancellationToken ct)
 	{
+		if(MaxExecutions == 0) {
+			// no limit
+			return;
+		}
+
 		while(true) {
 			DateTime utcNow = DateTime.UtcNow;
 			DateTime nextAvailableExecutionAt;
