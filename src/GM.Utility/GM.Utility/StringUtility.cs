@@ -40,7 +40,7 @@ namespace GM.Utility;
 /// </summary>
 public static class StringUtility
 {
-	private static readonly Lazy<Regex> REGEX_WHITESPACE = new Lazy<Regex>(() => new Regex(@"\s+", RegexOptions.Compiled));
+	private static readonly Lazy<Regex> REGEX_WHITESPACE = new(() => new Regex(@"\s+", RegexOptions.Compiled));
 	/// <summary>
 	/// Regex with pattern @"\s+".
 	/// </summary>
