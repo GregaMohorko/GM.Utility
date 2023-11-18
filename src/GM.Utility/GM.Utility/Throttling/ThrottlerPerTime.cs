@@ -68,10 +68,9 @@ public class ThrottlerPerTime
 	}
 
 	/// <summary>
-	/// Checks the number of executions in the 
+	/// Waits until the next time there can be an execution, according to the set throttling settings.
 	/// <para>Thread-safe.</para>
 	/// </summary>
-	/// <param name="ct">Cancellation token.</param>
 	public async Task WaitExecutionLimit(CancellationToken ct)
 	{
 		if(MaxExecutions == 0) {

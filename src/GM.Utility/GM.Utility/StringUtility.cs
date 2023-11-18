@@ -81,6 +81,18 @@ public static class StringUtility
 	}
 
 	/// <summary>
+	/// Returns the words of this text.
+	/// </summary>
+	/// <param name="text">The text of which words to return.</param>
+	public static List<string> Words(this string text)
+	{
+		return text
+			.Split(' ')
+			.Where(w => string.IsNullOrWhiteSpace(w) == false)
+			.ToList();
+	}
+
+	/// <summary>
 	/// Indents this text by the specified space count.
 	/// </summary>
 	/// <param name="text">The text to indent.</param>
