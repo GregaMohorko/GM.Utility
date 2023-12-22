@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2022 Gregor Mohorko
+Copyright (c) 2023 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ Author: Gregor Mohorko
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -81,28 +82,53 @@ public class GMHttpClient : IDisposable
 	}
 
 	/// <summary>
-	/// Sends an HTTP request as an asynchronous operation with the specified name/value collection.
+	/// Obsolete. Please use SendGet or Send.
 	/// </summary>
-	/// <param name="address">A string that represents the request <see cref="Uri"/>.</param>
-	/// <param name="nameValueCollection">A collection of name/value pairs.</param>
-	/// <param name="method">The HTTP method.</param>
-	/// <param name="cancellationToken">The cancellation token to cancel operation.</param>
-	/// <exception cref="HttpRequestException" />
-	public async Task<string> UploadValuesAsync(string address, IEnumerable<KeyValuePair<string, string>> nameValueCollection, System.Net.Http.HttpMethod method, CancellationToken cancellationToken)
+	// FIXME obsolete 2023-12-22
+	[Obsolete("Please use SendGet or Send.", error: true)]
+	public Task<string> UploadValuesAsync(string address, IEnumerable<KeyValuePair<string, string>> nameValueCollection, System.Net.Http.HttpMethod method, CancellationToken cancellationToken)
 	{
-		using(var request = new HttpRequestMessage(method, address)) {
-			{
-				// the constructor of FormUrlEncodedContent has a problem with large amount of data (>2000 characters)
-				//request.Content = new FormUrlEncodedContent(nameValueCollection);
+		throw new NotImplementedException();
+	}
 
-				// therefore, let's do it ourselves:
-				// (idea from: https://stackoverflow.com/a/51854330/6277755)
-				var encodedItems = nameValueCollection
-					.Select(x => $"{WebUtility.UrlEncode(x.Key)}={WebUtility.UrlEncode(x.Value)}");
-				request.Content = new StringContent(string.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
+	/// <summary>
+	/// Send a GET HTTP request.
+	/// </summary>
+	/// <param name="requestUri">A string that represents the base request <see cref="Uri"/> (without the query).</param>
+	/// <param name="nameValueCollection">A list of query values.</param>
+	/// <param name="ct">Cancellation token.</param>
+	/// <returns>Serialized response HTTP content.</returns>
+	public async Task<string> SendGet(string requestUri, IEnumerable<KeyValuePair<string, string>> nameValueCollection, CancellationToken ct)
+	{
+		// the constructor of FormUrlEncodedContent has a problem with large amount of data (>2000 characters)
+		//request.Content = new FormUrlEncodedContent(nameValueCollection);
+
+		// therefore, let's do it ourselves:
+		// (idea from: https://stackoverflow.com/a/51854330/6277755)
+		var encodedItems = nameValueCollection
+			.Select(x => $"{WebUtility.UrlEncode(x.Key)}={WebUtility.UrlEncode(x.Value)}");
+
+		string requestAndQueryUri = requestUri + "?" + string.Join("&", encodedItems);
+
+		return await Send(requestAndQueryUri, HttpMethod.Get, null, ct);
+	}
+
+	/// <summary>
+	/// Send an HTTP request.
+	/// </summary>
+	/// <param name="requestUri">A string that represents the request <see cref="Uri"/>.</param>
+	/// <param name="httpMethod">The HTTP method</param>
+	/// <param name="httpContent">The contents of the HTTP message. Should be NULL for GET.</param>
+	/// <param name="ct">Cancellation token.</param>
+	/// <returns>Serialized response HTTP content.</returns>
+	public async Task<string> Send(string requestUri, HttpMethod httpMethod, HttpContent httpContent, CancellationToken ct)
+	{
+		using(var request = new HttpRequestMessage(httpMethod, requestUri)) {
+			if(httpContent != null) {
+				request.Content = httpContent;
 			}
 
-			HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+			HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
 			try {
 				if(response.Content == null) {
 					return null;
