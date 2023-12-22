@@ -71,6 +71,9 @@
 - [Singleton](src/GM.Utility/GM.Utility/Patterns/Singleton.cs)
 - [Undo/Redo](src/GM.Utility/GM.Utility/Patterns/UndoRedo/GMUndoRedo.cs)
 
+**Throttling**:
+- [ThrottlerPerTime](src/GM.Utility/GM.Utility/Throttling/ThrottlerPerTime.cs)
+
 **Other**:
 - [DefaultedObject](src/GM.Utility/GM.Utility/DefaultedObject.cs)
 - [Defensive utilities](src/GM.Utility/GM.Utility/DefensiveUtility.cs)
