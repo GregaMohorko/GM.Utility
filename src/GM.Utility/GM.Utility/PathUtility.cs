@@ -155,7 +155,7 @@ namespace GM.Utility
 			return driveInfo.DriveType == DriveType.Network;
 		}
 
-		private static readonly Regex safeFileNameValidIdentifier = new Regex("^[a-zA-Z_][a-zA-Z0-9_]*$", RegexOptions.Compiled | RegexOptions.Singleline);
+		private static readonly Lazy<Regex> s_regex_safeFileNameValidIdentifier = new(() => new Regex("^[a-zA-Z_][a-zA-Z0-9_]*$", RegexOptions.Compiled | RegexOptions.Singleline));
 
 		/// <summary>
 		/// Determines whether the provided name is a valid file name.
@@ -167,7 +167,7 @@ namespace GM.Utility
 				return false;
 			}
 
-			if(!safeFileNameValidIdentifier.IsMatch(name)) {
+			if(!s_regex_safeFileNameValidIdentifier.Value.IsMatch(name)) {
 				return false;
 			}
 

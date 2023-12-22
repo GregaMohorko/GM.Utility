@@ -40,7 +40,7 @@ namespace GM.Utility;
 /// </summary>
 public static class StringUtility
 {
-	private static readonly Lazy<Regex> REGEX_WHITESPACE = new Lazy<Regex>(() => new Regex(@"\s+", RegexOptions.Compiled));
+	private static readonly Lazy<Regex> REGEX_WHITESPACE = new(() => new Regex(@"\s+", RegexOptions.Compiled));
 	/// <summary>
 	/// Regex with pattern @"\s+".
 	/// </summary>
@@ -78,6 +78,18 @@ public static class StringUtility
 	public static bool ContainsWhitespace(this string text)
 	{
 		return RegexWhitespace.IsMatch(text);
+	}
+
+	/// <summary>
+	/// Returns the words of this text.
+	/// </summary>
+	/// <param name="text">The text of which words to return.</param>
+	public static List<string> Words(this string text)
+	{
+		return text
+			.Split(' ')
+			.Where(w => string.IsNullOrWhiteSpace(w) == false)
+			.ToList();
 	}
 
 	/// <summary>

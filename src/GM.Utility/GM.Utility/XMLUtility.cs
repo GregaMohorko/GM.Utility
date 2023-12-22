@@ -168,9 +168,9 @@ namespace GM.Utility
 		}
 
 		// filters control characters but allows only properly-formed surrogate sequences
-		private static readonly Regex _invalidXMLChars = new Regex(
+		private static readonly Lazy<Regex> s_regex_invalidXMLChars = new(() => new Regex(
 			@"(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\uFEFF\uFFFE\uFFFF]",
-			RegexOptions.Compiled);
+			RegexOptions.Compiled));
 
 		/// <summary>
 		/// Removes any unusual unicode characters that can't be encoded into XML.
@@ -181,7 +181,7 @@ namespace GM.Utility
 			if(string.IsNullOrEmpty(text)) {
 				return "";
 			}
-			return _invalidXMLChars.Replace(text, "");
+			return s_regex_invalidXMLChars.Value.Replace(text, "");
 		}
 
 		/// <summary>

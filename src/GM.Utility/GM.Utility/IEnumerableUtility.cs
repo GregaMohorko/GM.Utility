@@ -139,6 +139,21 @@ namespace GM.Utility
 		}
 
 		/// <summary>
+		/// Returns duplicated elements from a sequence.
+		/// </summary>
+		/// <typeparam name="T">The type of elements.</typeparam>
+		/// <param name="source">The source collection.</param>
+		public static IEnumerable<T> Duplicates<T>(this IEnumerable<T> source)
+		{
+			return source
+				.GroupBy(x => x)
+				//.Where(g => g.Count() > 1)
+				.Where(g => g.Take(2).Count() == 2)
+				.Distinct()
+				.Select(g => g.Key);
+		}
+
+		/// <summary>
 		/// Performs the specified action on each element of this collection.
 		/// </summary>
 		/// <typeparam name="T">The type of the elements.</typeparam>
@@ -254,7 +269,7 @@ namespace GM.Utility
 			if(enumerable is ICollection<T> collection) {
 				return collection.Count < 1;
 			}
-			return enumerable.Any();
+			return enumerable.Any() == false;
 		}
 
 		/// <summary>

@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2020 Gregor Mohorko
+Copyright (c) 2023 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -297,6 +297,24 @@ namespace GM.Utility
 		public static IEnumerable<Type> GetTypesInNamespace(this Assembly assembly, string @namespace)
 		{
 			return assembly.GetTypes().Where(t => t.Namespace == @namespace);
+		}
+
+		/// <summary>
+		/// Gets the <see cref="Type"/> with the specified name, performing a case-sensitive search. If the type is not in the currently executing assembly or in mscorlib.dll/System.Private.CoreLib.dll, this method will look in the assemblies that <seealso cref="AppDomain.GetAssemblies()"/> returns for the current domain.
+		/// </summary>
+		/// <param name="typeName">The assembly-qualified name of the type to get. If the type is in the currently executing assembly or in mscorlib.dll/System.Private.CoreLib.dll, it is sufficient to supply the type name qualified by its namespace.</param>
+		public static Type GetType(string typeName)
+		{
+			Type type = Type.GetType(typeName);
+			if(type == null) {
+				foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+					type = assembly.GetType(typeName);
+					if(type != null) {
+						break;
+					}
+				}
+			}
+			return type ?? throw new ArgumentException($"Could not find a type with name '{typeName}'.", nameof(typeName));
 		}
 
 		/// <summary>
