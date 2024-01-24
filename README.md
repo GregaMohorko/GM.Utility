@@ -86,6 +86,6 @@
 ## Author and License
 Gregor Mohorko ([www.mohorko.info](https://www.mohorko.info))
 
-Copyright (c) 2023 Gregor Mohorko
+Copyright (c) 2024 Gregor Mohorko
 
 [MIT License](./LICENSE.md)
