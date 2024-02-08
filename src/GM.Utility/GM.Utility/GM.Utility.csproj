@@ -16,7 +16,7 @@
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
     <Copyright>Copyright © Gregor Mohorko 2024</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added CryptographyUtility.CreateRandomSalt.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added additional logging to ThrottlerPerTime.</PackageReleaseNotes>
     <AssemblyVersion>1.6.1.0</AssemblyVersion>
     <FileVersion>1.6.1.0</FileVersion>
     <RepositoryUrl>https://github.com/GregaMohorko/GM.Utility</RepositoryUrl>
