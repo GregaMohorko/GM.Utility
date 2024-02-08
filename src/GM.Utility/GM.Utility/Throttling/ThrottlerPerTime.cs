@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2023 Gregor Mohorko
+Copyright (c) 2024 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ Author: Gregor Mohorko
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace GM.Utility.Throttling;
 /// <summary>
@@ -49,16 +50,32 @@ public class ThrottlerPerTime
 	private volatile int _executionLogPosition;
 	private readonly DateTime[] _executionLog;
 
+	private readonly ILogger _logger;
+
 	/// <summary>
 	/// Creates a new instance of <see cref="ThrottlerPerTime"/>.
 	/// </summary>
 	/// <param name="time">The time frame.</param>
 	/// <param name="maxExecutions">The max number of executions that are allowed in the specified time frame. Zero means no limit.</param>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown when max executions is not non-negative.</exception>
 	public ThrottlerPerTime(TimeSpan time, int maxExecutions)
+		: this(time, maxExecutions, null)
+	{ }
+
+	/// <summary>
+	/// Creates a new instance of <see cref="ThrottlerPerTime"/>.
+	/// </summary>
+	/// <param name="time">The time frame.</param>
+	/// <param name="maxExecutions">The max number of executions that are allowed in the specified time frame. Zero means no limit.</param>
+	/// <param name="logger">Logger.</param>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown when max executions is not non-negative.</exception>
+	public ThrottlerPerTime(TimeSpan time, int maxExecutions, ILogger logger)
 	{
 		if(maxExecutions < 0) {
 			throw new ArgumentOutOfRangeException(nameof(maxExecutions), maxExecutions, "Should be non-negative.");
 		}
+
+		_logger = logger;
 
 		Time = time;
 		MaxExecutions = maxExecutions;
@@ -86,6 +103,7 @@ public class ThrottlerPerTime
 				nextAvailableExecutionAt = _executionLog[_executionLogPosition].Add(Time);
 				if(utcNow >= nextAvailableExecutionAt) {
 					// can execute now
+					_logger?.LogDebug("Position: {current}/{total}. Can execute now, since NextAvailableExecutionAt={nextAvailableExecutionAt} <= UtcNow={utcNow}.", _executionLogPosition, _executionLog.Length, nextAvailableExecutionAt, utcNow);
 
 					// log new execution
 					_executionLog[_executionLogPosition] = DateTime.UtcNow;
@@ -99,6 +117,7 @@ public class ThrottlerPerTime
 
 			// wait and try again at next available execution
 			var sleepTime = nextAvailableExecutionAt - utcNow;
+			_logger?.LogDebug("Position: {current}/{total}. Cannot execute now, since NextAvailableExecutionAt={nextAvailableExecutionAt} > UtcNow={utcNow}. Sleeping for {sleepTime}.", _executionLogPosition, _executionLog.Length, nextAvailableExecutionAt, utcNow, sleepTime);
 			await Task.Delay(sleepTime, ct);
 		}
 	}
