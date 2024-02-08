@@ -6,7 +6,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>GM.StrongNameKey.snk</AssemblyOriginatorKeyFile>
-    <Version>1.6.0.0</Version>
+    <Version>1.6.1.0</Version>
 	<Title>GM.Utility</Title>
     <Authors>Gregor Mohorko</Authors>
     <Company>Gregor Mohorko</Company>
@@ -16,9 +16,9 @@
     <Description>Library with various static classes and tools that provide universally useful functions, extensions and utilities.</Description>
     <Copyright>Copyright © Gregor Mohorko 2024</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added CryptographyUtility.CreateRandomSalt.</PackageReleaseNotes>
-    <AssemblyVersion>1.6.0.0</AssemblyVersion>
-    <FileVersion>1.6.0.0</FileVersion>
+    <PackageReleaseNotes>Added additional logging to ThrottlerPerTime.</PackageReleaseNotes>
+    <AssemblyVersion>1.6.1.0</AssemblyVersion>
+    <FileVersion>1.6.1.0</FileVersion>
     <RepositoryUrl>https://github.com/GregaMohorko/GM.Utility</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
