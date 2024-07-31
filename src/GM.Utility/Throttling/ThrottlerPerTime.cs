@@ -116,6 +116,14 @@ public class ThrottlerPerTime
 	}
 
 	/// <summary>
+	/// Returns a string that represents this throttler.
+	/// </summary>
+	public override string ToString()
+	{
+		return string.Join(", ", Limits.Select(l => $"({l.MaxExecutions} per {l.Time})"));
+	}
+
+	/// <summary>
 	/// Waits until the next time there can be an execution, according to the set throttling settings.
 	/// <para>Thread-safe.</para>
 	/// </summary>
