@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2020 Gregor Mohorko
+Copyright (c) 2024 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Project: GM.Utility.Test
-Created: 2020-01-16
-Author: Gregor Mohorko
+Project: GM.Utility.Testing.Unit
+Created: 2024-7-31
+Author: grega
 */
 
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace GM.Utility.Testing.Unit;
 
-namespace GM.Utility.Test
+public class EnumUtilityTests
 {
-	[TestClass]
-	public class EmailUtilityTest
+	[Fact]
+	public void GetValues()
 	{
-		[TestMethod]
-		public void IsValid()
-		{
-			Assert.IsTrue(EmailUtility.IsValid("example@mail.com"));
-			Assert.IsTrue(EmailUtility.IsValid("ExaMple.EXAMPLE@someDOMAIN.cOm"));
-			Assert.IsTrue(EmailUtility.IsValid("ALL.CAPS.MULTIPLE.DOTS@DOMAIN.COM"));
-			Assert.IsFalse(EmailUtility.IsValid("nodot@mailcom"));
-			Assert.IsFalse(EmailUtility.IsValid("no.dot@mail"));
-			Assert.IsFalse(EmailUtility.IsValid("no.no.no.no.dot@mydomain"));
-		}
+		DayOfWeek[] daysOfWeek=EnumUtility.GetValues<DayOfWeek>();
+		DayOfWeek[] expected = Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>().ToArray();
+		daysOfWeek.Should().Equal(expected);
 	}
 }

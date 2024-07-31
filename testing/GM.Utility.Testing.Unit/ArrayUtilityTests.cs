@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2022 Gregor Mohorko
+Copyright (c) 2024 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Project: GM.Utility
-Created: 2022-03-09
-Author: Gregor Mohorko
+Project: GM.Utility.Testing.Unit
+Created: 2024-7-31
+Author: grega
 */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace GM.Utility.Testing.Unit;
 
-namespace GM.Utility.Test
+public class ArrayUtilityTests
 {
-	[TestClass]
-	public class UriUtilityTest
+	[Fact]
+	public void Reset()
 	{
-		[TestMethod]
-		public void Combine()
+		Assert.Throws<ArgumentNullException>(delegate
 		{
-			Assert.AreEqual("http://www.google.com/additional/paths/test", UriUtility.Combine("http://www.google.com/", "/additional/paths", "test").ToString());
-		}
+			ArrayUtility.Reset<string>(null);
+		});
+		Assert.Throws<ArgumentNullException>(delegate
+		{
+			ArrayUtility.Reset(null,"");
+		});
+
+		var array1 = new int[] { 1,2,3,4,5,6,7,8,9,10 };
+		array1.Reset();
+		var expected1 = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		array1.Should().Equal(expected1);
+
+		var array2 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+		array2.Reset(42);
+		var expected2 = new int[] { 42, 42, 42, 42, 42, 42, 42, 42, 42, 42 };
+		array2.Should().Equal(expected2);
 	}
 }

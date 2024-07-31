@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2024 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,40 +21,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Project: GM.Utility.Test
-Created: 2018-4-16
-Author: GregaMohorko
+Project: GM.Utility.Testing.Unit
+Created: 2024-7-31
+Author: grega
 */
 
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace GM.Utility.Testing.Unit;
 
-namespace GM.Utility.Test
+public class StringUtilityTests
 {
-	[TestClass]
-	public class ArrayUtilityTest
+	[Fact]
+	public void ShortenWith3Dots()
 	{
-		[TestMethod]
-		public void Reset()
-		{
-			Assert.ThrowsException<ArgumentNullException>(delegate
-			{
-				ArrayUtility.Reset<string>(null);
-			});
-			Assert.ThrowsException<ArgumentNullException>(delegate
-			{
-				ArrayUtility.Reset(null,"");
-			});
+		Assert.Throws<ArgumentNullException>(() => StringUtility.ShortenWith3Dots(null, -42));
+		Assert.Throws<ArgumentOutOfRangeException>(() => StringUtility.ShortenWith3Dots("", -1));
+		Assert.Throws<ArgumentOutOfRangeException>(() => StringUtility.ShortenWith3Dots("", -100));
+		Assert.Throws<ArgumentOutOfRangeException>(() => StringUtility.ShortenWith3Dots("", int.MinValue));
+		Assert.Throws<ArgumentOutOfRangeException>(() => StringUtility.ShortenWith3Dots("", 0));
 
-			var array1 = new int[] { 1,2,3,4,5,6,7,8,9,10 };
-			array1.Reset();
-			var expected1 = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-			CollectionAssert.AreEqual(expected1, array1);
-
-			var array2 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-			array2.Reset(42);
-			var expected2 = new int[] { 42, 42, 42, 42, 42, 42, 42, 42, 42, 42 };
-			CollectionAssert.AreEqual(expected2, array2);
-		}
+		string text = "Blues for the Red Sun";
+		Assert.Equal(text, text.ShortenWith3Dots(int.MaxValue));
+		Assert.Equal(text, text.ShortenWith3Dots(text.Length));
+		Assert.Equal("B...", text.ShortenWith3Dots(1));
+		Assert.Equal("Blues...", text.ShortenWith3Dots(5));
+		Assert.Equal("Blues for the Red Su...", text.ShortenWith3Dots(20));
 	}
 }
