@@ -128,17 +128,18 @@ public class ThrottlerPerTime
 
 		while(true) {
 			DateTime utcNow = DateTime.UtcNow;
-			DateTime nextAvailableExecutionAt = DateTime.MaxValue;
+			DateTime nextAvailableExecutionAt = DateTime.MinValue;
 
 			lock(_executionLog) {
-				DateTime hm = _executionLog[_executionLogPosition];
 				foreach(var (Time, MaxExecutions) in Limits) {
+					if(MaxExecutions == 0) {
+						// no limit
+						continue;
+					}
 					int previousRelevantLogPosition = (_executionLogPosition - MaxExecutions + _executionLog.Length) % _executionLog.Length;
 					DateTime previousExecutionTime = _executionLog[previousRelevantLogPosition];
 					DateTime limitsNextAvailableExecutionAt = previousExecutionTime.Add(Time);
-					if(utcNow >= limitsNextAvailableExecutionAt
-						&& limitsNextAvailableExecutionAt < nextAvailableExecutionAt
-						) {
+					if(limitsNextAvailableExecutionAt > nextAvailableExecutionAt) {
 						nextAvailableExecutionAt = limitsNextAvailableExecutionAt;
 					}
 				}
