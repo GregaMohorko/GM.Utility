@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2024 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,40 +21,52 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Project: GM.Utility.Test
-Created: 2018-4-16
-Author: GregaMohorko
+Project: GM.Utility.Testing.Unit
+Created: 2024-7-31
+Author: grega
 */
 
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using GM.Utility.Throttling;
 
-namespace GM.Utility.Test
+namespace GM.Utility.Testing.Unit.Throttling;
+public class ThrottlerPerTimeTests
 {
-	[TestClass]
-	public class ArrayUtilityTest
+	[Fact]
+	public async Task WaitExecutionLimit()
 	{
-		[TestMethod]
-		public void Reset()
+		var throttler = new ThrottlerPerTime(
+			limits: new[]
+			{
+				// max 8 in the span of 200 ms
+				(TimeSpan.FromMilliseconds(200), 8),
+				// max 5 in the span of 50 ms
+				(TimeSpan.FromMilliseconds(50), 5)
+			}
+			);
+
+		const int EXECUTION_TARGET = 16;
+		int executionCount = 0;
+
+		var executingThread = new Thread(async () =>
 		{
-			Assert.ThrowsException<ArgumentNullException>(delegate
-			{
-				ArrayUtility.Reset<string>(null);
-			});
-			Assert.ThrowsException<ArgumentNullException>(delegate
-			{
-				ArrayUtility.Reset(null,"");
-			});
+			for(int i = EXECUTION_TARGET; i > 0; --i) {
+				await throttler.WaitExecutionLimit(CancellationToken.None);
+				++executionCount;
+			}
+		});
 
-			var array1 = new int[] { 1,2,3,4,5,6,7,8,9,10 };
-			array1.Reset();
-			var expected1 = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-			CollectionAssert.AreEqual(expected1, array1);
+		executingThread.Start();
 
-			var array2 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-			array2.Reset(42);
-			var expected2 = new int[] { 42, 42, 42, 42, 42, 42, 42, 42, 42, 42 };
-			CollectionAssert.AreEqual(expected2, array2);
-		}
+		await Task.Delay(30);
+		executionCount.Should().Be(5);
+
+		await Task.Delay(150 - 30);
+		executionCount.Should().Be(8);
+
+		await Task.Delay(230 - 150);
+		executionCount.Should().Be(8 + 5);
+
+		await Task.Delay(300 - 230);
+		executionCount.Should().Be(EXECUTION_TARGET);
 	}
 }

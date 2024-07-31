@@ -1,9 +1,7 @@
-﻿extensions: designer.cs generated.cs
-extensions: .cs
-/*
+﻿/*
 MIT License
 
-Copyright (c) %CurrentYear% Grega Mohorko
+Copyright (c) 2024 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +21,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Project: %Project%
-Created: %CreationYear%-%CreationMonth%-%CreationDay%
-Author: %UserName%
+Project: GM.Utility.Testing.Unit
+Created: 2024-7-31
+Author: grega
 */
+
+namespace GM.Utility.Testing.Unit;
+
+public class UtilTests
+{
+	[Fact]
+	public void CombineWithParams()
+	{
+		// should throw exceptions
+		_ = Assert.Throws<ArgumentNullException>(() => Util.CombineWithParams(default(string), null));
+		_ = Assert.Throws<ArgumentNullException>(() => Util.CombineWithParams(default(EventArgs), null));
+
+		// should not throw an exception
+		Util.CombineWithParams(default(int), null);
+		Util.CombineWithParams(default(TimeSpan), null);
+		Util.CombineWithParams(default(DateTime), null);
+		Util.CombineWithParams(default(DayOfWeek), null);
+	}
+}

@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2024 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Project: GM.Utility.Test
-Created: 2018-3-28
-Author: GregaMohorko
+Project: GM.Utility.Testing.Unit
+Created: 2024-7-31
+Author: grega
 */
 
-using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace GM.Utility.Testing.Unit;
 
-namespace GM.Utility.Test
+public class StringUtilityTests
 {
-	[TestClass]
-	public class EnumUtilityTest
+	[Fact]
+	public void ShortenWith3Dots()
 	{
-		[TestMethod]
-		public void GetValues()
-		{
-			DayOfWeek[] daysOfWeek=EnumUtility.GetValues<DayOfWeek>();
-			DayOfWeek[] expected = Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>().ToArray();
-			CollectionAssert.AreEqual(expected, daysOfWeek);
-		}
+		Assert.Throws<ArgumentNullException>(() => StringUtility.ShortenWith3Dots(null, -42));
+		Assert.Throws<ArgumentOutOfRangeException>(() => StringUtility.ShortenWith3Dots("", -1));
+		Assert.Throws<ArgumentOutOfRangeException>(() => StringUtility.ShortenWith3Dots("", -100));
+		Assert.Throws<ArgumentOutOfRangeException>(() => StringUtility.ShortenWith3Dots("", int.MinValue));
+		Assert.Throws<ArgumentOutOfRangeException>(() => StringUtility.ShortenWith3Dots("", 0));
+
+		string text = "Blues for the Red Sun";
+		Assert.Equal(text, text.ShortenWith3Dots(int.MaxValue));
+		Assert.Equal(text, text.ShortenWith3Dots(text.Length));
+		Assert.Equal("B...", text.ShortenWith3Dots(1));
+		Assert.Equal("Blues...", text.ShortenWith3Dots(5));
+		Assert.Equal("Blues for the Red Su...", text.ShortenWith3Dots(20));
 	}
 }

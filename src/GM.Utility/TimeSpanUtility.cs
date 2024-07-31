@@ -1,7 +1,7 @@
-/*
+﻿/*
 MIT License
 
-Copyright (c) 2018 Grega Mohorko
+Copyright (c) 2024 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Project: GM.Utility.Test
-Created: 2018-3-18
-Author: GregaMohorko
+Project: GM.Utility
+Created: 2024-7-30
+Author: grega
 */
 
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System;
 
-[assembly: AssemblyTitle("GM.Utility.Test")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Grega Mohorko")]
-[assembly: AssemblyProduct("GM.Utility.Test")]
-[assembly: AssemblyCopyright("Copyright © Grega Mohorko 2018")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-
-[assembly: ComVisible(false)]
-
-[assembly: Guid("dbe09199-2df5-40bf-9920-a313d674e6eb")]
-
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+namespace GM.Utility;
+/// <summary>
+/// Utilities for <see cref="TimeSpan"/>.
+/// </summary>
+public static class TimeSpanUtility
+{
+	/// <summary>
+	/// Returns the maximum value of the two provided values.
+	/// </summary>
+	/// <param name="val1">The first value.</param>
+	/// <param name="val2">The second value.</param>
+	public static TimeSpan Max(TimeSpan val1, TimeSpan val2)
+	{
+		return val1 > val2 ? val1 : val2;
+	}
+}
