@@ -116,6 +116,33 @@ public class ReflectionUtilityTests
 		Assert.False(ReflectionUtility.AreAllPropertiesEqual(objects));
 	}
 
+	public enum TestEnum { }
+
+	[Theory]
+	[InlineData("System.String", typeof(string))]
+	[InlineData("GM.Utility.Testing.Unit.ReflectionUtilityTests+TestEnum", typeof(TestEnum))]
+	[InlineData("System.Nullable`1[GM.Utility.Testing.Unit.ReflectionUtilityTests+TestEnum]", typeof(TestEnum?))]
+	[InlineData("System.Collections.Generic.List`1[GM.Utility.Testing.Unit.ReflectionUtilityTests+TestEnum]", typeof(List<TestEnum>))]
+	[InlineData("System.Collections.Generic.Dictionary`2[System.String,System.Collections.Generic.List`1[System.Nullable`1[GM.Utility.Testing.Unit.ReflectionUtilityTests+TestEnum]]]", typeof(Dictionary<string, List<TestEnum?>>))]
+	public void GetType_(string typeName, Type expectedType)
+	{
+		Type type = ReflectionUtility.GetType(typeName);
+		type.Should().Be(expectedType);
+	}
+
+	[Theory]
+	[InlineData(typeof(string), "String")]
+	[InlineData(typeof(TestEnum), "TestEnum")]
+	[InlineData(typeof(TestEnum?), "Nullable<TestEnum>")]
+	[InlineData(typeof(List<TestEnum>), "List<TestEnum>")]
+	[InlineData(typeof(Dictionary<string, TestEnum>), "Dictionary<String, TestEnum>")]
+	[InlineData(typeof(Dictionary<string, List<TestEnum?>>), "Dictionary<String, List<Nullable<TestEnum>>>")]
+	public void GetSimpleName(Type type, string expectedSimpleName)
+	{
+		string simpleName = ReflectionUtility.GetSimpleName(type);
+		simpleName.Should().Be(expectedSimpleName);
+	}
+
 	[Fact]
 	public void SetField()
 	{
