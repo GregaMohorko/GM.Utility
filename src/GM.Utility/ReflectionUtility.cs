@@ -1007,6 +1007,24 @@ public static class ReflectionUtility
 	}
 
 	/// <summary>
+	/// Gets the default value for the type of this field.
+	/// </summary>
+	/// <param name="field">The field.</param>
+	public static object GetDefaultValue(this FieldInfo field)
+	{
+		return GetDefault(field.FieldType);
+	}
+
+	/// <summary>
+	/// Gets the default value for the type of this property.
+	/// </summary>
+	/// <param name="property">The property.</param>
+	public static object GetDefaultValue(this PropertyInfo property)
+	{
+		return GetDefault(property.PropertyType);
+	}
+
+	/// <summary>
 	/// Gets the default value of this type.
 	/// </summary>
 	/// <param name="type">The type for which to get the default value.</param>
