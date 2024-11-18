@@ -91,6 +91,22 @@ public class IEnumerableUtilityTests
 	}
 
 	[Fact]
+	public void FirstOrDefaultPosition()
+	{
+		var example = new List<string> { "1", "2", null, "3", null, null, "4" };
+		int firstNull = example.IndexOf(x => x == null);
+		firstNull.Should().Be(2);
+		int firstOne = example.IndexOf(x => x == "1");
+		firstOne.Should().Be(0);
+		int firstTwo = example.IndexOf(x => x == "2");
+		firstTwo.Should().Be(1);
+		int firstFour = example.IndexOf(x => x == "4");
+		firstFour.Should().Be(6);
+		int firstFive = example.IndexOf(x => x == "5");
+		firstFive.Should().Be(-1);
+	}
+
+	[Fact]
 	public void Rotate()
 	{
 		var example = new List<int> { 1, 2, 3, 4 };

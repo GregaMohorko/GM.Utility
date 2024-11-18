@@ -154,25 +154,6 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Returns the position of the first element that satifies the provided condition.
-		/// </summary>
-		/// <typeparam name="T">The type of the elements.</typeparam>
-		/// <param name="enumerable">The collection.</param>
-		/// <param name="predicate">The search condition for the first element to get position of.</param>
-		public static int FirstOrDefaultPosition<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
-		{
-			if(enumerable == null) {
-				throw new ArgumentNullException(nameof(enumerable));
-			}
-			if(predicate == null) {
-				throw new ArgumentNullException(nameof(predicate));
-			}
-			return enumerable
-				.TakeWhile(x => predicate(x) == false)
-				.Count();
-		}
-
-		/// <summary>
 		/// Returns the first element in a sequence whose provided transform function returns a max value in the provided collection.
 		/// </summary>
 		/// <typeparam name="T">The type of the elements in the collection.</typeparam>
@@ -221,6 +202,30 @@ namespace GM.Utility
 			foreach(T element in collection) {
 				action(element);
 			}
+		}
+
+		/// <summary>
+		/// Returns the zero-based index of the first element that satifies the provided condition.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <param name="enumerable">The collection.</param>
+		/// <param name="predicate">The search condition for the first element to get the index of.</param>
+		public static int IndexOf<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+		{
+			if(enumerable == null) {
+				throw new ArgumentNullException(nameof(enumerable));
+			}
+			if(predicate == null) {
+				throw new ArgumentNullException(nameof(predicate));
+			}
+			int i = 0;
+			foreach(T element in enumerable) {
+				if(predicate(element)) {
+					return i;
+				}
+				++i;
+			}
+			return -1;
 		}
 
 		/// <summary>
