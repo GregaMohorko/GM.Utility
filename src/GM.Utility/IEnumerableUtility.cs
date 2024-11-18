@@ -154,23 +154,22 @@ namespace GM.Utility
 		}
 
 		/// <summary>
-		/// Performs the specified action on each element of this collection.
+		/// Returns the position of the first element that satifies the provided condition.
 		/// </summary>
 		/// <typeparam name="T">The type of the elements.</typeparam>
-		/// <param name="collection">The source collection.</param>
-		/// <param name="action">The action to perform on each element of this collection.</param>
-		public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+		/// <param name="enumerable">The collection.</param>
+		/// <param name="predicate">The search condition for the first element to get position of.</param>
+		public static int FirstOrDefaultPosition<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
 		{
-			if(collection == null) {
-				throw new ArgumentNullException(nameof(collection));
+			if(enumerable == null) {
+				throw new ArgumentNullException(nameof(enumerable));
 			}
-			if(action == null) {
-				throw new ArgumentNullException(nameof(action));
+			if(predicate == null) {
+				throw new ArgumentNullException(nameof(predicate));
 			}
-
-			foreach(T element in collection) {
-				action(element);
-			}
+			return enumerable
+				.TakeWhile(x => predicate(x) == false)
+				.Count();
 		}
 
 		/// <summary>
@@ -202,6 +201,26 @@ namespace GM.Utility
 				}
 			}
 			return itemWithMax;
+		}
+
+		/// <summary>
+		/// Performs the specified action on each element of this collection.
+		/// </summary>
+		/// <typeparam name="T">The type of the elements.</typeparam>
+		/// <param name="collection">The source collection.</param>
+		/// <param name="action">The action to perform on each element of this collection.</param>
+		public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+		{
+			if(collection == null) {
+				throw new ArgumentNullException(nameof(collection));
+			}
+			if(action == null) {
+				throw new ArgumentNullException(nameof(action));
+			}
+
+			foreach(T element in collection) {
+				action(element);
+			}
 		}
 
 		/// <summary>
