@@ -35,8 +35,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GM.Utility;
 
@@ -343,6 +341,9 @@ public static class ReflectionUtility
 	/// <param name="obj">The object.</param>
 	public static IEnumerable<PropertyInfo> GetAllPropertiesOfType<T>(this object obj)
 	{
+		if(obj == null) {
+			throw new ArgumentNullException(nameof(obj));
+		}
 		return GetAllPropertiesOfType<T>(obj.GetType());
 	}
 
@@ -435,6 +436,20 @@ public static class ReflectionUtility
 	{
 		PropertyInfo property = GetPropertyInfo(obj, propertyName, bindingAttr);
 		return property.GetValue(obj);
+	}
+
+	/// <summary>
+	/// Returns the values of all properties of the specified type.
+	/// </summary>
+	/// <typeparam name="TPropertyType">The type of the properties to return.</typeparam>
+	/// <param name="obj">The objects that has the properties.</param>
+	public static List<TPropertyType> GetAllPropertiesValues<TPropertyType>(this object obj)
+	{
+		var properties = GetAllPropertiesOfType<TPropertyType>(obj);
+
+		return properties
+			.Select(p => (TPropertyType)p.GetValue(obj))
+			.ToList();
 	}
 
 	/// <summary>
