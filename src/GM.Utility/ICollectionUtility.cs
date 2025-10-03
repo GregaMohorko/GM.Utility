@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2019 Grega Mohorko
+Copyright (c) 2025 Gregor Mohorko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,39 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Project: GM.Utility
-Created: 2019-09-17
-Author: Grega Mohorko
+Created: 2025-10-03
+Author: Gregor Mohorko
 */
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace GM.Utility
+namespace GM.Utility;
+/// <summary>
+/// Utilities for <see cref="ICollection{T}"/>.
+/// </summary>
+public static class ICollectionUtility
 {
 	/// <summary>
-	/// Utilities for <see cref="List{T}"/>.
+	/// Removes the elements of the specified collection from this collection (calls the <see cref="ICollection{T}.Remove(T)"/> method for each element in the specified collection).
 	/// </summary>
-	public static class ListUtility
+	/// <typeparam name="T">The type of the elements.</typeparam>
+	/// <param name="collection">The collection from which to remove elements.</param>
+	/// <param name="elementsToRemove">The collection whose elements should be removed from this collection. The collection itself cannot be null, but it can contain elements that are null, if type T is a reference type.</param>
+	public static void RemoveRange<T>(this ICollection<T> collection, IEnumerable<T> elementsToRemove)
 	{
-		/// <summary>
-		/// Removes the elements of the specified collection from this list (calls the <see cref="List{T}.Remove(T)"/> method for each element in the specified collection).
-		/// </summary>
-		/// <typeparam name="T">The type of the elements.</typeparam>
-		/// <param name="list">The list.</param>
-		/// <param name="collection">The collection whose elements should be removed from this list. The collection itself cannot be null, but it can contain elements that are null, if type T is a reference type.</param>
-		public static void RemoveRange<T>(this List<T> list, IEnumerable<T> collection)
-		{
-			if(list == null) {
-				throw new ArgumentNullException(nameof(list));
-			}
-			if(collection == null) {
-				throw new ArgumentNullException(nameof(collection));
-			}
+		DefensiveUtility.ThrowIfNull(collection, nameof(collection));
+		DefensiveUtility.ThrowIfNull(elementsToRemove, nameof(elementsToRemove));
 
-			foreach(T item in collection) {
-				list.Remove(item);
-			}
+		foreach(T item in elementsToRemove) {
+			collection.Remove(item);
 		}
 	}
 }
